@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +20,9 @@ namespace LinkCollectionApp
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services
+                .AddControllersWithViews()
+                .AddNewtonsoftJson();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
