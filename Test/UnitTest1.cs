@@ -1,3 +1,4 @@
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LinkCollectionApp.Test
@@ -8,6 +9,7 @@ namespace LinkCollectionApp.Test
         [TestMethod]
         public void TestMethod1()
         {
+            1.Should().Be(1);
         }
     }
 }
