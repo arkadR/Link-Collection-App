@@ -20,5 +20,10 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 
-- script: dotnet test
+- script: dotnet test Test/LinkCollectionApp.Test.csproj --logger trx
   displayName: 'dotnet test'
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
