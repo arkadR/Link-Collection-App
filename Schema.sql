@@ -13,6 +13,7 @@ CREATE TABLE [Collection]
     [IsPublic] BIT DEFAULT 0,
     [OwnerId] INT NOT NULL FOREIGN KEY REFERENCES [User]([Id]),
     [Name] VARCHAR(100),
+    [Description] VARCHAR(255),
     [CreatedDate] DATETIME NOT NULL DEFAULT GETDATE(),
 );
 
