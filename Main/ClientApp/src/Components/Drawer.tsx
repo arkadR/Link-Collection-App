@@ -1,6 +1,6 @@
 import React from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { List, Drawer } from "@material-ui/core";
+import { List, Drawer as MaterialDrawer } from "@material-ui/core";
 import { Lock, Widgets, People, Save } from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
@@ -30,13 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function CilppedDrawer() {
+export default function Drawer() {
   const classes = useStyles();
   //TODO: get data
   var testData = ["Mallorca", "Iss", "PWR"];
 
   return (
-    <Drawer
+    <MaterialDrawer
       className={classes.drawer}
       variant="permanent"
       classes={{
@@ -83,6 +83,6 @@ export default function CilppedDrawer() {
           }
         />
       </List>
-    </Drawer>
+    </MaterialDrawer>
   );
 }

@@ -1,27 +1,21 @@
-import React from "react";
 import "./App.css";
-import DrawerAppBar from "./shared/components/DrawerAppBar";
-import { Typography, Grid } from "@material-ui/core";
+import React from "react";
+import Layout from "./Components/Layout";
+import { Route } from "react-router-dom";
+import Home from "./Components/Home";
+import { ApplicationPaths } from "./api-authorization/ApiAuthorizationConstants";
+import ApiAuthorizationRoutes from "./api-authorization/ApiAuthorizationRoutes";
+import AuthorizeRoute from "./api-authorization/AuthorizeRoute";
 
 function App() {
   return (
-    <div>
-      <DrawerAppBar
-        content={
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            style={{ minHeight: "80vh" }}
-          >
-            <Typography variant="h3" align="center" style={{ color: "grey" }}>
-              Select collection to display
-            </Typography>
-          </Grid>
-        }
+    <Layout>
+      <Route exact path="/" component={Home}></Route>
+      <Route
+        path={ApplicationPaths.ApiAuthorizationPrefix}
+        component={ApiAuthorizationRoutes}
       />
-    </div>
+    </Layout>
   );
 }
 

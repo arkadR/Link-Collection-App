@@ -1,6 +1,11 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { Toolbar, Typography, AppBar, IconButton } from "@material-ui/core";
+import {
+  Toolbar,
+  Typography,
+  AppBar as MaterialAppBar,
+  IconButton
+} from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -14,11 +19,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function LoginAppBar() {
+export default function AppBar(props: AppBarProps) {
   const classes = useStyles();
 
   return (
-    <AppBar position="fixed" className={classes.appBar}>
+    <MaterialAppBar position="fixed" className={classes.appBar}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Link App
@@ -27,6 +32,10 @@ export default function LoginAppBar() {
           <AccountCircle />
         </IconButton>
       </Toolbar>
-    </AppBar>
+    </MaterialAppBar>
   );
 }
+
+type AppBarProps = {
+  children?: ReactElement;
+};
