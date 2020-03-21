@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import DrawerAppBar from "./shared/components/DrawerAppBar";
+import { Typography, Grid } from "@material-ui/core";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <DrawerAppBar
+        content={
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            style={{ minHeight: "80vh" }}
+          >
+            <Typography variant="h3" align="center" style={{ color: "grey" }}>
+              Select collection to display
+            </Typography>
+          </Grid>
+        }
+      />
     </div>
   );
 }
