@@ -33,11 +33,11 @@ namespace LinkCollectionApp
           Configuration.GetConnectionString("IdentityContextConnection")));
 
 
-      services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+      services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<IdentityContext>();
 
       services.AddIdentityServer()
-        .AddApiAuthorization<User, IdentityContext>();
+        .AddApiAuthorization<ApplicationUser, IdentityContext>();
 
       services.AddAuthentication()
         .AddIdentityServerJwt();
@@ -86,7 +86,7 @@ namespace LinkCollectionApp
     private void ConfigureAuthentication(IServiceCollection services)
     {
       //services
-      //.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true);
+      //.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true);
       //.AddEntityFrameworkStores<IdentityContext>();
     }
 

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace LinkCollectionApp.Areas.Identity.Data
 {
-  public class IdentityContext : ApiAuthorizationDbContext<User>
+  public class IdentityContext : ApiAuthorizationDbContext<ApplicationUser>
   {
     public IdentityContext(
       DbContextOptions options,

@@ -19,7 +19,7 @@ namespace LinkCollectionApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("LinkCollectionApp.Areas.Identity.Data.User", b =>
+            modelBuilder.Entity("LinkCollectionApp.Areas.Identity.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -230,7 +230,7 @@ namespace LinkCollectionApp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.User", null)
+                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -239,7 +239,7 @@ namespace LinkCollectionApp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.User", null)
+                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -254,7 +254,7 @@ namespace LinkCollectionApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.User", null)
+                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -263,7 +263,7 @@ namespace LinkCollectionApp.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.User", null)
+                    b.HasOne("LinkCollectionApp.Areas.Identity.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
