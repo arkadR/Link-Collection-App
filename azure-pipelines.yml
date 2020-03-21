@@ -27,6 +27,19 @@ steps:
 
 - script: dotnet test Test/LinkCollectionApp.Test.csproj --logger trx
   displayName: 'dotnet test'
+
+- task: Npm@1
+  displayName: npm ci
+  inputs:
+    command: 'ci'
+    workingDir: '/ClientApp'
+
+- task: Npm@1
+  displayName: npm install
+  inputs:
+    command: 'install'
+    workingDir: '/ClientApp'
+
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
