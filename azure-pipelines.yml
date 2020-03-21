@@ -32,13 +32,13 @@ steps:
   displayName: npm ci
   inputs:
     command: 'ci'
-    workingDir: '/ClientApp'
+    workingDir: 'Main/ClientApp'
 
 - task: Npm@1
   displayName: npm install
   inputs:
     command: 'install'
-    workingDir: '/ClientApp'
+    workingDir: 'Main/ClientApp'
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()
