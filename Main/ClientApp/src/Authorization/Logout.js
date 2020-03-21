@@ -60,7 +60,7 @@ export class Logout extends Component {
       return <div></div>;
     }
     if (!!message) {
-      return <div>{message}</div>;
+      return <Center>{message}</Center>;
     } else {
       const action = this.props.action;
       switch (action) {
@@ -77,7 +77,7 @@ export class Logout extends Component {
             </Center>
           );
         case LogoutActions.LoggedOut:
-          return <div>{message}</div>;
+          return <Center>{message}</Center>;
         default:
           throw new Error(`Invalid action '${action}'`);
       }

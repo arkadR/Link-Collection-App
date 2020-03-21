@@ -1,6 +1,7 @@
-import React, { Component, Fragment } from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { Component } from "react";
 import authService from "./AuthorizeService";
+import AuthenticatedView from "./AuthenticatedView";
+import AnonymousView from "./AnonymousView";
 import { ApplicationPaths } from "./ApiAuthorizationConstants";
 
 export class LoginMenu extends Component {
@@ -38,40 +39,22 @@ export class LoginMenu extends Component {
     if (!isAuthenticated) {
       const registerPath = `${ApplicationPaths.Register}`;
       const loginPath = `${ApplicationPaths.Login}`;
-      return AnonymousView(registerPath, loginPath);
+      return (
+        <AnonymousView registerPath={registerPath} loginPath={loginPath} />
+      );
     } else {
       const profilePath = `${ApplicationPaths.Profile}`;
       const logoutPath = {
         pathname: `${ApplicationPaths.LogOut}`,
         state: { local: true }
       };
-      return AuthenticatedView(userName, profilePath, logoutPath);
+      return (
+        <AuthenticatedView
+          userName={userName}
+          profilePath={profilePath}
+          logoutPath={logoutPath}
+        />
+      );
     }
   }
-}
-
-function AuthenticatedView(userName, profilePath, logoutPath) {
-  return (
-    <Fragment>
-      <NavLink tag={Link} className="text-dark" to={profilePath}>
-        Hello {userName}
-      </NavLink>
-      <NavLink tag={Link} className="text-dark" to={logoutPath}>
-        Logout
-      </NavLink>
-    </Fragment>
-  );
-}
-
-function AnonymousView(registerPath, loginPath) {
-  return (
-    <Fragment>
-      <NavLink tag={Link} className="text-dark" to={registerPath}>
-        Register
-      </NavLink>
-      <NavLink tag={Link} className="text-dark" to={loginPath}>
-        Login
-      </NavLink>
-    </Fragment>
-  );
 }
