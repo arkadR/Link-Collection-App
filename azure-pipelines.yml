@@ -21,30 +21,46 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
+
+
 steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk 3.1.100'
+  inputs:
+    packageType: sdk
+    version: 3.1.100
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
 - script: dotnet build --configuration $(buildConfiguration) -o $(Build.BinariesDirectory)
   displayName: 'dotnet build $(buildConfiguration)'
 
 - script: dotnet test Test/LinkCollectionApp.Test.csproj --logger trx
   displayName: 'dotnet test'
+
+- task: Npm@1
+  displayName: npm ci
+  inputs:
+    command: 'ci'
+    workingDir: 'Main/ClientApp'
+
 - task: PublishTestResults@2
   condition: succeededOrFailed()
   inputs:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
 
-- task: ArchiveFiles@2
+- task: DotNetCoreCLI@2
+  displayName: dotnet publish
   inputs:
-    rootFolderOrFile: '$(Build.BinariesDirectory)'
-    includeRootFolder: true
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    replaceExistingArchive: true
-    
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-o $(Build.ArtifactStagingDirectory)'
+
 - task: AzureWebApp@1
+  displayName: Publish to Azure
   inputs:
     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
     appType: 'webAppLinux'
-    appName: 'linkcollectionapp'
-    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    appName: 'LinkCollectionApp'
+    package: '$(Build.ArtifactStagingDirectory)/*.zip'
     runtimeStack: 'DOTNETCORE|LTS'
