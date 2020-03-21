@@ -46,5 +46,5 @@ steps:
     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
     appType: 'webAppLinux'
     appName: 'linkcollectionapp'
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     runtimeStack: 'DOTNETCORE|LTS'
