@@ -22,7 +22,7 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
+- script: dotnet build --configuration $(buildConfiguration) -o $(Build.BinariesDirectory)
   displayName: 'dotnet build $(buildConfiguration)'
 
 - script: dotnet test Test/LinkCollectionApp.Test.csproj --logger trx
