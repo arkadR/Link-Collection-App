@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace LinkCollectionApp.Areas.Identity.Data
+namespace LinkCollectionApp.Data
 {
   public class IdentityContext : ApiAuthorizationDbContext<ApplicationUser>
   {

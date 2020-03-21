@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-import { LoginMenu } from "../api-authorization/LoginMenu";
+import { LoginMenu } from "../Authorization/LoginMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,11 +31,11 @@ export default function AppBar(props: AppBarProps) {
           Link App
         </Typography>
         <LoginMenu></LoginMenu>
-        <IconButton color="inherit">
-          <Link to="/authentication/login">
+        <Link to="/authentication/login">
+          <IconButton color="inherit">
             <AccountCircle />
-          </Link>
-        </IconButton>
+          </IconButton>
+        </Link>
       </Toolbar>
     </MaterialAppBar>
   );

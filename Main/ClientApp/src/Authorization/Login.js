@@ -49,7 +49,6 @@ export class Login extends Component {
   render() {
     const action = this.props.action;
     const { message } = this.state;
-    debugger;
 
     if (!!message) {
       return <div>{message}</div>;

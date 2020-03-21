@@ -3,9 +3,9 @@ import React from "react";
 import Layout from "./Components/Layout";
 import { Route } from "react-router-dom";
 import Home from "./Components/Home";
-import { ApplicationPaths } from "./api-authorization/ApiAuthorizationConstants";
-import ApiAuthorizationRoutes from "./api-authorization/ApiAuthorizationRoutes";
-import AuthorizeRoute from "./api-authorization/AuthorizeRoute";
+import { ApplicationPaths } from "./Authorization/ApiAuthorizationConstants";
+import ApiAuthorizationRoutes from "./Authorization/ApiAuthorizationRoutes";
+import AuthorizeRoute from "./Authorization/AuthorizeRoute";
 
 function App() {
   return (

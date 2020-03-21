@@ -8,7 +8,6 @@ import * as serviceWorker from "./serviceWorker";
 //const baseUrl = document.getElementsByTagName("base")[0].getAttribute("href");
 const rootElement = document.getElementById("root");
 
-debugger;
 ReactDOM.render(
   <BrowserRouter basename="/">
     <App />
