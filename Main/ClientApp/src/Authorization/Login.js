@@ -1,5 +1,7 @@
 import React from "react";
 import { Component } from "react";
+import Center from "../Components/Center";
+import LoaderSpinner from "../Components/LoaderSpinner";
 import authService from "./AuthorizeService";
 import { AuthenticationResultStatus } from "./AuthorizeService";
 import {
@@ -55,9 +57,17 @@ export class Login extends Component {
     } else {
       switch (action) {
         case LoginActions.Login:
-          return <div>Processing login</div>;
+          return (
+            <Center>
+              <LoaderSpinner text="Processing login" />
+            </Center>
+          );
         case LoginActions.LoginCallback:
-          return <div>Processing login callback</div>;
+          return (
+            <Center>
+              <LoaderSpinner text="Processing login callback" />
+            </Center>
+          );
         case LoginActions.Profile:
         case LoginActions.Register:
           return <div></div>;

@@ -21,13 +21,13 @@ export default function DrawerItem({
 }: DrawerItemProps) {
   const [open, setOpen] = React.useState(false);
 
-  const handleClick = () => {
+  const toggleNestedItemsOpen = () => {
     setOpen(!open);
   };
 
   return (
     <div>
-      <ListItem button onClick={handleClick}>
+      <ListItem button onClick={toggleNestedItemsOpen}>
         <ListItemIcon children={icon} />
         <ListItemText primary={title} />
         {open ? <ExpandLess /> : <ExpandMore />}
