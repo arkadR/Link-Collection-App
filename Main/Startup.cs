@@ -29,16 +29,16 @@ namespace LinkCollectionApp
           .AddControllersWithViews()
           .AddNewtonsoftJson();
 
-      services.AddDbContext<IdentityContext>(options =>
+      services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(
-          Configuration.GetConnectionString("IdentityContextConnection")));
+          Configuration.GetConnectionString("ApplicationDbContextConnection")));
 
 
       services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<IdentityContext>();
+        .AddEntityFrameworkStores<ApplicationDbContext>();
 
       services.AddIdentityServer()
-        .AddApiAuthorization<ApplicationUser, IdentityContext>();
+        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
       services.AddAuthentication()
         .AddIdentityServerJwt();
@@ -88,7 +88,7 @@ namespace LinkCollectionApp
     {
       //services
       //.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true);
-      //.AddEntityFrameworkStores<IdentityContext>();
+      //.AddEntityFrameworkStores<ApplicationDbContext>();
     }
 
     private void ConfigureSpa(IApplicationBuilder app, IWebHostEnvironment env)

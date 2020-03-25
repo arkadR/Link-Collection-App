@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LinkCollectionApp.Migrations
 {
-    [DbContext(typeof(IdentityContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20200320181338_CreateIdentitySchema")]
     partial class CreateIdentitySchema
     {
