@@ -3,7 +3,6 @@ using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +22,6 @@ namespace LinkCollectionApp
 
     public void ConfigureServices(IServiceCollection services)
     {
-      ConfigureAuthentication(services);
 
       services
           .AddControllersWithViews()
@@ -33,7 +31,17 @@ namespace LinkCollectionApp
         options.UseSqlServer(
           Configuration.GetConnectionString("ApplicationDbContextConnection")));
 
+      ConfigureIdentity(services);
 
+      // In production, the React files will be served from this directory
+      services.AddSpaStaticFiles(configuration =>
+      {
+        configuration.RootPath = "ClientApp/build";
+      });
+    }
+
+    private void ConfigureIdentity(IServiceCollection services)
+    {
       services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -42,12 +50,6 @@ namespace LinkCollectionApp
 
       services.AddAuthentication()
         .AddIdentityServerJwt();
-
-      // In production, the React files will be served from this directory
-      services.AddSpaStaticFiles(configuration =>
-    {
-      configuration.RootPath = "ClientApp/build";
-    });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -81,17 +83,9 @@ namespace LinkCollectionApp
       });
 
       ConfigureSpa(app, env);
-
     }
 
-    private void ConfigureAuthentication(IServiceCollection services)
-    {
-      //services
-      //.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true);
-      //.AddEntityFrameworkStores<ApplicationDbContext>();
-    }
-
-    private void ConfigureSpa(IApplicationBuilder app, IWebHostEnvironment env)
+    private void ConfigureSpa(IApplicationBuilder app, IHostEnvironment env)
     {
       app.UseSpaStaticFiles();
 
