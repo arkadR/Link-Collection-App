@@ -1,4 +1,5 @@
 using LinkCollectionApp.Data;
+using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
