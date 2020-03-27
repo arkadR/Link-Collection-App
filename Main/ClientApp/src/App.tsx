@@ -28,13 +28,13 @@ function App() {
       </Route>
       <AuthorizeRoute
         path="/"
-        component={
+        component={() => (
           <Layout>
             <ContentWithDrawer>
               <Home />
             </ContentWithDrawer>
           </Layout>
-        }
+        )}
       ></AuthorizeRoute>
     </>
   );
