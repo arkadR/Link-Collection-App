@@ -13,7 +13,10 @@ function App() {
     <>
       <Route exact path="/">
         <Layout>
-          <Home />
+          {/* <Home /> */}
+          <ContentWithDrawer>
+            <Home />
+          </ContentWithDrawer>
         </Layout>
       </Route>
       <Route
@@ -21,12 +24,12 @@ function App() {
         component={ContentWithDrawer}
       >
         <Layout>
-          <ContentWithDrawer>
-            <ApiAuthorizationRoutes />
-          </ContentWithDrawer>
+          {/* <ContentWithDrawer> */}
+          <ApiAuthorizationRoutes />
+          {/* </ContentWithDrawer> */}
         </Layout>
       </Route>
-      <AuthorizeRoute
+      {/* <AuthorizeRoute
         path="/"
         component={() => (
           <Layout>
@@ -35,7 +38,7 @@ function App() {
             </ContentWithDrawer>
           </Layout>
         )}
-      ></AuthorizeRoute>
+      ></AuthorizeRoute> */}
     </>
   );
 }

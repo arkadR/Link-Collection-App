@@ -10,9 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
     content: {
       flexGrow: 1,
       padding: theme.spacing(3)
-    },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar
+    }
   })
 );
 
@@ -25,10 +23,7 @@ export default function ContentWithDrawer(props: ContentWithDrawerProps) {
   return (
     <div className={classes.root}>
       <Drawer />
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {props.children}
-      </main>
+      <main className={classes.content}>{props.children}</main>
     </div>
   );
 }

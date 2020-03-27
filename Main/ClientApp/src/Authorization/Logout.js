@@ -1,7 +1,7 @@
 import React from "react";
 import { Component } from "react";
-import Center from "../Components/Common/Center";
-import LoaderSpinner from "../Components/Common/LoaderSpinner";
+import MessageWithLoader from "../Components/Common/MessageWithLoader";
+import Message from "../Components/Common/Message";
 import authService from "./AuthorizeService";
 import { AuthenticationResultStatus } from "./AuthorizeService";
 import {
@@ -60,24 +60,16 @@ export class Logout extends Component {
       return <div></div>;
     }
     if (!!message) {
-      return <Center>{message}</Center>;
+      return <Message text={message} />;
     } else {
       const action = this.props.action;
       switch (action) {
         case LogoutActions.Logout:
-          return (
-            <Center>
-              <LoaderSpinner text="Processing logout" />
-            </Center>
-          );
+          return <MessageWithLoader text="Processing logout" />;
         case LogoutActions.LogoutCallback:
-          return (
-            <Center>
-              <LoaderSpinner text="Processing logout callback" />
-            </Center>
-          );
+          return <MessageWithLoader text="Processing logout callback" />;
         case LogoutActions.LoggedOut:
-          return <Center>{message}</Center>;
+          return <Message text={message} />;
         default:
           throw new Error(`Invalid action '${action}'`);
       }
