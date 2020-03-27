@@ -1,7 +1,7 @@
 import React from "react";
 import { Component } from "react";
-import Center from "../Components/Center";
-import LoaderSpinner from "../Components/LoaderSpinner";
+import Center from "../Components/Common/Center";
+import LoaderSpinner from "../Components/Common/LoaderSpinner";
 import authService from "./AuthorizeService";
 import { AuthenticationResultStatus } from "./AuthorizeService";
 import {

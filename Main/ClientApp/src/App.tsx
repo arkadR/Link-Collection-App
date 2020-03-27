@@ -6,16 +6,37 @@ import Home from "./Components/Home";
 import { ApplicationPaths } from "./Authorization/ApiAuthorizationConstants";
 import ApiAuthorizationRoutes from "./Authorization/ApiAuthorizationRoutes";
 import AuthorizeRoute from "./Authorization/AuthorizeRoute";
+import ContentWithDrawer from "./Components/ContentWithDrawer";
 
 function App() {
   return (
-    <Layout>
-      <Route exact path="/" component={Home}></Route>
+    <>
+      <Route exact path="/">
+        <Layout>
+          <Home />
+        </Layout>
+      </Route>
       <Route
         path={ApplicationPaths.ApiAuthorizationPrefix}
-        component={ApiAuthorizationRoutes}
-      />
-    </Layout>
+        component={ContentWithDrawer}
+      >
+        <Layout>
+          <ContentWithDrawer>
+            <ApiAuthorizationRoutes />
+          </ContentWithDrawer>
+        </Layout>
+      </Route>
+      <AuthorizeRoute
+        path="/"
+        component={
+          <Layout>
+            <ContentWithDrawer>
+              <Home />
+            </ContentWithDrawer>
+          </Layout>
+        }
+      ></AuthorizeRoute>
+    </>
   );
 }
 

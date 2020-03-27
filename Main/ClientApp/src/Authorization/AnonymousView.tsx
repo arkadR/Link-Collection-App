@@ -2,7 +2,12 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 
-export default function AnonymousView(props) {
+type AnonymousViewProps = {
+  registerPath: string;
+  loginPath: string;
+};
+
+export default function AnonymousView(props: AnonymousViewProps) {
   return (
     <Grid
       style={{ width: 200 }}
@@ -13,7 +18,7 @@ export default function AnonymousView(props) {
     >
       <Grid item>
         <NavLink
-          tag={Link}
+          // tag={Link}
           to={props.registerPath}
           style={{ color: "white", textDecoration: "none" }}
           // activeStyle={{ color: "red", textDecoration: "none" }}
@@ -23,7 +28,7 @@ export default function AnonymousView(props) {
       </Grid>
       <Grid item>
         <NavLink
-          tag={Link}
+          // tag={Link}
           to={props.loginPath}
           style={{ color: "white", textDecoration: "none" }}
           // activeStyle={{ color: "red", textDecoration: "none" }}

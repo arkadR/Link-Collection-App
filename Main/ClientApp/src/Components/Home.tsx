@@ -1,6 +1,6 @@
 import React from "react";
-import { Grid, Typography } from "@material-ui/core";
-import Center from "./Center";
+import { Typography } from "@material-ui/core";
+import Center from "./Common/Center";
 
 export default function Home() {
   return (

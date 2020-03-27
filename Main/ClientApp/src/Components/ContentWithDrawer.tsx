@@ -16,7 +16,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function ContentWithDrawer(props: ContentWithDrawerProps) {
+type ContentWithDrawerProps = {
+  children: ReactNode;
+};
+
+export default function ContentWithDrawer(props: ContentWithDrawerProps) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -28,9 +32,3 @@ function ContentWithDrawer(props: ContentWithDrawerProps) {
     </div>
   );
 }
-
-type ContentWithDrawerProps = {
-  children: ReactNode;
-};
-
-export default ContentWithDrawer;

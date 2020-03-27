@@ -1,16 +1,25 @@
-import { EventEmitter } from "events";
 import { Collection } from "../Model/Collection";
+import ActionTypes from "../Actions/ActionTypes";
+import StoreBase from "../Infrastructure/StoreBase";
+import Action from "../Infrastructure/Action";
 
-class CollectionStore extends EventEmitter {
-  addChangeListener(callback: (a: any) => void) {
-    this.on("change", callback);
+class CollectionStore extends StoreBase {
+  onActionReceived(action: Action): void {
+    switch (action.actionType) {
+      case ActionTypes.LOAD_COLLECTIONS: {
+        this._collections = action.payload.collections;
+        this.emitChange();
+        break;
+      }
+    }
   }
 
-  removeChangeListener(callback: (a: any) => void) {
-    this.removeListener("change", callback);
+  public getCollections() {
+    return this._collections;
   }
 
-  emitChange() {
-    this.emit("change");
-  }
+  private _collections: Collection[] = [];
 }
+
+const store = new CollectionStore();
+export default store;

@@ -1,11 +1,10 @@
-import React, { ReactElement } from "react";
+import React, { ReactNode } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
   Toolbar,
   Typography,
   AppBar as MaterialAppBar
 } from "@material-ui/core";
-import { LoginMenu } from "../Authorization/LoginMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,14 +24,15 @@ export default function AppBar(props: AppBarProps) {
     <MaterialAppBar position="fixed" className={classes.appBar}>
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
-          Link App
+          {props.title}
         </Typography>
-        <LoginMenu />
+        {props.rightSideMenu}
       </Toolbar>
     </MaterialAppBar>
   );
 }
 
 type AppBarProps = {
-  children?: ReactElement;
+  title: string;
+  rightSideMenu: ReactNode;
 };
