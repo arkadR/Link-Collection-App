@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LinkCollectionApp.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
-    {
+  public partial class CreateIdentitySchema : Migration
+  {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
       migrationBuilder.CreateTable(
