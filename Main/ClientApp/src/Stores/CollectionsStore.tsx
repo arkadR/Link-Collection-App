@@ -8,7 +8,7 @@ class CollectionStore extends StoreBase {
     switch (action.actionType) {
       case ActionTypes.LOAD_COLLECTIONS: {
         this._collections = action.payload.collections;
-        this.emitChange();
+        super.emitChange();
         break;
       }
     }

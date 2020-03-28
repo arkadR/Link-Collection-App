@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { List, Drawer as MaterialDrawer } from "@material-ui/core";
 import { Lock, Widgets, People, Save } from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
+import CollectionsStore from "../Stores/CollectionsStore";
+import { loadCollections } from "../Actions/Actions";
 
 const drawerWidth = 240;
 
@@ -32,8 +34,27 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Drawer() {
   const classes = useStyles();
-  //TODO: get data
-  var testData = ["Mallorca", "Iss", "PWR"];
+
+  const [collections, setCollections] = useState(
+    CollectionsStore.getCollections()
+  );
+
+  useEffect(() => {
+    const changeHandler = () => {
+      onChange();
+    };
+    CollectionsStore.addChangeListener(changeHandler);
+    loadCollections();
+
+    return () => {
+      CollectionsStore.removeChangeListener(changeHandler);
+    };
+  });
+
+  const onChange = () => {
+    debugger;
+    setCollections(CollectionsStore.getCollections());
+  };
 
   return (
     <MaterialDrawer
@@ -54,8 +75,8 @@ export default function Drawer() {
           icon={<Widgets />}
           nestedList={
             <List component="div" disablePadding>
-              {testData.map((text, index) => (
-                <DrawerItemNested title={text} icon={<Lock />} />
+              {collections.map(collection => (
+                <DrawerItemNested title={collection.Name} icon={<Lock />} />
               ))}
             </List>
           }
@@ -65,8 +86,8 @@ export default function Drawer() {
           icon={<People />}
           nestedList={
             <List component="div" disablePadding>
-              {testData.map((text, index) => (
-                <DrawerItemNested title={text} />
+              {collections.map(collection => (
+                <DrawerItemNested title={collection.Name} />
               ))}
             </List>
           }
@@ -76,8 +97,8 @@ export default function Drawer() {
           icon={<Save />}
           nestedList={
             <List component="div" disablePadding>
-              {testData.map((text, index) => (
-                <DrawerItemNested title={text} />
+              {collections.map(collection => (
+                <DrawerItemNested title={collection.Name} />
               ))}
             </List>
           }

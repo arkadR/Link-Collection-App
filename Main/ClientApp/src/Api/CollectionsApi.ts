@@ -1,9 +1,14 @@
 import { Collection } from "../Model/Collection";
+import authService from "../Authorization/AuthorizeService";
 
 class CollectionsApi {
-  async getCollections(): Promise<Collection[]> {
-    let response = await fetch("collections");
+  async getCollections() {
+    const token = await authService.getAccessToken();
+    const response = await fetch("api/collections", {
+      headers: !token ? {} : { Authorization: `Bearer ${token}` }
+    });
     let collections = (await response.json()) as Collection[];
+    console.debug("getCollections", collections);
     return collections;
   }
 }

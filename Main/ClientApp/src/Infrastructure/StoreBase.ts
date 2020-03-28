@@ -9,15 +9,15 @@ export default abstract class StoreBase extends EventEmitter {
   }
 
   addChangeListener(callback: (a: any) => void) {
-    this.on("change", callback);
+    super.on("change", callback);
   }
 
   removeChangeListener(callback: (a: any) => void) {
-    this.removeListener("change", callback);
+    super.removeListener("change", callback);
   }
 
   emitChange() {
-    this.emit("change");
+    super.emit("change");
   }
 
   abstract onActionReceived(action: Action): void;
