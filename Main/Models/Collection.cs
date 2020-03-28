@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace LinkCollectionApp.Models
 {
@@ -19,9 +20,12 @@ namespace LinkCollectionApp.Models
     public string Description { get; set; }
     public DateTime CreatedDate { get; set; }
 
+    [JsonIgnore]
     public virtual ApplicationUser Owner { get; set; }
     public virtual ICollection<Element> Element { get; set; }
+    [JsonIgnore]
     public virtual ICollection<SavedCollection> SavedCollection { get; set; }
+    [JsonIgnore]
     public virtual ICollection<SharedCollection> SharedCollection { get; set; }
   }
 }

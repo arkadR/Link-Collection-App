@@ -1,3 +1,4 @@
+using System.Text.Json;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 
 namespace LinkCollectionApp
 {
@@ -24,8 +26,10 @@ namespace LinkCollectionApp
     {
 
       services
-          .AddControllersWithViews()
-          .AddNewtonsoftJson();
+        .AddControllersWithViews()
+        .AddNewtonsoftJson()
+        .AddJsonOptions(opts =>
+          opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
 
       services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(

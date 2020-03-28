@@ -8,9 +8,9 @@ class CollectionsApi {
       headers: !token ? {} : { Authorization: `Bearer ${token}` }
     });
     let collections = (await response.json()) as Collection[];
-    console.debug("getCollections", collections);
     return collections;
   }
 }
+
 let api = new CollectionsApi();
 export default api;

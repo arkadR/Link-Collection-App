@@ -35,26 +35,22 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Drawer() {
   const classes = useStyles();
 
-  // const [collections, setCollections] = useState(
-  //   CollectionsStore.getCollections()
-  // );
+  const [collections, setCollections] = useState(
+    CollectionsStore.getCollections()
+  );
 
-  // useEffect(() => {
-  //   const changeHandler = () => {
-  //     onChange();
-  //   };
-  //   CollectionsStore.addChangeListener(changeHandler);
-  //   loadCollections();
+  useEffect(() => {
+    const changeHandler = () => {
+      setCollections(CollectionsStore.getCollections());
+      debugger;
+    };
+    CollectionsStore.addChangeListener(changeHandler);
+    if (collections.length == 0) loadCollections();
 
-  //   return () => {
-  //     CollectionsStore.removeChangeListener(changeHandler);
-  //   };
-  // });
-
-  // const onChange = () => {
-  //   debugger;
-  //   setCollections(CollectionsStore.getCollections());
-  // };
+    return () => {
+      CollectionsStore.removeChangeListener(changeHandler);
+    };
+  });
 
   return (
     <MaterialDrawer
@@ -75,9 +71,9 @@ export default function Drawer() {
           icon={<Widgets />}
           nestedList={
             <List component="div" disablePadding>
-              {/* {collections.map(collection => (
-                <DrawerItemNested title={collection.Name} icon={<Lock />} />
-              ))} */}
+              {collections.map(collection => (
+                <DrawerItemNested title={collection.name} icon={<Lock />} />
+              ))}
             </List>
           }
         />

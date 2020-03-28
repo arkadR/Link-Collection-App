@@ -1,8 +1,8 @@
 export type Collection = {
-  Id: number;
-  IsPublic: boolean;
-  OwnerId: number;
-  Name: string;
-  Description: string;
-  CreatedDate: Date;
+  id: number;
+  isPublic: boolean;
+  ownerId: number;
+  name: string;
+  description: string;
+  createdDate: Date;
 };

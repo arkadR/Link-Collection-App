@@ -7,18 +7,14 @@ import { ApplicationPaths } from "./Authorization/ApiAuthorizationConstants";
 import ApiAuthorizationRoutes from "./Authorization/ApiAuthorizationRoutes";
 import AuthorizeRoute from "./Authorization/AuthorizeRoute";
 import ContentWithDrawer from "./Components/ContentWithDrawer";
+import WelcomeScreen from "./Components/WelcomeScreen";
 
 function App() {
   return (
     <>
       <ApiAuthorizationRoutes />
-      <Route exact path="/">
-        <Layout>
-          <ContentWithDrawer>
-            <Home />
-          </ContentWithDrawer>
-        </Layout>
-      </Route>
+      <Route exact path="/" component={WelcomeScreen} />
+      <AuthorizeRoute path="/home/" component={Home} />
       {/* <Route
         path={ApplicationPaths.ApiAuthorizationPrefix}
         component={ContentWithDrawer}
