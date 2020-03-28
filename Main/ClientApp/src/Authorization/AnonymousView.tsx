@@ -17,24 +17,20 @@ export default function AnonymousView(props: AnonymousViewProps) {
       spacing={2}
     >
       <Grid item>
-        <NavLink
-          // tag={Link}
+        <Link
           to={props.registerPath}
           style={{ color: "white", textDecoration: "none" }}
-          // activeStyle={{ color: "red", textDecoration: "none" }}
         >
-          REGISTER
-        </NavLink>
+          Register
+        </Link>
       </Grid>
       <Grid item>
-        <NavLink
-          // tag={Link}
+        <Link
           to={props.loginPath}
           style={{ color: "white", textDecoration: "none" }}
-          // activeStyle={{ color: "red", textDecoration: "none" }}
         >
-          LOGIN
-        </NavLink>
+          Login
+        </Link>
       </Grid>
     </Grid>
   );

@@ -35,26 +35,26 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Drawer() {
   const classes = useStyles();
 
-  const [collections, setCollections] = useState(
-    CollectionsStore.getCollections()
-  );
+  // const [collections, setCollections] = useState(
+  //   CollectionsStore.getCollections()
+  // );
 
-  useEffect(() => {
-    const changeHandler = () => {
-      onChange();
-    };
-    CollectionsStore.addChangeListener(changeHandler);
-    loadCollections();
+  // useEffect(() => {
+  //   const changeHandler = () => {
+  //     onChange();
+  //   };
+  //   CollectionsStore.addChangeListener(changeHandler);
+  //   loadCollections();
 
-    return () => {
-      CollectionsStore.removeChangeListener(changeHandler);
-    };
-  });
+  //   return () => {
+  //     CollectionsStore.removeChangeListener(changeHandler);
+  //   };
+  // });
 
-  const onChange = () => {
-    debugger;
-    setCollections(CollectionsStore.getCollections());
-  };
+  // const onChange = () => {
+  //   debugger;
+  //   setCollections(CollectionsStore.getCollections());
+  // };
 
   return (
     <MaterialDrawer
@@ -75,9 +75,9 @@ export default function Drawer() {
           icon={<Widgets />}
           nestedList={
             <List component="div" disablePadding>
-              {collections.map(collection => (
+              {/* {collections.map(collection => (
                 <DrawerItemNested title={collection.Name} icon={<Lock />} />
-              ))}
+              ))} */}
             </List>
           }
         />
@@ -86,9 +86,9 @@ export default function Drawer() {
           icon={<People />}
           nestedList={
             <List component="div" disablePadding>
-              {collections.map(collection => (
+              {/* {collections.map(collection => (
                 <DrawerItemNested title={collection.Name} />
-              ))}
+              ))} */}
             </List>
           }
         />
@@ -97,9 +97,9 @@ export default function Drawer() {
           icon={<Save />}
           nestedList={
             <List component="div" disablePadding>
-              {collections.map(collection => (
+              {/* {collections.map(collection => (
                 <DrawerItemNested title={collection.Name} />
-              ))}
+              ))} */}
             </List>
           }
         />

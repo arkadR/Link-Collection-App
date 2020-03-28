@@ -11,34 +11,24 @@ import ContentWithDrawer from "./Components/ContentWithDrawer";
 function App() {
   return (
     <>
+      <ApiAuthorizationRoutes />
       <Route exact path="/">
         <Layout>
-          {/* <Home /> */}
           <ContentWithDrawer>
             <Home />
           </ContentWithDrawer>
         </Layout>
       </Route>
-      <Route
+      {/* <Route
         path={ApplicationPaths.ApiAuthorizationPrefix}
         component={ContentWithDrawer}
       >
+
         <Layout>
-          {/* <ContentWithDrawer> */}
-          <ApiAuthorizationRoutes />
-          {/* </ContentWithDrawer> */}
-        </Layout>
-      </Route>
-      {/* <AuthorizeRoute
-        path="/"
-        component={() => (
-          <Layout>
-            <ContentWithDrawer>
-              <Home />
-            </ContentWithDrawer>
-          </Layout>
-        )}
-      ></AuthorizeRoute> */}
+          <ContentWithDrawer>
+      </ContentWithDrawer>
+      </Layout>
+      </Route> */}
     </>
   );
 }

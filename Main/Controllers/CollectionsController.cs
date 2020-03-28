@@ -6,27 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LinkCollectionApp.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CollectionsController : ControllerBase
+  [Route("api/[controller]")]
+  [ApiController]
+  public class CollectionsController : ControllerBase
+  {
+    [Authorize]
+    [HttpGet]
+    public ICollection<Collection> GetUserCollections()
     {
-        [Authorize]
-        [HttpGet]
-        public ICollection<Collection> GetUserCollections()
+      return new List<Collection>
+      {
+        new Collection
         {
-            return new List<Collection>()
-              {
-                new Collection
-                {
-                  CreatedDate = DateTime.Today,
-                  Description = "fbkwfbhk",
-                  Element = new List<Element>(),
-                  Id = 1,
-                  IsPublic = false,
-                  Name = "Collection1",
-                  OwnerId = User.Identity.Name
-                }
-              };
+          CreatedDate = DateTime.Today, 
+          Description = "fbkwfbhk", 
+          Element = new List<Element>(), 
+          Id = 1, 
+          IsPublic = false, 
+          Name = "Collection1", 
+          OwnerId = User.Identity.Name
         }
+      };
     }
+  }
 }
