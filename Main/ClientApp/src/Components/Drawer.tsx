@@ -28,6 +28,10 @@ const useStyles = makeStyles((theme: Theme) =>
     drawerPaper: {
       width: drawerWidth
     },
+    link: {
+      color: "black",
+      textDecoration: "none"
+    },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar
   })
@@ -71,7 +75,10 @@ export default function Drawer() {
           nestedList={
             <List component="div" disablePadding>
               {collections.map(collection => (
-                <Link to={`/collections/${collection.id}`}>
+                <Link
+                  to={`/collections/${collection.id}`}
+                  className={classes.link}
+                >
                   <DrawerItemNested title={collection.name} icon={<Lock />} />
                 </Link>
               ))}
