@@ -8,13 +8,14 @@ import ApiAuthorizationRoutes from "./Authorization/ApiAuthorizationRoutes";
 import AuthorizeRoute from "./Authorization/AuthorizeRoute";
 import ContentWithDrawer from "./Components/ContentWithDrawer";
 import WelcomeScreen from "./Components/WelcomeScreen";
+import CollectionsSite from "./Components/CollectionsSite";
 
 function App() {
   return (
     <>
       <ApiAuthorizationRoutes />
       <Route exact path="/" component={WelcomeScreen} />
-      <AuthorizeRoute path="/home/" component={Home} />
+      <AuthorizeRoute path="/collections/" component={CollectionsSite} />
       {/* <Route
         path={ApplicationPaths.ApiAuthorizationPrefix}
         component={ContentWithDrawer}

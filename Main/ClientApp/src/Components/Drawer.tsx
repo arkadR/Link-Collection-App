@@ -6,6 +6,7 @@ import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../Stores/CollectionsStore";
 import { loadCollections } from "../Actions/Actions";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -42,10 +43,8 @@ export default function Drawer() {
   useEffect(() => {
     const changeHandler = () => {
       setCollections(CollectionsStore.getCollections());
-      debugger;
     };
     CollectionsStore.addChangeListener(changeHandler);
-    if (collections.length == 0) loadCollections();
 
     return () => {
       CollectionsStore.removeChangeListener(changeHandler);
@@ -72,7 +71,9 @@ export default function Drawer() {
           nestedList={
             <List component="div" disablePadding>
               {collections.map(collection => (
-                <DrawerItemNested title={collection.name} icon={<Lock />} />
+                <Link to={`/collections/${collection.id}`}>
+                  <DrawerItemNested title={collection.name} icon={<Lock />} />
+                </Link>
               ))}
             </List>
           }

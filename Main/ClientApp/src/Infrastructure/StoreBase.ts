@@ -5,7 +5,7 @@ import Action from "./Action";
 export default abstract class StoreBase extends EventEmitter {
   constructor() {
     super();
-    Dispatcher.register(this.onActionReceived);
+    Dispatcher.register(this.onActionReceived.bind(this));
   }
 
   addChangeListener(callback: (a: any) => void) {

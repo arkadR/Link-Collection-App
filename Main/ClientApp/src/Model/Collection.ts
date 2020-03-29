@@ -1,3 +1,5 @@
+import { Element } from "./Element";
+
 export type Collection = {
   id: number;
   isPublic: boolean;
@@ -5,4 +7,5 @@ export type Collection = {
   name: string;
   description: string;
   createdDate: Date;
+  element: Element[];
 };

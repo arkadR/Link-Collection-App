@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace LinkCollectionApp.Models
 {
   public partial class Element
@@ -11,7 +13,9 @@ namespace LinkCollectionApp.Models
     public string Description { get; set; }
     public int? Sequence { get; set; }
 
+    [JsonIgnore]
     public virtual Collection Collection { get; set; }
+    [JsonIgnore]
     public virtual ApplicationUser Owner { get; set; }
   }
 }

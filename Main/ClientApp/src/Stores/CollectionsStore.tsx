@@ -2,27 +2,9 @@ import { Collection } from "../Model/Collection";
 import ActionTypes from "../Actions/ActionTypes";
 import StoreBase from "../Infrastructure/StoreBase";
 import Action from "../Infrastructure/Action";
-import Dispatcher from "../Infrastructure/Dispatcher";
-import { EventEmitter } from "events";
+import { loadCollections } from "../Actions/Actions";
 
-class CollectionStore extends EventEmitter {
-  constructor() {
-    super();
-    Dispatcher.register(this.onActionReceived.bind(this));
-  }
-
-  addChangeListener(callback: (a: any) => void) {
-    this.on("change", callback);
-  }
-
-  removeChangeListener(callback: (a: any) => void) {
-    this.removeListener("change", callback);
-  }
-
-  emitChange() {
-    this.emit("change");
-  }
-
+class CollectionStore extends StoreBase {
   onActionReceived(action: Action): void {
     switch (action.actionType) {
       case ActionTypes.LOAD_COLLECTIONS: {
@@ -33,11 +15,17 @@ class CollectionStore extends EventEmitter {
     }
   }
 
-  public getCollections() {
-    return this._collections;
+  public getCollections(): Collection[] {
+    if (this._collections == null) loadCollections();
+    return this._collections ?? [];
   }
 
-  private _collections: Collection[] = [];
+  public getCollection(id: number): Collection | null {
+    let collection = this._collections?.find(c => c.id == id);
+    return collection ?? null;
+  }
+
+  private _collections: Collection[] | null = null;
 }
 
 const store = new CollectionStore();

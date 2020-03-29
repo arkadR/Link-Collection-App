@@ -44,6 +44,7 @@ namespace LinkCollectionApp.Controllers
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return _dbContext.ApplicationUser
           .Include(user => user.Collection)
+          .ThenInclude(c => c.Element)
           .Single(u => u.Id == userId);
       }
     }
