@@ -1,8 +1,11 @@
+import { Element } from "./Element";
+
 export type Collection = {
-  Id: Number;
-  IsPublic: Boolean;
-  OwnerId: Number;
-  Name: String;
-  Description: String;
-  CreatedDate: Date;
+  id: number;
+  isPublic: boolean;
+  ownerId: number;
+  name: string;
+  description: string;
+  createdDate: Date;
+  element: Element[];
 };

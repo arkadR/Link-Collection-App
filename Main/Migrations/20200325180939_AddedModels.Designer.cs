@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LinkCollectionApp.Migrations
 {
-    [DbContext(typeof(IdentityContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20200325180939_AddedModels")]
     partial class AddedModels
     {

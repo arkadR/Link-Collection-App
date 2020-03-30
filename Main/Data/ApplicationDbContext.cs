@@ -6,9 +6,9 @@ using Microsoft.Extensions.Options;
 
 namespace LinkCollectionApp.Data
 {
-  public class IdentityContext : ApiAuthorizationDbContext<ApplicationUser>
+  public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
   {
-    public IdentityContext(
+    public ApplicationDbContext(
       DbContextOptions options,
       IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
     {

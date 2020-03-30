@@ -6,15 +6,30 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  MenuItem
+  MenuItem,
+  makeStyles
 } from "@material-ui/core";
 import { ExitToApp, Settings, AccountCircle } from "@material-ui/icons";
 
-export default function AuthenticatedView(props) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+const useStyles = makeStyles({
+  root: {
+    width: 2300
+  }
+});
 
-  const openMenu = event => {
-    setAnchorEl(event.currentTarget);
+type AuthenticatedViewProps = {
+  profilePath: string;
+  userName: string;
+  logoutPath: string;
+};
+
+export default function AuthenticatedView(props: AuthenticatedViewProps) {
+  const classes = useStyles();
+
+  const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
+
+  const openMenu = (event: MouseEvent) => {
+    setAnchorEl(event.currentTarget as Element);
   };
 
   const closeMenu = () => {
@@ -24,14 +39,16 @@ export default function AuthenticatedView(props) {
   return (
     <div>
       <Fragment>
-        <NavLink
-          tag={Link}
+        <Link
+          // tag={Link}
           className="text-dark"
           to={props.profilePath}
           style={{ color: "white", textDecoration: "none" }}
         >
           Hello {props.userName}
-        </NavLink>
+        </Link>
+        {/*
+        // @ts-ignore */}
         <IconButton color="inherit" onClick={openMenu}>
           <AccountCircle />
         </IconButton>
@@ -42,34 +59,31 @@ export default function AuthenticatedView(props) {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={closeMenu}
+        className={classes.root}
       >
         <MenuItem onClick={closeMenu}>
-          <NavLink
-            tag={Link}
+          <Link
+            // tag={Link}
             to={props.profilePath}
             style={{ color: "black", textDecoration: "none" }}
           >
-            <ListItem dense>
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItem>
-          </NavLink>
+            <ListItemIcon>
+              <Settings />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+          </Link>
         </MenuItem>
         <MenuItem onClick={closeMenu}>
-          <NavLink
-            tag={Link}
+          <Link
+            // tag={Link}
             to={props.logoutPath}
             style={{ color: "black", textDecoration: "none" }}
           >
-            <ListItem dense>
-              <ListItemIcon>
-                <ExitToApp />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItem>
-          </NavLink>
+            <ListItemIcon>
+              <ExitToApp />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </Link>
         </MenuItem>
       </Menu>
     </div>

@@ -1,13 +1,14 @@
 import React from "react";
-import { Grid, Typography } from "@material-ui/core";
-import Center from "./Center";
+import Message from "./Common/Message";
+import ContentWithDrawer from "./ContentWithDrawer";
+import Layout from "./Layout";
 
 export default function Home() {
   return (
-    <Center>
-      <Typography variant="h3" align="center" style={{ color: "grey" }}>
-        Select a collection to display
-      </Typography>
-    </Center>
+    <Layout>
+      <ContentWithDrawer>
+        <Message text="Select a collection to display" />
+      </ContentWithDrawer>
+    </Layout>
   );
 }

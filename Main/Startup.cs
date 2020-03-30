@@ -1,14 +1,15 @@
+using System.Text.Json;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 
 namespace LinkCollectionApp
 {
@@ -23,31 +24,36 @@ namespace LinkCollectionApp
 
     public void ConfigureServices(IServiceCollection services)
     {
-      ConfigureAuthentication(services);
 
       services
-          .AddControllersWithViews()
-          .AddNewtonsoftJson();
+        .AddControllersWithViews()
+        .AddNewtonsoftJson()
+        .AddJsonOptions(opts =>
+          opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
 
-      services.AddDbContext<IdentityContext>(options =>
+      services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(
-          Configuration.GetConnectionString("IdentityContextConnection")));
+          Configuration.GetConnectionString("ApplicationDbContextConnection")));
 
-
-      services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<IdentityContext>();
-
-      services.AddIdentityServer()
-        .AddApiAuthorization<ApplicationUser, IdentityContext>();
-
-      services.AddAuthentication()
-        .AddIdentityServerJwt();
+      ConfigureIdentity(services);
 
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
+      {
+        configuration.RootPath = "ClientApp/build";
+      });
+    }
+
+    private void ConfigureIdentity(IServiceCollection services)
     {
-      configuration.RootPath = "ClientApp/build";
-    });
+      services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+
+      services.AddIdentityServer()
+        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+      services.AddAuthentication()
+        .AddIdentityServerJwt();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -81,17 +87,9 @@ namespace LinkCollectionApp
       });
 
       ConfigureSpa(app, env);
-
     }
 
-    private void ConfigureAuthentication(IServiceCollection services)
-    {
-      //services
-      //.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true);
-      //.AddEntityFrameworkStores<IdentityContext>();
-    }
-
-    private void ConfigureSpa(IApplicationBuilder app, IWebHostEnvironment env)
+    private void ConfigureSpa(IApplicationBuilder app, IHostEnvironment env)
     {
       app.UseSpaStaticFiles();
 
