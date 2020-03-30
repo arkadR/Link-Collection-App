@@ -23,10 +23,6 @@ const canRenderExtra = (url: string) => {
   return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
 };
 
-const dumbCheck = (id: number) => {
-  return id === 1;
-};
-
 export default function CollectionView(props: CollectionViewProps) {
   const classes = useStyles();
   const collectionId = props.match.params.collectionId;
@@ -51,7 +47,7 @@ export default function CollectionView(props: CollectionViewProps) {
       {collection?.element.map(element => (
         <GridListTile
           key={element.id}
-          rows={canRenderExtra(element.link) ? 2 : 1} //z jakiegoś powodu nie chce działać
+          rows={canRenderExtra(element.link) ? 2 : 1} // nie zadziała bo pracuje na fexbox -> można ustawiać tylko względem jednej osi  //IDEA: 2(3) kolumny na stałe, każda zawiera flexbox, elementy dodawane naprzemiennie
         >
           <ElementView element={element} />
         </GridListTile>
