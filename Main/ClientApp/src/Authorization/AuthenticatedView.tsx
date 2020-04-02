@@ -67,10 +67,12 @@ export default function AuthenticatedView(props: AuthenticatedViewProps) {
             to={props.profilePath}
             style={{ color: "black", textDecoration: "none" }}
           >
-            <ListItemIcon>
-              <Settings />
-            </ListItemIcon>
-            <ListItemText primary="Settings" />
+            <ListItem>
+              <ListItemIcon>
+                <Settings />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
+            </ListItem>
           </Link>
         </MenuItem>
         <MenuItem onClick={closeMenu}>
@@ -79,10 +81,12 @@ export default function AuthenticatedView(props: AuthenticatedViewProps) {
             to={props.logoutPath}
             style={{ color: "black", textDecoration: "none" }}
           >
-            <ListItemIcon>
-              <ExitToApp />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
+            <ListItem>
+              <ListItemIcon>
+                <ExitToApp />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItem>
           </Link>
         </MenuItem>
       </Menu>

@@ -1,7 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import MessageWithLoader from "../Components/Common/MessageWithLoader";
-import Message from "../Components/Common/Message";
+import PanelWideMessage from "../Components/Common/PanelWideMessage";
 import authService from "./AuthorizeService";
 import { AuthenticationResultStatus } from "./AuthorizeService";
 import {
@@ -60,16 +59,21 @@ export class Logout extends Component {
       return <div></div>;
     }
     if (!!message) {
-      return <Message text={message} />;
+      return <PanelWideMessage text={message} />;
     } else {
       const action = this.props.action;
       switch (action) {
         case LogoutActions.Logout:
-          return <MessageWithLoader text="Processing logout" />;
+          return <PanelWideMessage text="Processing logout" throbber={true} />;
         case LogoutActions.LogoutCallback:
-          return <MessageWithLoader text="Processing logout callback" />;
+          return (
+            <PanelWideMessage
+              text="Processing logout callback"
+              throbber={true}
+            />
+          );
         case LogoutActions.LoggedOut:
-          return <Message text={message} />;
+          return <PanelWideMessage text={message} />;
         default:
           throw new Error(`Invalid action '${action}'`);
       }
