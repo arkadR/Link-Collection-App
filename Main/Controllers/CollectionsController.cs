@@ -5,6 +5,7 @@ using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinkCollectionApp.Controllers
 {
@@ -25,11 +26,12 @@ namespace LinkCollectionApp.Controllers
     [HttpGet]
     public ICollection<Collection> GetUserCollections()
     {
-      var user = _userProvider.GetCurrentUser();
-      var collections = _dbContext.Entry(user)
-        .Collection(u => u.Collection)
-        .Query()
-        .ToList();
+      var userId = _userProvider.GetCurrentUserId();
+      var collections = _dbContext.Users
+        .Include(u => u.Collection)
+        .ThenInclude(c => c.Element)
+        .Single(u => u.Id == userId)
+        .Collection.ToList();
 
       return collections;
     }

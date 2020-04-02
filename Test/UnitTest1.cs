@@ -2,7 +2,9 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using IdentityServer4.EntityFramework.Options;
+using LinkCollectionApp.Controllers;
 using LinkCollectionApp.Data;
+using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -42,6 +44,13 @@ namespace LinkCollectionApp.Test
         context.Users.Should().HaveCount(1);
         context.Users.Single().Id.Should().Be(userId);
       }
+
+      var userContextProviderMock = new Mock<IUserContextProvider>();
+      userContextProviderMock.Setup(m => m.GetCurrentUserId()).Returns(userId);
+      var controller = new CollectionsController(
+        new ApplicationDbContext(options, operationalStoreOptionsMock.Object), userContextProviderMock.Object);
+
+      controller.GetUserCollections().Should().HaveCount(0);
     }
   }
 }

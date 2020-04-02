@@ -20,8 +20,14 @@ namespace LinkCollectionApp.Infrastructure.Implementations
 
     public ApplicationUser GetCurrentUser()
     {
+      return _dbContext.ApplicationUser.Single(u => u.Id == GetCurrentUserId()); ;
+    }
+
+
+    public string GetCurrentUserId()
+    {
       var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-      return _dbContext.ApplicationUser.Single(u => u.Id == userId); ;
+      return userId;
     }
   }
 }
