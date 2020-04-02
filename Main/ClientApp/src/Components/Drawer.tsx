@@ -5,8 +5,9 @@ import { Lock, Widgets, People, Save } from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../Stores/CollectionsStore";
-import { loadCollections } from "../Actions/Actions";
 import { Link } from "react-router-dom";
+import ListItemAdd from "./ListItemAdd";
+import AddCollectionDialog from "./Dialogs/AddCollectionDialog";
 
 const drawerWidth = 240;
 
@@ -32,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) =>
       color: "black",
       textDecoration: "none"
     },
+    addItem: {
+      paddingLeft: "15px"
+    },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar
   })
@@ -39,6 +43,11 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Drawer() {
   const classes = useStyles();
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const toggleAddComponentDialogOpen = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
   const [collections, setCollections] = useState(
     CollectionsStore.getCollections()
@@ -82,30 +91,29 @@ export default function Drawer() {
                   <DrawerItemNested title={collection.name} icon={<Lock />} />
                 </Link>
               ))}
+              <ListItemAdd
+                onClickHandler={() => {
+                  toggleAddComponentDialogOpen();
+                }}
+                text="Add collection"
+                className={classes.addItem}
+              />
+              <AddCollectionDialog
+                open={drawerOpen}
+                toggleDialogOpen={toggleAddComponentDialogOpen}
+              />
             </List>
           }
         />
         <DrawerItem
           title="Shared with me"
           icon={<People />}
-          nestedList={
-            <List component="div" disablePadding>
-              {/* {collections.map(collection => (
-                <DrawerItemNested title={collection.Name} />
-              ))} */}
-            </List>
-          }
+          nestedList={<List component="div" disablePadding></List>}
         />
         <DrawerItem
           title="Saved"
           icon={<Save />}
-          nestedList={
-            <List component="div" disablePadding>
-              {/* {collections.map(collection => (
-                <DrawerItemNested title={collection.Name} />
-              ))} */}
-            </List>
-          }
+          nestedList={<List component="div" disablePadding></List>}
         />
       </List>
     </MaterialDrawer>

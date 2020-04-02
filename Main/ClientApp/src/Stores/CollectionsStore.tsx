@@ -12,6 +12,10 @@ class CollectionStore extends StoreBase {
         this.emitChange();
         break;
       }
+      case ActionTypes.ADD_COLLECTION: {
+        loadCollections();
+        break;
+      }
     }
   }
 
