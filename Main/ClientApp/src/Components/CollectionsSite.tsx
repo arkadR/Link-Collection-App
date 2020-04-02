@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import ContentWithDrawer from "./ContentWithDrawer";
 import { Route, useRouteMatch, RouteComponentProps } from "react-router-dom";
-import Message from "./Common/Message";
+import PanelWideMessage from "./Common/PanelWideMessage";
 import CollectionView from "./CollectionView";
 
 export default function CollectionsSite(props: CollectionsSiteProps) {
@@ -13,7 +13,12 @@ export default function CollectionsSite(props: CollectionsSiteProps) {
         <Route
           exact
           path={path}
-          component={() => <Message text="Select a collection to display" />}
+          component={() => (
+            <PanelWideMessage
+              text="Select a collection to display"
+              throbber={false}
+            />
+          )}
         />
         <Route path={`${url}/:collectionId`} component={CollectionView} />
       </ContentWithDrawer>
