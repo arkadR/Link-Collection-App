@@ -1,5 +1,8 @@
-using System.Text.Json;
+﻿using System.Text.Json;
+using LinkCollectionApp.Controllers;
 using LinkCollectionApp.Data;
+using LinkCollectionApp.Infrastructure.Implementations;
+using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -35,6 +38,8 @@ namespace LinkCollectionApp
         options.UseSqlServer(
           Configuration.GetConnectionString("ApplicationDbContextConnection")));
 
+      services.AddHttpContextAccessor();
+      services.AddTransient<IUserContextProvider, UserContextProvider>();
       ConfigureIdentity(services);
 
       // In production, the React files will be served from this directory
