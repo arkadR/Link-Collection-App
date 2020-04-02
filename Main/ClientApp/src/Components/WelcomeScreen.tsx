@@ -1,11 +1,11 @@
 import React from "react";
-import Message from "./Common/Message";
+import PanelWideMessage from "./Common/PanelWideMessage";
 import Layout from "./Layout";
 
 export default function WelcomeScreen() {
   return (
     <Layout>
-      <Message text="Log in to get started" />
+      <PanelWideMessage text="Log in to get started" throbber={false} />
     </Layout>
   );
 }

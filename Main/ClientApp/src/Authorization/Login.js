@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import MessageWithLoader from "../Components/Common/MessageWithLoader";
+import PanelWideMessage from "../Components/Common/PanelWideMessage";
 import authService from "./AuthorizeService";
 import { AuthenticationResultStatus } from "./AuthorizeService";
 import {
@@ -56,9 +56,14 @@ export class Login extends Component {
     } else {
       switch (action) {
         case LoginActions.Login:
-          return <MessageWithLoader text="Processing login" />;
+          return <PanelWideMessage text="Processing login" throbber={true} />;
         case LoginActions.LoginCallback:
-          return <MessageWithLoader text="Processing login callback" />;
+          return (
+            <PanelWideMessage
+              text="Processing login callback"
+              throbber={true}
+            />
+          );
         case LoginActions.Profile:
         case LoginActions.Register:
           return <div></div>;
