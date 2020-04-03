@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  TextField
-} from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import { addCollection } from "../../Actions/Actions";
 import { CollectionCreationData } from "../../Model/Collection";
+import SimpleDialog from "./SimpleDialog";
 
 type AddCollectionDialogProps = {
   open: boolean;
@@ -28,13 +21,13 @@ export default function AddCollectionDialog(props: AddCollectionDialogProps) {
   };
 
   return (
-    <Dialog open={props.open} onClose={props.toggleDialogOpen}>
-      <DialogTitle>{"Add collection"}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Enter name of a new category here. You can change later settings for
-          this category.
-        </DialogContentText>
+    <SimpleDialog
+      open={props.open}
+      toggleDialogOpen={props.toggleDialogOpen}
+      title="Add Collection"
+      description="  Enter name of a new category here. You can change later settings for
+    this category."
+      content={
         <TextField
           onChange={e => handleInputChange(e.target.value)}
           autoFocus
@@ -45,11 +38,8 @@ export default function AddCollectionDialog(props: AddCollectionDialogProps) {
           placeholder="MyCollection"
           fullWidth
         />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={props.toggleDialogOpen} color="primary">
-          Cancel
-        </Button>
+      }
+      actions={
         <Button
           onClick={() => {
             addCollection(createCollectionData(inputText));
@@ -60,7 +50,7 @@ export default function AddCollectionDialog(props: AddCollectionDialogProps) {
         >
           Add
         </Button>
-      </DialogActions>
-    </Dialog>
+      }
+    />
   );
 }

@@ -43,10 +43,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Drawer() {
   const classes = useStyles();
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const toggleAddComponentDialogOpen = () => {
-    setDrawerOpen(!drawerOpen);
+    setDialogOpen(!dialogOpen);
   };
 
   const [collections, setCollections] = useState(
@@ -99,7 +99,7 @@ export default function Drawer() {
                 className={classes.addItem}
               />
               <AddCollectionDialog
-                open={drawerOpen}
+                open={dialogOpen}
                 toggleDialogOpen={toggleAddComponentDialogOpen}
               />
             </List>

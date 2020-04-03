@@ -7,3 +7,9 @@ export type Element = {
   description: string;
   sequence: number | null;
 };
+
+export type ElementCreationData = {
+  collectionId: number;
+  link: string;
+  name: string;
+};

@@ -2,6 +2,7 @@ import Dispatcher from "../Infrastructure/Dispatcher";
 import CollectionsApi from "../Api/CollectionsApi";
 import ActionTypes from "./ActionTypes";
 import { CollectionCreationData } from "../Model/Collection";
+import { ElementCreationData } from "../Model/Element";
 
 export async function loadCollections() {
   let collections = await CollectionsApi.getCollections();
@@ -19,4 +20,8 @@ export async function addCollection(
     actionType: ActionTypes.ADD_COLLECTION,
     payload: { collectionCreationData: collectionCreationData }
   });
+}
+
+export function addElement(elementCreationData: ElementCreationData) {
+  throw new Error("Method not implemented.");
 }
