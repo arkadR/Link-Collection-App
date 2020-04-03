@@ -18,11 +18,11 @@ export async function addCollection(
 ) {
   let success = await CollectionsApi.addCollection(collectionCreationData);
   if (success) loadCollections();
-  else console.log("Could not add collection");
+  else console.error("Could not add collection");
 }
 
 export async function addElement(elementCreationData: ElementCreationData) {
   let success = await ElementsApi.addElement(elementCreationData);
   if (success) loadCollections();
-  else console.log("Could not add element");
+  else console.error("Could not add element");
 }

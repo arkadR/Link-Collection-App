@@ -35,13 +35,10 @@ export default function CollectionView(props: CollectionViewProps) {
     setDialogOpen(!dialogOpen);
   };
 
-  console.log({ col: collection });
-
   useEffect(() => {
     setCollection(CollectionsStore.getCollection(collectionId));
     const changeHandler = () => {
       setCollection(CollectionsStore.getCollection(collectionId));
-      console.log({ col: collection });
     };
 
     CollectionsStore.addChangeListener(changeHandler);

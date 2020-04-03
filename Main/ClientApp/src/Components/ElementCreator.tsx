@@ -8,7 +8,6 @@ type ElementCreatorProps = {
 };
 
 export default function ElementCreator(props: ElementCreatorProps) {
-  console.log(props.element);
   return (
     <>
       {IsImageElement(props.element) ? (
