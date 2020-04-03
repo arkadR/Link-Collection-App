@@ -8,9 +8,9 @@ namespace LinkCollectionApp.Models
   {
     public Collection()
     {
-      Element = new HashSet<Element>();
-      SavedCollection = new HashSet<SavedCollection>();
-      SharedCollection = new HashSet<SharedCollection>();
+      Elements = new HashSet<Element>();
+      SavedCollections = new HashSet<SavedCollection>();
+      SharedCollections = new HashSet<SharedCollection>();
     }
 
     public int Id { get; set; }
@@ -22,10 +22,10 @@ namespace LinkCollectionApp.Models
 
     [JsonIgnore]
     public virtual ApplicationUser Owner { get; set; }
-    public virtual ICollection<Element> Element { get; set; }
+    public virtual ICollection<Element> Elements { get; set; }
     [JsonIgnore]
-    public virtual ICollection<SavedCollection> SavedCollection { get; set; }
+    public virtual ICollection<SavedCollection> SavedCollections { get; set; }
     [JsonIgnore]
-    public virtual ICollection<SharedCollection> SharedCollection { get; set; }
+    public virtual ICollection<SharedCollection> SharedCollections { get; set; }
   }
 }

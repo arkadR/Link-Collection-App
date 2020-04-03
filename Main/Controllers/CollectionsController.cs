@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
+using LinkCollectionApp.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +30,10 @@ namespace LinkCollectionApp.Controllers
     {
       var userId = _userProvider.GetCurrentUserId();
       var collections = _dbContext.Users
-        .Include(u => u.Collection)
-        .ThenInclude(c => c.Element)
+        .Include(u => u.Collections)
+        .ThenInclude(c => c.Elements)
         .Single(u => u.Id == userId)
-        .Collection.ToList();
+        .Collections.ToList();
 
       return collections;
     }

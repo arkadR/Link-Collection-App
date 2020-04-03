@@ -1,4 +1,4 @@
-﻿namespace LinkCollectionApp.Controllers
+﻿namespace LinkCollectionApp.Models.DTO
 {
   public class CollectionCreationData
   {

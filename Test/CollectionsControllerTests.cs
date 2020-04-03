@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using LinkCollectionApp.Controllers;
-using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
+using LinkCollectionApp.Models.DTO;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using Xunit;
 
 namespace LinkCollectionApp.Test
@@ -41,7 +39,7 @@ namespace LinkCollectionApp.Test
     public void GetUserCollections_UserWithXCollections_XCollectionsReturned(int numberOfCollections)
     {
       //Arrange
-      var userId = Guid.NewGuid().ToString();
+      var userId = NewGuid;
       AddUser(userId);
       for (var i = 0; i < numberOfCollections; i++)
       {
@@ -69,7 +67,7 @@ namespace LinkCollectionApp.Test
     public void GetUserCollections_CollectionsWithoutElements_NoElementsReturned(int numberOfCollections)
     {
       //Arrange
-      var userId = Guid.NewGuid().ToString();
+      var userId = NewGuid;
       AddUser(userId);
       for (var i = 0; i < numberOfCollections; i++)
       {
@@ -85,7 +83,7 @@ namespace LinkCollectionApp.Test
       });
 
       //Assert 
-      collections.SelectMany(c => c.Element).Should().BeEmpty();
+      collections.SelectMany(c => c.Elements).Should().BeEmpty();
     }
 
     [Theory]
@@ -97,7 +95,7 @@ namespace LinkCollectionApp.Test
     public void GetUserCollections_CollectionHasElements_ElementsReturned(int numberOfElements)
     {
       //Arrange
-      var userId = Guid.NewGuid().ToString();
+      var userId = NewGuid;
       AddUser(userId);
       AddCollection(userId, numberOfElements);
 
@@ -110,7 +108,7 @@ namespace LinkCollectionApp.Test
       });
 
       //Assert 
-      collections.Single().Element.Should().HaveCount(numberOfElements);
+      collections.Single().Elements.Should().HaveCount(numberOfElements);
     }
 
 
@@ -121,7 +119,7 @@ namespace LinkCollectionApp.Test
     {
       //Arrange
       var collectionData = new CollectionCreationData {IsPublic = false, Name = collectionName};
-      var userId = Guid.NewGuid().ToString();
+      var userId = NewGuid;
       AddUser(userId);
 
       //Act
@@ -147,7 +145,7 @@ namespace LinkCollectionApp.Test
     {
       //Arrange
       var collectionData = new CollectionCreationData { IsPublic = true, Name = collectionName };
-      var userId = Guid.NewGuid().ToString();
+      var userId = NewGuid;
       AddUser(userId);
 
       //Act
@@ -174,7 +172,7 @@ namespace LinkCollectionApp.Test
     {
       //Arrange
       var collectionData = new CollectionCreationData { IsPublic = true, Name = collectionName };
-      var userId = Guid.NewGuid().ToString();
+      var userId = NewGuid;
       AddUser(userId);
 
       //Act
@@ -189,53 +187,12 @@ namespace LinkCollectionApp.Test
       {
         var collectionFromContext = context.Collection.SingleOrDefault(c => c.Name == collectionName);
         var collectionFromUser = context.ApplicationUser
-          .Include(u => u.Collection)
-          .Single(u => u.Id == userId).Collection
+          .Include(u => u.Collections)
+          .Single(u => u.Id == userId).Collections
           .Single(c => c.Name == collectionName);
         collectionFromContext.Should().BeEquivalentTo(collectionFromUser);
         collectionFromContext.OwnerId.Should().Be(userId);
       });
-    }
-
-
-
-    //TODO[AR]: Move to a setup class
-    private void AddUser(string userId)
-    {
-      InTransaction(context =>
-      {
-        context.ApplicationUser.Add(new ApplicationUser
-        {
-          Id = userId,
-          UserName = Guid.NewGuid().ToString(),
-          Email = $"{userId}@test.com"
-        });
-        context.SaveChanges();
-      });
-    }
-
-    private void AddCollection(string ownerId, int numOfElements)
-    {
-      InTransaction(context =>
-      {
-        context.Add(new Collection
-        {
-          OwnerId = ownerId,
-          Description = Guid.NewGuid().ToString(),
-          Element = Enumerable.Range(0, numOfElements).Select(num => new Element
-          {
-            Name = Guid.NewGuid().ToString()
-          }).ToList()
-        });
-        context.SaveChanges();
-      });
-    }
-
-    private IUserContextProvider GetUserProviderMock(string userId)
-    {
-      var userProviderMock = new Mock<IUserContextProvider>();
-      userProviderMock.Setup(m => m.GetCurrentUserId()).Returns(userId);
-      return userProviderMock.Object;
     }
   }
 }

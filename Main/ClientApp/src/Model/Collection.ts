@@ -7,7 +7,7 @@ export type Collection = {
   name: string;
   description: string;
   createdDate: Date;
-  element: Element[];
+  elements: Element[];
 };
 
 export type CollectionCreationData = {

@@ -11,7 +11,7 @@ namespace LinkCollectionApp.Migrations
           name: "app");
 
       migrationBuilder.CreateTable(
-          name: "Collection",
+          name: "Collections",
           schema: "app",
           columns: table => new
           {
@@ -35,7 +35,7 @@ namespace LinkCollectionApp.Migrations
           });
 
       migrationBuilder.CreateTable(
-          name: "Element",
+          name: "CreatedElements",
           schema: "app",
           columns: table => new
           {
@@ -55,7 +55,7 @@ namespace LinkCollectionApp.Migrations
                       name: "FK__Element__Collect__4E88ABD4",
                       column: x => x.CollectionId,
                       principalSchema: "app",
-                      principalTable: "Collection",
+                      principalTable: "Collections",
                       principalColumn: "Id",
                       onDelete: ReferentialAction.Restrict);
             table.ForeignKey(
@@ -67,7 +67,7 @@ namespace LinkCollectionApp.Migrations
           });
 
       migrationBuilder.CreateTable(
-          name: "SavedCollection",
+          name: "SavedCollections",
           schema: "app",
           columns: table => new
           {
@@ -81,7 +81,7 @@ namespace LinkCollectionApp.Migrations
                       name: "FK__SavedColl__Colle__59063A47",
                       column: x => x.CollectionId,
                       principalSchema: "app",
-                      principalTable: "Collection",
+                      principalTable: "Collections",
                       principalColumn: "Id",
                       onDelete: ReferentialAction.Restrict);
             table.ForeignKey(
@@ -93,7 +93,7 @@ namespace LinkCollectionApp.Migrations
           });
 
       migrationBuilder.CreateTable(
-          name: "SharedCollection",
+          name: "SharedCollections",
           schema: "app",
           columns: table => new
           {
@@ -109,7 +109,7 @@ namespace LinkCollectionApp.Migrations
                       name: "FK__SharedCol__Colle__52593CB8",
                       column: x => x.CollectionId,
                       principalSchema: "app",
-                      principalTable: "Collection",
+                      principalTable: "Collections",
                       principalColumn: "Id",
                       onDelete: ReferentialAction.Restrict);
             table.ForeignKey(
@@ -123,50 +123,50 @@ namespace LinkCollectionApp.Migrations
       migrationBuilder.CreateIndex(
           name: "IX_Collection_OwnerId",
           schema: "app",
-          table: "Collection",
+          table: "Collections",
           column: "OwnerId");
 
       migrationBuilder.CreateIndex(
           name: "IX_Element_CollectionId",
           schema: "app",
-          table: "Element",
+          table: "CreatedElements",
           column: "CollectionId");
 
       migrationBuilder.CreateIndex(
           name: "IX_Element_OwnerId",
           schema: "app",
-          table: "Element",
+          table: "CreatedElements",
           column: "OwnerId");
 
       migrationBuilder.CreateIndex(
           name: "IX_SavedCollection_CollectionId",
           schema: "app",
-          table: "SavedCollection",
+          table: "SavedCollections",
           column: "CollectionId");
 
       migrationBuilder.CreateIndex(
           name: "IX_SharedCollection_CollectionId",
           schema: "app",
-          table: "SharedCollection",
+          table: "SharedCollections",
           column: "CollectionId");
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
       migrationBuilder.DropTable(
-            name: "Element",
+            name: "CreatedElements",
             schema: "app");
 
       migrationBuilder.DropTable(
-          name: "SavedCollection",
+          name: "SavedCollections",
           schema: "app");
 
       migrationBuilder.DropTable(
-          name: "SharedCollection",
+          name: "SharedCollections",
           schema: "app");
 
       migrationBuilder.DropTable(
-          name: "Collection",
+          name: "Collections",
           schema: "app");
     }
   }

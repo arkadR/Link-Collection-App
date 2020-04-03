@@ -168,7 +168,7 @@ namespace LinkCollectionApp.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.Collection", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.Collections", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,10 +204,10 @@ namespace LinkCollectionApp.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Collection","app");
+                    b.ToTable("Collections","app");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.Element", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.CreatedElements", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -247,10 +247,10 @@ namespace LinkCollectionApp.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Element","app");
+                    b.ToTable("CreatedElements","app");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollection", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollections", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -263,10 +263,10 @@ namespace LinkCollectionApp.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("SavedCollection","app");
+                    b.ToTable("SavedCollections","app");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollection", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollections", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -289,7 +289,7 @@ namespace LinkCollectionApp.Migrations
 
                     b.HasIndex("CollectionId");
 
-                    b.ToTable("SharedCollection","app");
+                    b.ToTable("SharedCollections","app");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -427,55 +427,55 @@ namespace LinkCollectionApp.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.Collection", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.Collections", b =>
                 {
                     b.HasOne("LinkCollectionApp.Models.ApplicationUser", "Owner")
-                        .WithMany("Collection")
+                        .WithMany("Collections")
                         .HasForeignKey("OwnerId")
                         .HasConstraintName("FK__Collectio__Owner__4AB81AF0")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.Element", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.CreatedElements", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Models.Collection", "Collection")
-                        .WithMany("Element")
+                    b.HasOne("LinkCollectionApp.Models.Collections", "Collections")
+                        .WithMany("CreatedElements")
                         .HasForeignKey("CollectionId")
                         .HasConstraintName("FK__Element__Collect__4E88ABD4")
                         .IsRequired();
 
                     b.HasOne("LinkCollectionApp.Models.ApplicationUser", "Owner")
-                        .WithMany("Element")
+                        .WithMany("CreatedElements")
                         .HasForeignKey("OwnerId")
                         .HasConstraintName("FK__Element__OwnerId__4F7CD00D")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollection", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollections", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Models.Collection", "Collection")
-                        .WithMany("SavedCollection")
+                    b.HasOne("LinkCollectionApp.Models.Collections", "Collections")
+                        .WithMany("SavedCollections")
                         .HasForeignKey("CollectionId")
                         .HasConstraintName("FK__SavedColl__Colle__59063A47")
                         .IsRequired();
 
                     b.HasOne("LinkCollectionApp.Models.ApplicationUser", "User")
-                        .WithMany("SavedCollection")
+                        .WithMany("SavedCollections")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK__SavedColl__UserI__5812160E")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollection", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollections", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Models.Collection", "Collection")
-                        .WithMany("SharedCollection")
+                    b.HasOne("LinkCollectionApp.Models.Collections", "Collections")
+                        .WithMany("SharedCollections")
                         .HasForeignKey("CollectionId")
                         .HasConstraintName("FK__SharedCol__Colle__52593CB8")
                         .IsRequired();
 
                     b.HasOne("LinkCollectionApp.Models.ApplicationUser", "User")
-                        .WithMany("SharedCollection")
+                        .WithMany("SharedCollections")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK__SharedCol__UserI__534D60F1")
                         .IsRequired();
