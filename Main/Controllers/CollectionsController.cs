@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using LinkCollectionApp.Data;
+using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace LinkCollectionApp.Controllers
@@ -17,36 +14,28 @@ namespace LinkCollectionApp.Controllers
   [ApiController]
   public class CollectionsController : ControllerBase
   {
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _dbContext;
+    private readonly IUserContextProvider _userProvider;
 
-    public CollectionsController(UserManager<ApplicationUser> userManager, ApplicationDbContext dbContext)
+    public CollectionsController(ApplicationDbContext dbContext, IUserContextProvider userProvider)
     {
-      _userManager = userManager;
       _dbContext = dbContext;
+      _userProvider = userProvider;
     }
 
     [HttpGet]
     public ICollection<Collection> GetUserCollections()
     {
-      var user = CurrentUser;
-      var collections = user.Collection;
+      var userId = _userProvider.GetCurrentUserId();
+      var collections = _dbContext.Users
+        .Include(u => u.Collection)
+        .ThenInclude(c => c.Element)
+        .Single(u => u.Id == userId)
+        .Collection.ToList();
+
       return collections;
-      // return CurrentUser.Collection;
     }
 
 
-
-    private ApplicationUser CurrentUser
-    {
-      get
-      {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        return _dbContext.ApplicationUser
-          .Include(user => user.Collection)
-          .ThenInclude(c => c.Element)
-          .Single(u => u.Id == userId);
-      }
-    }
   }
 }
