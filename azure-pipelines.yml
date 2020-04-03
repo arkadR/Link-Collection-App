@@ -43,12 +43,12 @@ steps:
     command: 'ci'
     workingDir: 'Main/ClientApp'
 
-- task: Npm@1
-  displayName: npm test
-  inputs:
-    command: 'custom'
-    workingDir: 'Main/ClientApp'
-    customCommand: 'test'
+# - task: Npm@1
+#   displayName: npm test
+#   inputs:
+#     command: 'custom'
+#     workingDir: 'Main/ClientApp'
+#     customCommand: 'test'
 
 - task: PublishTestResults@2
   condition: succeededOrFailed()
