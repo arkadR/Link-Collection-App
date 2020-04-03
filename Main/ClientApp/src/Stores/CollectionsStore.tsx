@@ -9,6 +9,7 @@ class CollectionStore extends StoreBase {
     switch (action.actionType) {
       case ActionTypes.LOAD_COLLECTIONS: {
         this._collections = action.payload.collections;
+        console.log(this._collections);
         this.emitChange();
         break;
       }

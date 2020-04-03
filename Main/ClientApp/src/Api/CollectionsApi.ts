@@ -14,7 +14,6 @@ class CollectionsApi {
   async addCollection(
     collectionData: CollectionCreationData
   ): Promise<boolean> {
-    debugger;
     let response = await authorizedPost("api/collections", collectionData);
     return response.ok;
   }

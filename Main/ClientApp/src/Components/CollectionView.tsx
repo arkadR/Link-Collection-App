@@ -35,13 +35,14 @@ export default function CollectionView(props: CollectionViewProps) {
     setDialogOpen(!dialogOpen);
   };
 
+  console.log({ col: collection });
+
   useEffect(() => {
     setCollection(CollectionsStore.getCollection(collectionId));
     const changeHandler = () => {
       setCollection(CollectionsStore.getCollection(collectionId));
+      console.log({ col: collection });
     };
-
-    console.debug({ col: collection });
 
     CollectionsStore.addChangeListener(changeHandler);
     return () => {
@@ -57,7 +58,7 @@ export default function CollectionView(props: CollectionViewProps) {
         spacing={50}
         className={classes.list}
       >
-        {collection?.element.map(element => (
+        {collection?.elements.map(element => (
           <GridListTile key={element.id}>
             <ElementCreator element={element} />
           </GridListTile>
