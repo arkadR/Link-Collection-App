@@ -36,13 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200403210622_ChangedNaigationNames.cs" />
-    <Compile Remove="Migrations\20200403210622_ChangedNaigationNames.Designer.cs" />
-    <Compile Remove="Migrations\20200403210932_ChangedNavigationNames.cs" />
-    <Compile Remove="Migrations\20200403210932_ChangedNavigationNames.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="ClientApp\src\App.tsx" />
     <None Remove="ClientApp\src\Home.tsx" />
     <None Remove="ClientApp\src\Layout1.tsx" />
