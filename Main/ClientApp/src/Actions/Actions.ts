@@ -15,11 +15,9 @@ export async function loadCollections() {
 export async function addCollection(
   collectionCreationData: CollectionCreationData
 ) {
-  CollectionsApi.addCollection(collectionCreationData);
-  Dispatcher.dispatch({
-    actionType: ActionTypes.ADD_COLLECTION,
-    payload: { collectionCreationData: collectionCreationData }
-  });
+  let success = await CollectionsApi.addCollection(collectionCreationData);
+  if (success) loadCollections();
+  else console.log("Could not add collection");
 }
 
 export function addElement(elementCreationData: ElementCreationData) {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
@@ -36,6 +37,21 @@ namespace LinkCollectionApp.Controllers
       return collections;
     }
 
+    [HttpPost]
+    public IActionResult AddCollection([FromBody] CollectionCreationData data)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var collection = new Collection {Name = data.Name, IsPublic = data.IsPublic, OwnerId = userId};
+      _dbContext.Add(collection);
+      _dbContext.SaveChanges();
+      return Ok();
+    }
+  }
 
+  public class CollectionCreationData
+  {
+    public string Name { get; set; }
+
+    public bool IsPublic { get; set; }
   }
 }

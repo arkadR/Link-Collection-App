@@ -32,9 +32,12 @@ namespace LinkCollectionApp
         .AddControllersWithViews()
         .AddNewtonsoftJson()
         .AddJsonOptions(opts =>
-          opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase);
+        {
+          opts.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+          opts.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+        });
 
-      services.AddDbContext<ApplicationDbContext>(options =>
+    services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(
           Configuration.GetConnectionString("ApplicationDbContextConnection")));
 
