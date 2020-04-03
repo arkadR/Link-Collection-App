@@ -5,6 +5,7 @@ using FluentAssertions;
 using LinkCollectionApp.Controllers;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -110,6 +111,90 @@ namespace LinkCollectionApp.Test
 
       //Assert 
       collections.Single().Element.Should().HaveCount(numberOfElements);
+    }
+
+
+    [Theory]
+    [InlineData("SomeCollection")]
+    [InlineData("1234567890")]
+    public void AddCollection_PrivateCollection_CollectionAddedToDb(string collectionName)
+    {
+      //Arrange
+      var collectionData = new CollectionCreationData {IsPublic = false, Name = collectionName};
+      var userId = Guid.NewGuid().ToString();
+      AddUser(userId);
+
+      //Act
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        controller.AddCollection(collectionData);
+      });
+
+      //Assert 
+      InTransaction(context =>
+      {
+        var collection = context.Collection.SingleOrDefault(c => c.Name == collectionName);
+        collection.Should().NotBeNull();
+        collection.IsPublic.Should().BeFalse();
+      });
+    }
+
+    [Theory]
+    [InlineData("SomeCollection")]
+    [InlineData("1234567890")]
+    public void AddCollection_PublicCollection_CollectionAddedToDb(string collectionName)
+    {
+      //Arrange
+      var collectionData = new CollectionCreationData { IsPublic = true, Name = collectionName };
+      var userId = Guid.NewGuid().ToString();
+      AddUser(userId);
+
+      //Act
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        controller.AddCollection(collectionData);
+      });
+
+      //Assert 
+      InTransaction(context =>
+      {
+        var collection = context.Collection.SingleOrDefault(c => c.Name == collectionName);
+        collection.Should().NotBeNull();
+        collection.IsPublic.Should().BeTrue();
+      });
+    }
+
+
+    [Theory]
+    [InlineData("SomeCollection")]
+    [InlineData("1234567890")]
+    public void AddCollection_PublicCollection_CollectionAssignedToUser(string collectionName)
+    {
+      //Arrange
+      var collectionData = new CollectionCreationData { IsPublic = true, Name = collectionName };
+      var userId = Guid.NewGuid().ToString();
+      AddUser(userId);
+
+      //Act
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        controller.AddCollection(collectionData);
+      });
+
+      //Assert 
+      InTransaction(context =>
+      {
+        var collectionFromContext = context.Collection.SingleOrDefault(c => c.Name == collectionName);
+        var collectionFromUser = context.ApplicationUser
+          .Include(u => u.Collection)
+          .Single(u => u.Id == userId).Collection
+          .Single(c => c.Name == collectionName);
+        collectionFromContext.Should().BeEquivalentTo(collectionFromUser);
+        collectionFromContext.OwnerId.Should().Be(userId);
+      });
     }
 
 
