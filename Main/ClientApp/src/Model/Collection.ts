@@ -9,3 +9,8 @@ export type Collection = {
   createdDate: Date;
   element: Element[];
 };
+
+export type CollectionCreationData = {
+  isPublic: boolean;
+  name: string;
+};
