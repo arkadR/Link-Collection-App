@@ -41,8 +41,6 @@ export default function CollectionView(props: CollectionViewProps) {
       setCollection(CollectionsStore.getCollection(collectionId));
     };
 
-    console.debug({ col: collection });
-
     CollectionsStore.addChangeListener(changeHandler);
     return () => {
       CollectionsStore.removeChangeListener(changeHandler);
@@ -57,7 +55,7 @@ export default function CollectionView(props: CollectionViewProps) {
         spacing={50}
         className={classes.list}
       >
-        {collection?.element.map(element => (
+        {collection?.elements.map(element => (
           <GridListTile key={element.id}>
             <ElementCreator element={element} />
           </GridListTile>

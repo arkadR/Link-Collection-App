@@ -1,5 +1,6 @@
 import Dispatcher from "../Infrastructure/Dispatcher";
 import CollectionsApi from "../Api/CollectionsApi";
+import ElementsApi from "../Api/ElementsApi";
 import ActionTypes from "./ActionTypes";
 import { CollectionCreationData } from "../Model/Collection";
 import { ElementCreationData } from "../Model/Element";
@@ -15,13 +16,13 @@ export async function loadCollections() {
 export async function addCollection(
   collectionCreationData: CollectionCreationData
 ) {
-  CollectionsApi.addCollection(collectionCreationData);
-  Dispatcher.dispatch({
-    actionType: ActionTypes.ADD_COLLECTION,
-    payload: { collectionCreationData: collectionCreationData }
-  });
+  let success = await CollectionsApi.addCollection(collectionCreationData);
+  if (success) loadCollections();
+  else console.error("Could not add collection");
 }
 
-export function addElement(elementCreationData: ElementCreationData) {
-  throw new Error("Method not implemented.");
+export async function addElement(elementCreationData: ElementCreationData) {
+  let success = await ElementsApi.addElement(elementCreationData);
+  if (success) loadCollections();
+  else console.error("Could not add element");
 }

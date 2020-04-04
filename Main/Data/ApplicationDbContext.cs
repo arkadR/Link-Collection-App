@@ -65,7 +65,7 @@ namespace LinkCollectionApp.Data
             .HasMaxLength(450);
 
         entity.HasOne(d => d.Owner)
-            .WithMany(p => p.Collection)
+            .WithMany(p => p.Collections)
             .HasForeignKey(d => d.OwnerId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__Collectio__Owner__4AB81AF0");
@@ -93,13 +93,13 @@ namespace LinkCollectionApp.Data
             .HasMaxLength(450);
 
         entity.HasOne(d => d.Collection)
-            .WithMany(p => p.Element)
+            .WithMany(p => p.Elements)
             .HasForeignKey(d => d.CollectionId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__Element__Collect__4E88ABD4");
 
         entity.HasOne(d => d.Owner)
-            .WithMany(p => p.Element)
+            .WithMany(p => p.CreatedElements)
             .HasForeignKey(d => d.OwnerId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__Element__OwnerId__4F7CD00D");
@@ -113,13 +113,13 @@ namespace LinkCollectionApp.Data
         entity.ToTable("SavedCollection", "app");
 
         entity.HasOne(d => d.Collection)
-            .WithMany(p => p.SavedCollection)
+            .WithMany(p => p.SavedCollections)
             .HasForeignKey(d => d.CollectionId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__SavedColl__Colle__59063A47");
 
         entity.HasOne(d => d.User)
-            .WithMany(p => p.SavedCollection)
+            .WithMany(p => p.SavedCollections)
             .HasForeignKey(d => d.UserId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__SavedColl__UserI__5812160E");
@@ -137,13 +137,13 @@ namespace LinkCollectionApp.Data
         entity.Property(e => e.ViewRights).HasDefaultValueSql("((1))");
 
         entity.HasOne(d => d.Collection)
-            .WithMany(p => p.SharedCollection)
+            .WithMany(p => p.SharedCollections)
             .HasForeignKey(d => d.CollectionId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__SharedCol__Colle__52593CB8");
 
         entity.HasOne(d => d.User)
-            .WithMany(p => p.SharedCollection)
+            .WithMany(p => p.SharedCollections)
             .HasForeignKey(d => d.UserId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__SharedCol__UserI__534D60F1");
