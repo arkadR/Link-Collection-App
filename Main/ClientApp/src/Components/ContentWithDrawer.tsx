@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Drawer from "./Drawer";
+import Drawer from "./Drawer/Drawer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
