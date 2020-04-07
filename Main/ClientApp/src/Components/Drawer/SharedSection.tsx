@@ -43,6 +43,7 @@ export default function SharedSection() {
             <Link
               to={`/collections/shared/${sharedCollection.collection.id}`}
               className={classes.link}
+              key={sharedCollection.collection.id}
             >
               <DrawerItemNested
                 title={sharedCollection.collection.name}

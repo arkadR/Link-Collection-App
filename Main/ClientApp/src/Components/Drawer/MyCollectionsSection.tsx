@@ -50,7 +50,11 @@ export default function MyCollectionsSection() {
       nestedList={
         <List component="div" disablePadding>
           {collections.map(collection => (
-            <Link to={`/collections/${collection.id}`} className={classes.link}>
+            <Link
+              to={`/collections/${collection.id}`}
+              className={classes.link}
+              key={collection.id}
+            >
               <DrawerItemNested
                 title={collection.name}
                 icon={collection.isPublic ? <Public /> : <Lock />}

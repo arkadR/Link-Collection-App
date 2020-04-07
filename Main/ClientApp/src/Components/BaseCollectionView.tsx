@@ -28,9 +28,9 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
         spacing={50}
         className={classes.list}
       >
+        {GridColumnList(0, props.collection)}
         {GridColumnList(1, props.collection)}
         {GridColumnList(2, props.collection)}
-        {GridColumnList(0, props.collection)}
       </GridList>
       {props.children}
     </>
