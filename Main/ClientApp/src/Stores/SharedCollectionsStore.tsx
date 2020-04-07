@@ -20,6 +20,13 @@ class SharedCollectionStore extends StoreBase {
     return this._sharedCollections ?? [];
   }
 
+  public getSharedCollection(collectionId: number): SharedCollection | null {
+    let sharedCollection = this._sharedCollections?.find(
+      sc => sc.collection.id == collectionId
+    );
+    return sharedCollection ?? null;
+  }
+
   private _sharedCollections: SharedCollection[] | null = null;
 }
 
