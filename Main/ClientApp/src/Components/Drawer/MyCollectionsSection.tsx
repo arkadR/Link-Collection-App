@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { List } from "@material-ui/core";
-import { Lock, Widgets } from "@material-ui/icons";
+import { Lock, Widgets, Public } from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../../Stores/CollectionsStore";
@@ -51,7 +51,10 @@ export default function MyCollectionsSection() {
         <List component="div" disablePadding>
           {collections.map(collection => (
             <Link to={`/collections/${collection.id}`} className={classes.link}>
-              <DrawerItemNested title={collection.name} icon={<Lock />} />
+              <DrawerItemNested
+                title={collection.name}
+                icon={collection.isPublic ? <Public /> : <Lock />}
+              />
             </Link>
           ))}
           <ListItemAdd
