@@ -1,4 +1,6 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace LinkCollectionApp.Models
 {
   public partial class SharedCollection
@@ -9,6 +11,7 @@ namespace LinkCollectionApp.Models
     public bool? EditRights { get; set; }
 
     public virtual Collection Collection { get; set; }
+    [JsonIgnore]
     public virtual ApplicationUser User { get; set; }
   }
 }
