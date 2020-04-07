@@ -29,7 +29,7 @@ export default function AddCollectionDialog(props: AddCollectionDialogProps) {
     this category."
       content={
         <TextField
-          onChange={e => handleInputChange(e.target.value)}
+          onChange={(e) => handleInputChange(e.target.value)}
           autoFocus
           margin="dense"
           id="collectionName"
@@ -41,6 +41,7 @@ export default function AddCollectionDialog(props: AddCollectionDialogProps) {
       }
       actions={
         <Button
+          disabled={inputText.length === 0}
           onClick={() => {
             addCollection(createCollectionData(inputText));
             props.toggleDialogOpen();

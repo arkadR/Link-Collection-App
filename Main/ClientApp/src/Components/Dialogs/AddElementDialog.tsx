@@ -26,7 +26,7 @@ export default function AddElementDialog(props: AddElementDialogProps) {
     return {
       collectionId: props.collectionId,
       name: name,
-      link: url
+      link: url,
     } as ElementCreationData;
   };
 
@@ -39,7 +39,7 @@ export default function AddElementDialog(props: AddElementDialogProps) {
       content={
         <>
           <TextField
-            onChange={e => handleNameChange(e.target.value)}
+            onChange={(e) => handleNameChange(e.target.value)}
             autoFocus
             margin="dense"
             id="elementName"
@@ -49,7 +49,7 @@ export default function AddElementDialog(props: AddElementDialogProps) {
             fullWidth
           />
           <TextField
-            onChange={e => handleUrlChange(e.target.value)}
+            onChange={(e) => handleUrlChange(e.target.value)}
             autoFocus
             margin="dense"
             id="elementDescription"
@@ -62,6 +62,7 @@ export default function AddElementDialog(props: AddElementDialogProps) {
       }
       actions={
         <Button
+          disabled={name.length === 0}
           onClick={() => {
             addElement(createElementData(name, url));
             props.toggleDialogOpen();

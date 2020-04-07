@@ -1,4 +1,5 @@
 import Dispatcher from "../Infrastructure/Dispatcher";
+import SharedCollectionsApi from "../Api/SharedCollectionsApi";
 import CollectionsApi from "../Api/CollectionsApi";
 import ElementsApi from "../Api/ElementsApi";
 import ActionTypes from "./ActionTypes";
@@ -25,4 +26,12 @@ export async function addElement(elementCreationData: ElementCreationData) {
   let success = await ElementsApi.addElement(elementCreationData);
   if (success) loadCollections();
   else console.error("Could not add element");
+}
+
+export async function loadSharedCollections() {
+  let sharedCollections = await SharedCollectionsApi.getSharedCollections();
+  Dispatcher.dispatch({
+    actionType: ActionTypes.LOAD_SHARED_COLLECTIONS,
+    payload: { sharedCollections: sharedCollections }
+  });
 }

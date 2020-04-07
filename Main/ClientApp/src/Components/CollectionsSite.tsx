@@ -4,6 +4,7 @@ import ContentWithDrawer from "./ContentWithDrawer";
 import { Route, useRouteMatch, RouteComponentProps } from "react-router-dom";
 import PanelWideMessage from "./Common/PanelWideMessage";
 import CollectionView from "./CollectionView";
+import SharedCollectionView from "./SharedCollectionView";
 
 export default function CollectionsSite(props: CollectionsSiteProps) {
   let { path, url } = useRouteMatch();
@@ -20,7 +21,11 @@ export default function CollectionsSite(props: CollectionsSiteProps) {
             />
           )}
         />
-        <Route path={`${url}/:collectionId`} component={CollectionView} />
+        <Route
+          path={`${url}/shared/:collectionId`}
+          component={SharedCollectionView}
+        />
+        <Route exact path={`${url}/:collectionId`} component={CollectionView} />
       </ContentWithDrawer>
     </Layout>
   );

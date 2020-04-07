@@ -21,19 +21,16 @@ type DrawerItemNestedProps = {
   icon?: ReactElement;
 };
 
-export default function DrawerItemNested({
-  title,
-  icon
-}: DrawerItemNestedProps) {
+export default function DrawerItemNested(props: DrawerItemNestedProps) {
   const classes = useStyles();
   return (
     <ListItem button className={classes.nested}>
-      {icon != null ? (
-        <ListItemIcon children={icon} />
+      {props.icon != null ? (
+        <ListItemIcon children={props.icon} />
       ) : (
         <ListItemIcon children={<Clear style={{ visibility: "hidden" }} />} />
       )}
-      <ListItemText primary={title} />
+      <ListItemText primary={props.title} />
       <IconButton color="inherit">
         <MoreVert />
       </IconButton>
