@@ -28,13 +28,32 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
         spacing={50}
         className={classes.list}
       >
-        {props.collection?.elements.map(element => (
-          <GridListTile key={element.id}>
-            <ElementCreator element={element} />
-          </GridListTile>
-        ))}
+        {GridColumnList(1, props.collection)}
+        {GridColumnList(2, props.collection)}
+        {GridColumnList(0, props.collection)}
       </GridList>
       {props.children}
     </>
+  );
+}
+
+function GridColumnList(
+  modulo: number,
+  collection: BaseCollectionViewProps["collection"]
+) {
+  return (
+    <GridListTile key={modulo}>
+      <GridList cols={1} cellHeight="auto" spacing={50}>
+        {collection?.elements.map(element => {
+          if (element.sequence != null && element.sequence % 3 == modulo) {
+            return (
+              <GridListTile key={element.id}>
+                <ElementCreator element={element} />
+              </GridListTile>
+            );
+          }
+        })}
+      </GridList>
+    </GridListTile>
   );
 }
