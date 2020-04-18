@@ -6,7 +6,7 @@ import { AuthenticationResultStatus } from "./AuthorizeService";
 import {
   LoginActions,
   QueryParameterNames,
-  ApplicationPaths
+  ApplicationPaths,
 } from "./ApiAuthorizationConstants";
 
 // The main responsibility of this component is to handle the user's login process.
@@ -18,7 +18,7 @@ export class Login extends Component {
     super(props);
 
     this.state = {
-      message: undefined
+      message: undefined,
     };
   }
 
@@ -56,13 +56,10 @@ export class Login extends Component {
     } else {
       switch (action) {
         case LoginActions.Login:
-          return <PanelWideMessage text="Processing login" throbber={true} />;
+          return <PanelWideMessage withThrobber text="Processing login" />;
         case LoginActions.LoginCallback:
           return (
-            <PanelWideMessage
-              text="Processing login callback"
-              throbber={true}
-            />
+            <PanelWideMessage withThrobber text="Processing login callback" />
           );
         case LoginActions.Profile:
         case LoginActions.Register:

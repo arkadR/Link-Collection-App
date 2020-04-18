@@ -6,7 +6,7 @@ import { AuthenticationResultStatus } from "./AuthorizeService";
 import {
   QueryParameterNames,
   LogoutActions,
-  ApplicationPaths
+  ApplicationPaths,
 } from "./ApiAuthorizationConstants";
 
 // The main responsibility of this component is to handle the user's logout process.
@@ -19,7 +19,7 @@ export class Logout extends Component {
     this.state = {
       message: undefined,
       isReady: false,
-      authenticated: false
+      authenticated: false,
     };
   }
 
@@ -33,7 +33,7 @@ export class Logout extends Component {
           // This prevents regular links to <app>/authentication/logout from triggering a logout
           this.setState({
             isReady: true,
-            message: "The logout was not initiated from within the page."
+            message: "The logout was not initiated from within the page.",
           });
         }
         break;
@@ -43,7 +43,7 @@ export class Logout extends Component {
       case LogoutActions.LoggedOut:
         this.setState({
           isReady: true,
-          message: "You successfully logged out!"
+          message: "You successfully logged out!",
         });
         break;
       default:
@@ -64,13 +64,10 @@ export class Logout extends Component {
       const action = this.props.action;
       switch (action) {
         case LogoutActions.Logout:
-          return <PanelWideMessage text="Processing logout" throbber={true} />;
+          return <PanelWideMessage withThrobber text="Processing logout" />;
         case LogoutActions.LogoutCallback:
           return (
-            <PanelWideMessage
-              text="Processing logout callback"
-              throbber={true}
-            />
+            <PanelWideMessage withThrobber text="Processing logout callback" />
           );
         case LogoutActions.LoggedOut:
           return <PanelWideMessage text={message} />;

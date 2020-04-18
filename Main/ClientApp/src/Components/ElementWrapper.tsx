@@ -3,11 +3,11 @@ import { Element } from "../Model/Element";
 import ElementView from "./ElementView";
 import ImageElement from "./ImageElement";
 
-type ElementCreatorProps = {
+type ElementWrapperProps = {
   element: Element;
 };
 
-export default function ElementCreator(props: ElementCreatorProps) {
+export default function ElementWrapper(props: ElementWrapperProps) {
   return (
     <>
       {IsImageElement(props.element) ? (

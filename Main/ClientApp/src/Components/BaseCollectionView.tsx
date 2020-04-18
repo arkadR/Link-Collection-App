@@ -1,25 +1,32 @@
 import React, { ReactNode } from "react";
 import { Collection } from "../Model/Collection";
-import ElementCreator from "./ElementCreator";
-import { GridList, GridListTile, Fab } from "@material-ui/core";
+import { Element } from "../Model/Element";
+import ElementWrapper from "./ElementWrapper";
+import { GridList, GridListTile } from "@material-ui/core";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     list: {
-      padding: "25px 30px 25px 30px"
-    }
+      padding: "25px 30px 25px 30px",
+    },
   })
 );
 
 type BaseCollectionViewProps = {
-  collection: Collection | null | undefined;
+  collection: Collection | null;
   children?: ReactNode;
 };
 
 export default function BaseCollectionView(props: BaseCollectionViewProps) {
   const classes = useStyles();
 
+  let elements =
+    props.collection?.elements.sort((el1, el2) => {
+      if (el1.sequence === null) return 1;
+      if (el2.sequence === null) return -1;
+      return el1.sequence - el2.sequence;
+    }) ?? [];
   return (
     <>
       <GridList
@@ -28,30 +35,25 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
         spacing={50}
         className={classes.list}
       >
-        {GridColumnList(0, props.collection)}
-        {GridColumnList(1, props.collection)}
-        {GridColumnList(2, props.collection)}
+        {GridColumnList(elements.filter((el, idx) => idx % 3 === 0))}
+        {GridColumnList(elements.filter((el, idx) => idx % 3 === 1))}
+        {GridColumnList(elements.filter((el, idx) => idx % 3 === 2))}
       </GridList>
       {props.children}
     </>
   );
 }
 
-function GridColumnList(
-  modulo: number,
-  collection: BaseCollectionViewProps["collection"]
-) {
+function GridColumnList(elements: Element[]) {
   return (
-    <GridListTile key={modulo}>
+    <GridListTile>
       <GridList cols={1} cellHeight="auto" spacing={50}>
-        {collection?.elements.map(element => {
-          if (element.sequence != null && element.sequence % 3 == modulo) {
-            return (
-              <GridListTile key={element.id}>
-                <ElementCreator element={element} />
-              </GridListTile>
-            );
-          }
+        {elements.map((element) => {
+          return (
+            <GridListTile key={element.id}>
+              <ElementWrapper element={element} />
+            </GridListTile>
+          );
         })}
       </GridList>
     </GridListTile>

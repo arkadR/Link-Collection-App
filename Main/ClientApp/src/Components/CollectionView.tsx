@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme: Theme) =>
     fab: {
       position: "absolute",
       bottom: theme.spacing(2),
-      right: theme.spacing(2)
-    }
+      right: theme.spacing(2),
+    },
   })
 );
 
@@ -24,7 +24,6 @@ type CollectionViewProps = RouteComponentProps & {
 
 export default function CollectionView(props: CollectionViewProps) {
   const classes = useStyles();
-  const collectionId = props.match.params.collectionId;
   let [collection, setCollection] = useState<Collection | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
@@ -33,6 +32,7 @@ export default function CollectionView(props: CollectionViewProps) {
   };
 
   useEffect(() => {
+    const collectionId = props.match.params.collectionId;
     setCollection(CollectionsStore.getCollection(collectionId));
     const changeHandler = () => {
       setCollection(CollectionsStore.getCollection(collectionId));

@@ -6,7 +6,7 @@ import PanelWideMessage from "./Common/PanelWideMessage";
 import CollectionView from "./CollectionView";
 import SharedCollectionView from "./SharedCollectionView";
 
-export default function CollectionsSite(props: CollectionsSiteProps) {
+export default function CollectionsPage(props: CollectionsSiteProps) {
   let { path, url } = useRouteMatch();
   return (
     <Layout>
@@ -15,10 +15,7 @@ export default function CollectionsSite(props: CollectionsSiteProps) {
           exact
           path={path}
           component={() => (
-            <PanelWideMessage
-              text="Select a collection to display"
-              throbber={false}
-            />
+            <PanelWideMessage text="Select a collection to display" />
           )}
         />
         <Route

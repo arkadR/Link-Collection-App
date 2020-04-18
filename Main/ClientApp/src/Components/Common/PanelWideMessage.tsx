@@ -5,7 +5,7 @@ import Center from "./Center";
 
 type PanelWideMessageProps = {
   text: string;
-  throbber: boolean;
+  withThrobber?: boolean;
 };
 
 export default function PanelWideMessage(props: PanelWideMessageProps) {
@@ -17,7 +17,7 @@ export default function PanelWideMessage(props: PanelWideMessageProps) {
             {props.text}
           </Typography>
         </Grid>
-        {props.throbber && (
+        {props.withThrobber === true && (
           <Grid item>
             <Loader type="TailSpin" color="grey" height={60} width={60} />
           </Grid>
