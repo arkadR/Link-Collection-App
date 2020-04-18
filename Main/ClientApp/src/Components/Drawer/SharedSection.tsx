@@ -11,8 +11,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     link: {
       color: "black",
-      textDecoration: "none"
-    }
+      textDecoration: "none",
+    },
   })
 );
 
@@ -39,7 +39,7 @@ export default function SharedSection() {
       icon={<People />}
       nestedList={
         <List component="div" disablePadding>
-          {sharedCollections.map(sharedCollection => (
+          {sharedCollections.map((sharedCollection) => (
             <Link
               to={`/collections/shared/${sharedCollection.collection.id}`}
               className={classes.link}
@@ -56,6 +56,7 @@ export default function SharedSection() {
                     <VisibilityOff />
                   )
                 }
+                menuItems={<></>}
               />
             </Link>
           ))}

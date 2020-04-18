@@ -7,3 +7,10 @@ export type SharedCollection = {
   viewRights: boolean;
   editRights: boolean;
 };
+
+export type SharedCollectionData = {
+  collectionId: number;
+  userId: string;
+  viewRights: boolean;
+  editRights: boolean;
+};
