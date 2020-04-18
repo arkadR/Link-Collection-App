@@ -38,5 +38,22 @@ namespace LinkCollectionApp.Controllers
 
       return sharedCollections;
     }
+
+    [HttpPost]
+    public void ShareCollection(SharedCollectionCreationData data)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      _dbContext.Users
+        .Include(user => user.SharedCollections)
+        .Single(user => user.Id == data.UserId).SharedCollections
+        .Add(new SharedCollection
+      {
+        CollectionId = data.CollectionId,
+        UserId = data.UserId,
+        ViewRights = data.ViewRights,
+        EditRights = data.EditRights
+      });
+      _dbContext.SaveChanges();
+    }
   }
 }

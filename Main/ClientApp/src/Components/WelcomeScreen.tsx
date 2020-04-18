@@ -5,7 +5,7 @@ import Layout from "./Layout";
 export default function WelcomeScreen() {
   return (
     <Layout>
-      <PanelWideMessage text="Log in to get started" throbber={false} />
+      <PanelWideMessage text="Log in to get started" />
     </Layout>
   );
 }

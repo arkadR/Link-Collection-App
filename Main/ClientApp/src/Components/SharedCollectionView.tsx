@@ -2,7 +2,7 @@ import { RouteComponentProps } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import SharedCollectionsStore from "../Stores/SharedCollectionsStore";
 import { SharedCollection } from "../Model/SharedCollection";
-import ElementCreator from "./ElementCreator";
+import ElementWrapper from "./ElementWrapper";
 import { GridList, GridListTile, Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
@@ -15,8 +15,8 @@ const useStyles = makeStyles((theme: Theme) =>
     fab: {
       position: "absolute",
       bottom: theme.spacing(2),
-      right: theme.spacing(2)
-    }
+      right: theme.spacing(2),
+    },
   })
 );
 
@@ -26,13 +26,13 @@ type SharedCollectionViewProps = RouteComponentProps & {
 
 export default function SharedCollectionView(props: SharedCollectionViewProps) {
   const classes = useStyles();
-  const collectionId = props.match.params.collectionId;
   let [
     sharedCollection,
-    setSharedCollection
+    setSharedCollection,
   ] = useState<SharedCollection | null>(null);
 
   useEffect(() => {
+    const collectionId = props.match.params.collectionId;
     setSharedCollection(
       SharedCollectionsStore.getSharedCollection(collectionId)
     );
@@ -64,10 +64,7 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
           )}
         </BaseCollectionView>
       ) : (
-        <PanelWideMessage
-          text="You have no rights to view this collection"
-          throbber={false}
-        />
+        <PanelWideMessage text="You have no rights to view this collection" />
       )}
     </>
   );

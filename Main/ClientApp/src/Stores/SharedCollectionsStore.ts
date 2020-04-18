@@ -22,7 +22,7 @@ class SharedCollectionStore extends StoreBase {
 
   public getSharedCollection(collectionId: number): SharedCollection | null {
     let sharedCollection = this._sharedCollections?.find(
-      sc => sc.collection.id == collectionId
+      (sc) => sc.collection.id == collectionId
     );
     return sharedCollection ?? null;
   }
