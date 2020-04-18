@@ -6,8 +6,18 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Typography,
+  Divider,
 } from "@material-ui/core";
-import { Lock, Widgets, Public, GroupAdd } from "@material-ui/icons";
+import {
+  Lock,
+  Widgets,
+  Public,
+  GroupAdd,
+  Delete,
+  Edit,
+  LockOpen,
+} from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../../Stores/CollectionsStore";
@@ -24,6 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
       textDecoration: "none",
     },
     addItem: {
+      paddingLeft: "15px",
+    },
+    collectionSettingsMenuTitle: {
       paddingLeft: "15px",
     },
   })
@@ -75,19 +88,57 @@ export default function MyCollectionsSection() {
                   title={collection.name}
                   icon={collection.isPublic ? <Public /> : <Lock />}
                   menuItems={
-                    //<></>}
+                    <>
+                      <Typography
+                        variant="h5"
+                        className={classes.collectionSettingsMenuTitle}
+                      >
+                        Settings
+                      </Typography>
+                      <MenuItem>
+                        {/* TODO: on click */}
+                        <ListItem>
+                          <ListItemIcon>
+                            <Delete />
+                          </ListItemIcon>
+                          <ListItemText primary="Delete" />
+                        </ListItem>
+                      </MenuItem>
+                      <MenuItem>
+                        {/* TODO: on click */}
+                        <ListItem>
+                          <ListItemIcon>
+                            <Edit />
+                          </ListItemIcon>
+                          <ListItemText primary="Edit" />
+                        </ListItem>
+                      </MenuItem>
+                      <Divider />
+                      <MenuItem>
+                        {/* TODO: on click */}
+                        <ListItem>
+                          <ListItemIcon>
+                            <LockOpen />
+                          </ListItemIcon>
+                          <ListItemText primary="Share with everyone" />
+                        </ListItem>
+                      </MenuItem>
+                      {/* //<></>}
                     /*
-                  // @ts-ignore */
-                    <MenuItem
-                      onClick={() => onShareCollectionClick(collection.id)}
-                    >
-                      <ListItem>
-                        <ListItemIcon>
-                          <GroupAdd />
-                        </ListItemIcon>
-                        <ListItemText primary="Share" />
-                      </ListItem>
-                    </MenuItem>
+                  // @ts-ignore */}
+                      <MenuItem
+                        onClick={() => onShareCollectionClick(collection.id)}
+                      >
+                        <ListItem>
+                          <ListItemIcon>
+                            <GroupAdd />
+                          </ListItemIcon>
+                          <ListItemText primary="Share" />
+                        </ListItem>
+                      </MenuItem>
+                      <Divider />
+                      {/* TODO: list of contributors */}
+                    </>
                   }
                 />
               </Link>

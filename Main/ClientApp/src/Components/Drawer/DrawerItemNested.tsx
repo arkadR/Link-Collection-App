@@ -43,7 +43,16 @@ export default function DrawerItemNested(props: DrawerItemNestedProps) {
       <IconButton color="inherit" onClick={onMenuOpen}>
         <MoreVert />
       </IconButton>
-      <Menu open={anchorEl !== null} anchorEl={anchorEl} onClose={onMenuClose}>
+      <Menu
+        open={anchorEl !== null}
+        anchorEl={anchorEl}
+        onClose={onMenuClose}
+        PaperProps={{
+          style: {
+            maxHeight: 350,
+          },
+        }}
+      >
         {props.menuItems}
       </Menu>
     </ListItem>
