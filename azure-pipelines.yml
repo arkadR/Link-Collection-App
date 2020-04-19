@@ -38,57 +38,58 @@ steps:
     projects: 'Main/LinkCollectionApp.csproj'
     arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
 
-# - task: DotNetCoreCLI@2
-#   displayName: dotnet test
-#   inputs:
-#     command: 'test'
-#     projects: 'Test/LinkCollectionApp.Test.csproj'
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: 'test'
+    projects: 'Test/LinkCollectionApp.Test.csproj'
 
-# - task: Npm@1
-#   displayName: npm ci
-#   inputs:
-#     command: 'ci'
-#     workingDir: 'Main/ClientApp'
+- task: Npm@1
+  displayName: npm ci
+  inputs:
+    command: 'ci'
+    workingDir: 'Main/ClientApp'
 
-# - task: Npm@1
-#   displayName: npm test
-#   inputs:
-#     command: 'custom'
-#     workingDir: 'Main/ClientApp'
-#     customCommand: 'test'
+- task: Npm@1
+  displayName: npm test
+  inputs:
+    command: 'custom'
+    workingDir: 'Main/ClientApp'
+    customCommand: 'test'
 
-# - task: DotNetCoreCLI@2
-#   displayName: dotnet publish
-#   inputs:
-#     command: 'publish'
-#     publishWebProjects: true
-#     arguments: '-o $(Build.ArtifactStagingDirectory)'
+- task: DotNetCoreCLI@2
+  displayName: dotnet publish
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '-o $(Build.ArtifactStagingDirectory)'
 
-# - task: AzureWebApp@1
-#   displayName: Publish to Azure
-#   inputs:
-#     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
-#     appType: 'webAppLinux'
-#     appName: 'LinkCollectionApp'
-#     package: '$(Build.ArtifactStagingDirectory)/*.zip'
-#     runtimeStack: 'DOTNETCORE|LTS'
+- task: AzureWebApp@1
+  displayName: Publish to Azure
+  inputs:
+    azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
+    appType: 'webAppLinux'
+    appName: 'LinkCollectionApp'
+    package: '$(Build.ArtifactStagingDirectory)/*.zip'
+    runtimeStack: 'DOTNETCORE|LTS'
 
-- script: dotnet tool install --global dotnet-ef
-  displayName: 'dotnet install ef'
+# - script: dotnet tool install --global dotnet-ef
+#   displayName: 'dotnet install ef'
 
-# - task: DotNetCoreCLI@2
-#   displayName: install ef core
-#   inputs:
-#     command: 'custom'
-#     custom: 'tool install --global dotnet-ef'
+- task: DotNetCoreCLI@2
+  displayName: dotnet install ef core
+  inputs:
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-ef'
 
-- script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
-# - task: DotNetCoreCLI@2
-#   displayName: Generate migration script
-#   inputs:
-#     command: 'custom'
-#     custom: 'ef migrations script'
-#     arguments: '--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
+# - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
+- task: DotNetCoreCLI@2
+  displayName: dotnet ef migrations script
+  inputs:
+    command: 'custom'
+    custom: 'ef'
+    arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
 
 - task: SqlAzureDacpacDeployment@1
   displayName: database update
