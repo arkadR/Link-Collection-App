@@ -19,8 +19,8 @@ namespace LinkCollectionApp.Test
       var ownerId = "someOwner";
       var userId = "someUser";
       AddUser(ownerId);
-      var collection = AddCollection(ownerId, 5);
       AddUser(userId);
+      var collection = AddCollection(ownerId, 5);
       ShareCollection(collection.Id, userId, true, true);
 
       //Act
@@ -53,8 +53,8 @@ namespace LinkCollectionApp.Test
       var ownerId = "someOwner";
       var userId = "someUser";
       AddUser(ownerId);
-      var collection = AddCollection(ownerId, 1);
       AddUser(userId);
+      var collection = AddCollection(ownerId, 1);
       ShareCollection(collection.Id, userId, viewRights, editRights);
 
       //Act
