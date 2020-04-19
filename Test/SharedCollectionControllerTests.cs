@@ -3,6 +3,8 @@ using System.Linq;
 using FluentAssertions;
 using LinkCollectionApp.Controllers;
 using LinkCollectionApp.Models;
+using LinkCollectionApp.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
 namespace LinkCollectionApp.Test
@@ -145,6 +147,201 @@ namespace LinkCollectionApp.Test
       sharedCollectionsOfUser1.ForEach(sc => sc.UserId.Should().Be(user1));
       sharedCollectionsOfUser2.ForEach(sc => sc.UserId.Should().Be(user2));
     }
+
+    [Fact]
+    public void ShareCollection_OneCollectionShared_RecordAddedToDatabase()
+    {
+      //Arrange
+      var user1 = NewGuid;
+      var user2 = NewGuid;
+
+      AddUser(user1);
+      AddUser(user2);
+      var collection = AddCollection(user1, 5);
+
+      //Act
+      var sharedCollectionData = new SharedCollectionCreationData
+      {
+        CollectionId = collection.Id,
+        EditRights = true,
+        ViewRights = true,
+        UserId = user2
+      };
+      InTransaction(context =>
+      {
+        var controller = new SharedCollectionsController(context, GetUserProviderMock(user1));
+        controller.ShareCollection(sharedCollectionData);
+      });
+
+      //Assert
+      InTransaction(context =>
+      {
+        context.SharedCollection.Should().HaveCount(1);
+        context.SharedCollection.Single().UserId.Should().Be(user2);
+        context.SharedCollection.Single().CollectionId.Should().Be(collection.Id);
+      });
+    }
+
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(true, false)]
+    [InlineData(false, true)]
+    [InlineData(false, false)]
+    public void ShareCollection_OneCollectionSharedWithRights_ProperRightsSaved(bool viewRights, bool editRights)
+    {
+      //Arrange
+      var user1 = NewGuid;
+      var user2 = NewGuid;
+
+      AddUser(user1);
+      AddUser(user2);
+      var collection = AddCollection(user1, 5);
+
+      //Act
+      var sharedCollectionData = new SharedCollectionCreationData
+      {
+        CollectionId = collection.Id,
+        EditRights = editRights,
+        ViewRights = viewRights,
+        UserId = user2
+      };
+      InTransaction(context =>
+      {
+        var controller = new SharedCollectionsController(context, GetUserProviderMock(user1));
+        controller.ShareCollection(sharedCollectionData);
+      });
+
+      //Assert
+      InTransaction(context =>
+      {
+        var singleCollection = context.SharedCollection.Single();
+        singleCollection.EditRights.Should().Be(editRights);
+        singleCollection.ViewRights.Should().Be(viewRights);
+      });
+    }
+
+    [Fact]
+    public void ShareCollection_CollectionAlreadySharedToUser_NoRecordAdded()
+    {
+      //Arrange
+      var user1 = NewGuid;
+      var user2 = NewGuid;
+
+      AddUser(user1);
+      AddUser(user2);
+      var collection = AddCollection(user1, 5);
+
+      //Act
+      var sharedCollectionData = new SharedCollectionCreationData
+      {
+        CollectionId = collection.Id,
+        EditRights = true,
+        ViewRights = true,
+        UserId = user2
+      };
+      InTransaction(context =>
+      {
+        var controller = new SharedCollectionsController(context, GetUserProviderMock(user1));
+        controller.ShareCollection(sharedCollectionData);
+      });
+      InTransaction(context =>
+      {
+        var controller = new SharedCollectionsController(context, GetUserProviderMock(user1));
+        controller.ShareCollection(sharedCollectionData);
+      });
+
+      //Assert
+      InTransaction(context => { context.SharedCollection.Should().HaveCount(1); });
+    }
+
+    [Fact]
+    public void ShareCollection_ShareCollectionOfDifferentUser_Forbidden()
+    {
+      //Arrange
+      var user1 = NewGuid;
+      var user2 = NewGuid;
+      var user3 = NewGuid;
+
+      AddUser(user1);
+      AddUser(user2);
+      AddUser(user3);
+      var collection = AddCollection(user1, 5);
+
+      //Act
+      var sharedCollectionData = new SharedCollectionCreationData
+      {
+        CollectionId = collection.Id,
+        EditRights = true,
+        ViewRights = true,
+        UserId = user3
+      };
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new SharedCollectionsController(context, GetUserProviderMock(user2));
+        result = controller.ShareCollection(sharedCollectionData);
+      });
+
+      //Assert
+      result.Should().BeOfType<ForbidResult>();
+    }
+    [Fact]
+    public void ShareCollection_ShareNotExistingCollection_NotFound()
+    {
+      //Arrange
+      var user1 = NewGuid;
+      var user2 = NewGuid;
+
+      AddUser(user1);
+      AddUser(user2);
+
+      //Act
+      var sharedCollectionData = new SharedCollectionCreationData
+      {
+        CollectionId = 100,
+        EditRights = true,
+        ViewRights = true,
+        UserId = user2
+      };
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new SharedCollectionsController(context, GetUserProviderMock(user1));
+        result = controller.ShareCollection(sharedCollectionData);
+      });
+
+      //Assert
+      result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public void ShareCollection_ShareCollectionToNotExistingUser_NotFound()
+    {
+      //Arrange
+      var user1 = NewGuid;
+
+      AddUser(user1);
+      var collection = AddCollection(user1, 5);
+
+      //Act
+      var sharedCollectionData = new SharedCollectionCreationData
+      {
+        CollectionId = collection.Id,
+        EditRights = true,
+        ViewRights = true,
+        UserId = NewGuid
+      };
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new SharedCollectionsController(context, GetUserProviderMock(user1));
+        result = controller.ShareCollection(sharedCollectionData);
+      });
+
+      //Assert
+      result.Should().BeOfType<NotFoundResult>();
+    }
+
 
 
 
