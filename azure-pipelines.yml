@@ -15,7 +15,7 @@ pr:
     - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   buildConfiguration: 'Release'
@@ -57,44 +57,44 @@ steps:
 #     workingDir: 'Main/ClientApp'
 #     customCommand: 'test'
 
-- task: DotNetCoreCLI@2
-  displayName: dotnet publish
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '-o $(Build.ArtifactStagingDirectory)'
+# - task: DotNetCoreCLI@2
+#   displayName: dotnet publish
+#   inputs:
+#     command: 'publish'
+#     publishWebProjects: true
+#     arguments: '-o $(Build.ArtifactStagingDirectory)'
 
-- task: AzureWebApp@1
-  displayName: Publish to Azure
-  inputs:
-    azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
-    appType: 'webAppLinux'
-    appName: 'LinkCollectionApp'
-    package: '$(Build.ArtifactStagingDirectory)/*.zip'
-    runtimeStack: 'DOTNETCORE|LTS'
+# - task: AzureWebApp@1
+#   displayName: Publish to Azure
+#   inputs:
+#     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
+#     appType: 'webAppLinux'
+#     appName: 'LinkCollectionApp'
+#     package: '$(Build.ArtifactStagingDirectory)/*.zip'
+#     runtimeStack: 'DOTNETCORE|LTS'
 
-- task: DotNetCoreCLI@2
-  displayName: dotnet install ef core
-  inputs:
-    command: 'custom'
-    custom: 'tool'
-    arguments: 'install --global dotnet-ef'
+# - task: DotNetCoreCLI@2
+#   displayName: dotnet install ef core
+#   inputs:
+#     command: 'custom'
+#     custom: 'tool'
+#     arguments: 'install --global dotnet-ef'
 
-# - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
-- task: DotNetCoreCLI@2
-  displayName: dotnet ef migrations script
-  inputs:
-    command: 'custom'
-    custom: 'ef'
-    arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
+# # - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
+# - task: DotNetCoreCLI@2
+#   displayName: dotnet ef migrations script
+#   inputs:
+#     command: 'custom'
+#     custom: 'ef'
+#     arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
 
-- task: SqlAzureDacpacDeployment@1
-  displayName: Update Azure database
-  inputs:
-    azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
-    AuthenticationType: 'connectionString'
-    ConnectionString: '$(ApplicationDbContextConnection)'
-    deployType: 'SqlTask'
-    SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
-    IpDetectionMethod: 'AutoDetect' 
+# - task: SqlAzureDacpacDeployment@1
+#   displayName: Update Azure database
+#   inputs:
+#     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
+#     AuthenticationType: 'connectionString'
+#     ConnectionString: '$(ApplicationDbContextConnection)'
+#     deployType: 'SqlTask'
+#     SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
+#     IpDetectionMethod: 'AutoDetect' 
 
