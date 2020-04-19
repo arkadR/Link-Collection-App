@@ -96,7 +96,7 @@ jobs:
             appType: 'webAppLinux'
             appName: 'LinkCollectionApp'
             package: '$(Pipeline.Workspace)/WebApp/*.zip'
-            runtimeStack: 'DOTNETCORE|LTS'
+            runtimeStack: 'DOTNETCORE|Latest'
 
 
   # # - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
