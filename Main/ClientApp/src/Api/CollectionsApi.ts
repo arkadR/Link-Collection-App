@@ -1,7 +1,8 @@
 import { Collection, CollectionCreationData } from "../Model/Collection";
 import {
   authorizedPost,
-  authorizedGet
+  authorizedGet,
+  authorizedDelete,
 } from "../Infrastructure/FetchUtilities";
 
 class CollectionsApi {
@@ -15,6 +16,11 @@ class CollectionsApi {
     collectionData: CollectionCreationData
   ): Promise<boolean> {
     let response = await authorizedPost("api/collections", collectionData);
+    return response.ok;
+  }
+
+  async deleteCollection(id: number): Promise<boolean> {
+    let response = await authorizedDelete("api/collections", id);
     return response.ok;
   }
 }

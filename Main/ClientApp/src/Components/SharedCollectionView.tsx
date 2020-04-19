@@ -30,6 +30,11 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
     sharedCollection,
     setSharedCollection,
   ] = useState<SharedCollection | null>(null);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const toggleAddElementDialogOpen = () => {
+    setDialogOpen(!dialogOpen);
+  };
 
   useEffect(() => {
     const collectionId = props.match.params.collectionId;
@@ -53,14 +58,21 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
       {sharedCollection?.viewRights ? (
         <BaseCollectionView collection={sharedCollection?.collection}>
           {sharedCollection?.editRights && (
-            <Fab
-              color="primary"
-              aria-label="add"
-              className={classes.fab}
-              // onClick={toggleAddElementDialogOpen}
-            >
-              <AddIcon />
-            </Fab>
+            <>
+              <Fab
+                color="primary"
+                aria-label="add"
+                className={classes.fab}
+                onClick={toggleAddElementDialogOpen}
+              >
+                <AddIcon />
+              </Fab>
+              <AddElementDialog
+                toggleDialogOpen={toggleAddElementDialogOpen}
+                open={dialogOpen}
+                collectionId={props.match.params.collectionId}
+              />
+            </>
           )}
         </BaseCollectionView>
       ) : (

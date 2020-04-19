@@ -26,6 +26,10 @@ import ListItemAdd from "../ListItemAdd";
 import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
 import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
 import { Collection } from "../../Model/Collection";
+import { deleteCollection } from "../../Actions/Actions";
+import SimpleDialog from "../Dialogs/SimpleDialog";
+import DeleteDialog from "../Dialogs/DeleteDialog";
+import DeleteCollectionDialog from "../Dialogs/DeleteCollectionDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -49,6 +53,7 @@ export default function MyCollectionsSection() {
     CollectionsStore.getCollections()
   );
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState(-1);
 
   useEffect(() => {
@@ -69,6 +74,11 @@ export default function MyCollectionsSection() {
   const onShareCollectionClick = (collectionId: number) => {
     setSelectedCollection(collectionId);
     setShareDialogOpen(true);
+  };
+
+  const onDeleteCollectionClick = (collectionId: number) => {
+    setSelectedCollection(collectionId);
+    setDeleteDialogOpen(true);
   };
 
   return (
@@ -95,8 +105,9 @@ export default function MyCollectionsSection() {
                       >
                         Settings
                       </Typography>
-                      <MenuItem>
-                        {/* TODO: on click */}
+                      <MenuItem
+                        onClick={() => onDeleteCollectionClick(collection.id)}
+                      >
                         <ListItem>
                           <ListItemIcon>
                             <Delete />
@@ -162,6 +173,11 @@ export default function MyCollectionsSection() {
         toggleDialogOpen={() => setShareDialogOpen(!shareDialogOpen)}
         collectionId={selectedCollection}
       ></ShareCollectionDialog>
+      <DeleteCollectionDialog
+        open={deleteDialogOpen}
+        toggleDialogOpen={() => setDeleteDialogOpen(!deleteDialogOpen)}
+        confirmAction={() => deleteCollection(selectedCollection)}
+      />
     </>
   );
 }

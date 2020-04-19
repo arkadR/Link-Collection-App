@@ -47,5 +47,19 @@ namespace LinkCollectionApp.Controllers
       _dbContext.SaveChanges();
       return Ok();
     }
+
+    [HttpDelete]
+    public IActionResult DeleteCollection([FromBody] int id)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var collection = _dbContext.Collection.Single(c => c.Id == id);
+      if(collection.OwnerId == userId)
+      {
+        _dbContext.Remove(collection);
+        _dbContext.SaveChanges();
+        return Ok();
+      }
+      return Forbid();
+    }
   }
 }
