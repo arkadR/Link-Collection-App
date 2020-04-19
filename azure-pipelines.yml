@@ -23,7 +23,7 @@ jobs:
 - job: build
   displayName: Build & Test
   pool:
-    vmImage: ubuntu-latest
+    vmImage: 'ubuntu-latest'
   steps:
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 3.1.100'
@@ -83,15 +83,14 @@ jobs:
   dependsOn: build
   environment: LinkCollectionApp-dev
   pool:
-    vm-image: windows-latest
+    vm-image: 'windows-latest'
   strategy:
     runOnce:
-      preDeploy:
+      deploy:
         steps:
         - download: current
           artifact: WebApp
-      deploy:
-        steps:
+
         - task: AzureWebApp@1
           displayName: Publish to Azure
           inputs:
@@ -101,7 +100,6 @@ jobs:
             package: 'WebApp/*.zip'
             runtimeStack: 'DOTNETCORE|Latest'
 
-
         # - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
         - task: DotNetCoreCLI@2
           displayName: dotnet ef migrations script
@@ -110,13 +108,13 @@ jobs:
             custom: 'ef'
             arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
 
-  # - task: SqlAzureDacpacDeployment@1
-  #   displayName: Update Azure database
-  #   inputs:
-  #     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
-  #     AuthenticationType: 'connectionString'
-  #     ConnectionString: '$(ApplicationDbContextConnection)'
-  #     deployType: 'SqlTask'
-  #     SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
-  #     IpDetectionMethod: 'AutoDetect' 
+        - task: SqlAzureDacpacDeployment@1
+          displayName: Update Azure database
+          inputs:
+            azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
+            AuthenticationType: 'connectionString'
+            ConnectionString: '$(ApplicationDbContextConnection)'
+            deployType: 'SqlTask'
+            SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
+            IpDetectionMethod: 'AutoDetect' 
 
