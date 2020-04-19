@@ -50,12 +50,12 @@ steps:
     command: 'ci'
     workingDir: 'Main/ClientApp'
 
-- task: Npm@1
-  displayName: npm test
-  inputs:
-    command: 'custom'
-    workingDir: 'Main/ClientApp'
-    customCommand: 'test'
+# - task: Npm@1
+#   displayName: npm test
+#   inputs:
+#     command: 'custom'
+#     workingDir: 'Main/ClientApp'
+#     customCommand: 'test'
 
 - task: DotNetCoreCLI@2
   displayName: dotnet publish
@@ -73,9 +73,6 @@ steps:
     package: '$(Build.ArtifactStagingDirectory)/*.zip'
     runtimeStack: 'DOTNETCORE|LTS'
 
-# - script: dotnet tool install --global dotnet-ef
-#   displayName: 'dotnet install ef'
-
 - task: DotNetCoreCLI@2
   displayName: dotnet install ef core
   inputs:
@@ -92,7 +89,7 @@ steps:
     arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
 
 - task: SqlAzureDacpacDeployment@1
-  displayName: database update
+  displayName: Update Azure database
   inputs:
     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
     AuthenticationType: 'connectionString'
