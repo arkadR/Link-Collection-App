@@ -19,7 +19,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  CI: true
+  # CI: true
 
 jobs:
 - job: build
