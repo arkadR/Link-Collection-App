@@ -84,7 +84,7 @@ steps:
   inputs:
     command: 'custom'
     custom: 'ef migrations script'
-    arguments: '--output -i'
+    arguments: '--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
 
 - task: SqlAzureDacpacDeployment@1
   displayName: database update
