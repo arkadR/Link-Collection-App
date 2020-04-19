@@ -66,6 +66,7 @@ namespace LinkCollectionApp
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      //TODO: switch back to IsDevelopment at the end. For now it is necessary for viewing stack trace on Azure
       // if (env.IsDevelopment())
       if (true)
       {
