@@ -23,7 +23,7 @@ jobs:
 - job: build
   displayName: Build & Test
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: ubuntu-latest
   steps:
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 3.1.100'
@@ -79,16 +79,19 @@ jobs:
   #     customCommand: 'test'
 
 - deployment: deploy
+  displayName: Azure Deploy
   dependsOn: build
   environment: LinkCollectionApp-dev
   pool:
-    vm-image: 'windows-latest'
+    vm-image: windows-latest
   strategy:
     runOnce:
-      deploy:
+      preDeploy:
         steps:
         - download: current
           artifact: WebApp
+      deploy:
+        steps:
         - task: AzureWebApp@1
           displayName: Publish to Azure
           inputs:
@@ -99,13 +102,13 @@ jobs:
             runtimeStack: 'DOTNETCORE|Latest'
 
 
-  # # - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
-  # - task: DotNetCoreCLI@2
-  #   displayName: dotnet ef migrations script
-  #   inputs:
-  #     command: 'custom'
-  #     custom: 'ef'
-  #     arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
+        # - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
+        - task: DotNetCoreCLI@2
+          displayName: dotnet ef migrations script
+          inputs:
+            command: 'custom'
+            custom: 'ef'
+            arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
 
   # - task: SqlAzureDacpacDeployment@1
   #   displayName: Update Azure database
