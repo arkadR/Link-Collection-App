@@ -47,6 +47,7 @@ jobs:
 
 
 - job: Build
+  dependsOn: Setup
   steps:
   - task: DotNetCoreCLI@2
     displayName: dotnet build $(buildConfiguration)
@@ -58,6 +59,7 @@ jobs:
 
 
 - job: Test
+  dependsOn: Build
   steps:
   - task: DotNetCoreCLI@2
     displayName: dotnet test
@@ -73,6 +75,7 @@ jobs:
   #     customCommand: 'test'
 
 - deployment: Deploy
+  dependsOn: Test
   environment: LinkCollectionApp-dev
   strategy:
     runOnce:
