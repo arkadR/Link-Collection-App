@@ -16,6 +16,10 @@ export async function authorizedDelete(apiEndpoint: string, data = {}) {
   return authorizedGenericFetch(apiEndpoint, data, "DELETE");
 }
 
+export async function authorizedUpdate(apiEndpoint: string, data = {}) {
+  return authorizedGenericFetch(apiEndpoint, data, "PUT");
+}
+
 async function authorizedGenericFetch(
   apiEndpoint: string,
   data = {},

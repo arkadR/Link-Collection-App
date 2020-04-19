@@ -10,14 +10,15 @@ type DeleteCollectionDialogProps = {
 export default function DeleteCollectionDialog(
   props: DeleteCollectionDialogProps
 ) {
+  const title = "Do you want to delete this collection?";
+  const description =
+    "Collection and all it content will be irreversibly deleted. Do you want to proceed?";
   return (
     <DeleteDialog
       open={props.open}
       toggleDialogOpen={props.toggleDialogOpen}
-      title="Do you want to delete this collection?"
-      description={
-        "Collection and all it content will be irreversibly deleted. Do you want to proceed?"
-      }
+      title={title}
+      description={description}
       confirmAction={props.confirmAction}
     />
   );

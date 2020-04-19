@@ -23,12 +23,11 @@ import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../../Stores/CollectionsStore";
 import { Link } from "react-router-dom";
 import ListItemAdd from "../ListItemAdd";
-import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
+import EditCollectionDialog from "../Dialogs/EditCollectionDialog";
 import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
+import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
 import { Collection } from "../../Model/Collection";
-import { deleteCollection } from "../../Actions/Actions";
-import SimpleDialog from "../Dialogs/SimpleDialog";
-import DeleteDialog from "../Dialogs/DeleteDialog";
+import { deleteCollection, updateCollection } from "../../Actions/Actions";
 import DeleteCollectionDialog from "../Dialogs/DeleteCollectionDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -54,6 +53,7 @@ export default function MyCollectionsSection() {
   );
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState(-1);
 
   useEffect(() => {
@@ -79,6 +79,11 @@ export default function MyCollectionsSection() {
   const onDeleteCollectionClick = (collectionId: number) => {
     setSelectedCollection(collectionId);
     setDeleteDialogOpen(true);
+  };
+
+  const onUpdateCollectionClick = (collectionId: number) => {
+    setSelectedCollection(collectionId);
+    setUpdateDialogOpen(true);
   };
 
   return (
@@ -115,8 +120,9 @@ export default function MyCollectionsSection() {
                           <ListItemText primary="Delete" />
                         </ListItem>
                       </MenuItem>
-                      <MenuItem>
-                        {/* TODO: on click */}
+                      <MenuItem
+                        onClick={() => onUpdateCollectionClick(collection.id)}
+                      >
                         <ListItem>
                           <ListItemIcon>
                             <Edit />
@@ -177,6 +183,11 @@ export default function MyCollectionsSection() {
         open={deleteDialogOpen}
         toggleDialogOpen={() => setDeleteDialogOpen(!deleteDialogOpen)}
         confirmAction={() => deleteCollection(selectedCollection)}
+      />
+      <EditCollectionDialog
+        open={updateDialogOpen}
+        toggleDialogOpen={() => setUpdateDialogOpen(!updateDialogOpen)}
+        collectionId={selectedCollection}
       />
     </>
   );

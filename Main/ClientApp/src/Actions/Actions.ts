@@ -30,6 +30,12 @@ export async function deleteCollection(id: number) {
   else console.error("Could not delete collection");
 }
 
+export async function updateCollection(id: number, name: string) {
+  let success = await CollectionsApi.updateCollection(id, name);
+  if (success) loadCollections();
+  else console.error("Could not update collection");
+}
+
 export async function addElement(elementCreationData: ElementCreationData) {
   let success = await ElementsApi.addElement(elementCreationData);
   if (success) loadCollections();

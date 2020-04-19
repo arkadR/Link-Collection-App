@@ -53,13 +53,24 @@ namespace LinkCollectionApp.Controllers
     {
       var userId = _userProvider.GetCurrentUserId();
       var collection = _dbContext.Collection.Single(c => c.Id == id);
-      if(collection.OwnerId == userId)
+      if (collection.OwnerId == userId)
       {
         _dbContext.Remove(collection);
         _dbContext.SaveChanges();
         return Ok();
       }
       return Forbid();
+    }
+
+    [HttpPut]
+    public IActionResult UpdateCollection([FromBody] CollectionUpdateData data)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var collection = _dbContext.Collection.Single(c => c.Id == data.Id);
+      collection.Name = data.Name;
+      _dbContext.Update(collection);
+      _dbContext.SaveChanges();
+      return Ok();
     }
   }
 }

@@ -3,6 +3,7 @@ import {
   authorizedPost,
   authorizedGet,
   authorizedDelete,
+  authorizedUpdate,
 } from "../Infrastructure/FetchUtilities";
 
 class CollectionsApi {
@@ -21,6 +22,11 @@ class CollectionsApi {
 
   async deleteCollection(id: number): Promise<boolean> {
     let response = await authorizedDelete("api/collections", id);
+    return response.ok;
+  }
+
+  async updateCollection(id: number, name: string): Promise<boolean> {
+    let response = await authorizedUpdate("api/collections", { id, name });
     return response.ok;
   }
 }
