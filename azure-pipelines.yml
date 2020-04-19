@@ -22,79 +22,93 @@ variables:
   CI: true
 
 
+jobs:
+- job: Setup
+  steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk 3.1.100'
+    inputs:
+      packageType: sdk
+      version: 3.1.100
+      installationPath: $(Agent.ToolsDirectory)/dotnet
 
-steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk 3.1.100'
-  inputs:
-    packageType: sdk
-    version: 3.1.100
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+  - task: DotNetCoreCLI@2
+    displayName: dotnet install ef core
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'install --global dotnet-ef'
 
-- task: DotNetCoreCLI@2
-  displayName: dotnet build $(buildConfiguration)
-  inputs:
-    command: 'build'
-    projects: 'Main/LinkCollectionApp.csproj'
-    arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
+  - task: Npm@1
+    displayName: npm ci
+    inputs:
+      command: 'ci'
+      workingDir: 'Main/ClientApp'
 
-- task: DotNetCoreCLI@2
-  displayName: dotnet test
-  inputs:
-    command: 'test'
-    projects: 'Test/LinkCollectionApp.Test.csproj'
 
-- task: Npm@1
-  displayName: npm ci
-  inputs:
-    command: 'ci'
-    workingDir: 'Main/ClientApp'
+- job: Build
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build $(buildConfiguration)
+    inputs:
+      command: 'build'
+      projects: 'Main/LinkCollectionApp.csproj'
+      arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
 
-# - task: Npm@1
-#   displayName: npm test
-#   inputs:
-#     command: 'custom'
-#     workingDir: 'Main/ClientApp'
-#     customCommand: 'test'
 
-# - task: DotNetCoreCLI@2
-#   displayName: dotnet publish
-#   inputs:
-#     command: 'publish'
-#     publishWebProjects: true
-#     arguments: '-o $(Build.ArtifactStagingDirectory)'
 
-# - task: AzureWebApp@1
-#   displayName: Publish to Azure
-#   inputs:
-#     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
-#     appType: 'webAppLinux'
-#     appName: 'LinkCollectionApp'
-#     package: '$(Build.ArtifactStagingDirectory)/*.zip'
-#     runtimeStack: 'DOTNETCORE|LTS'
+- job: Test
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test
+    inputs:
+      command: 'test'
+      projects: 'Test/LinkCollectionApp.Test.csproj'
 
-# - task: DotNetCoreCLI@2
-#   displayName: dotnet install ef core
-#   inputs:
-#     command: 'custom'
-#     custom: 'tool'
-#     arguments: 'install --global dotnet-ef'
+  # - task: Npm@1
+  #   displayName: npm test
+  #   inputs:
+  #     command: 'custom'
+  #     workingDir: 'Main/ClientApp'
+  #     customCommand: 'test'
 
-# # - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
-# - task: DotNetCoreCLI@2
-#   displayName: dotnet ef migrations script
-#   inputs:
-#     command: 'custom'
-#     custom: 'ef'
-#     arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
+- deployment: Deploy
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - task: DotNetCoreCLI@2
+          displayName: dotnet publish
+          inputs:
+            command: 'publish'
+            publishWebProjects: true
+            arguments: '-o $(Build.ArtifactStagingDirectory)'
 
-# - task: SqlAzureDacpacDeployment@1
-#   displayName: Update Azure database
-#   inputs:
-#     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
-#     AuthenticationType: 'connectionString'
-#     ConnectionString: '$(ApplicationDbContextConnection)'
-#     deployType: 'SqlTask'
-#     SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
-#     IpDetectionMethod: 'AutoDetect' 
+        - task: AzureWebApp@1
+          displayName: Publish to Azure
+          inputs:
+            azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
+            appType: 'webAppLinux'
+            appName: 'LinkCollectionApp'
+            package: '$(Build.ArtifactStagingDirectory)/*.zip'
+            runtimeStack: 'DOTNETCORE|LTS'
+
+
+  # # - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet ef migrations script
+  #   inputs:
+  #     command: 'custom'
+  #     custom: 'ef'
+  #     arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
+
+  # - task: SqlAzureDacpacDeployment@1
+  #   displayName: Update Azure database
+  #   inputs:
+  #     azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
+  #     AuthenticationType: 'connectionString'
+  #     ConnectionString: '$(ApplicationDbContextConnection)'
+  #     deployType: 'SqlTask'
+  #     SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
+  #     IpDetectionMethod: 'AutoDetect' 
 
