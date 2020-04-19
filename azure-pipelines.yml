@@ -14,12 +14,12 @@ pr:
     include:
     - master
 
-
 pool:
   vmImage: 'windows-latest'
 
 variables:
   buildConfiguration: 'Release'
+  CI: true
 
 
 
