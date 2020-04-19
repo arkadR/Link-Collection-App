@@ -78,7 +78,7 @@ jobs:
     inputs:
       command: 'custom'
       custom: 'ef'
-      arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)/Sql/migrations.sql -i'
+      arguments: 'migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)/Sql/migrations.sql -i'
 
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: WebApp  
