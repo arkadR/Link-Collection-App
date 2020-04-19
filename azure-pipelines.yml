@@ -31,11 +31,17 @@ steps:
     version: 3.1.100
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- script: dotnet build --configuration $(buildConfiguration) -o $(Build.BinariesDirectory)
-  displayName: 'dotnet build $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  displayName: dotnet build $(buildConfiguration)
+  inputs:
+    command: 'build'
+    projects: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
 
-- script: dotnet test Test/LinkCollectionApp.Test.csproj --logger trx
-  displayName: 'dotnet test'
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: 'test'
+    projects: 'Test/LinkCollectionApp.Test.csproj'
 
 - task: Npm@1
   displayName: npm ci
@@ -71,3 +77,21 @@ steps:
     appName: 'LinkCollectionApp'
     package: '$(Build.ArtifactStagingDirectory)/*.zip'
     runtimeStack: 'DOTNETCORE|LTS'
+
+- task: DotNetCoreCLI@2
+  displayName: Generate migration script
+  inputs:
+    command: 'custom'
+    custom: 'ef migrations script'
+    arguments: '--output -i'
+
+- task: SqlAzureDacpacDeployment@1
+  displayName: database update
+  inputs:
+    azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
+    AuthenticationType: 'connectionString'
+    ConnectionString: '$(ApplicationDbContextConnection)'
+    deployType: 'SqlTask'
+    SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
+    IpDetectionMethod: 'AutoDetect' 
+
