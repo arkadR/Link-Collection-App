@@ -82,7 +82,7 @@ steps:
 #     command: 'custom'
 #     custom: 'tool install --global dotnet-ef'
 
-- script: dotnet ef migrations script --project Main\LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
+- script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i
 # - task: DotNetCoreCLI@2
 #   displayName: Generate migration script
 #   inputs:
