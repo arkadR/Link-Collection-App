@@ -67,6 +67,9 @@ jobs:
       publishWebProjects: true
       arguments: '-o $(Build.ArtifactStagingDirectory)'
   
+  - publish: $(Build.ArtifactStagingDirectory)
+    artifact: WebApp
+  
 
   # - task: Npm@1
   #   displayName: npm test
