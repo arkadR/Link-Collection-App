@@ -73,6 +73,9 @@ steps:
 #     package: '$(Build.ArtifactStagingDirectory)/*.zip'
 #     runtimeStack: 'DOTNETCORE|LTS'
 
+- script: dotnet tool install --global dotnet-ef
+  displayName: 'dotnet install ef'
+
 - task: DotNetCoreCLI@2
   displayName: install ef core
   inputs:
