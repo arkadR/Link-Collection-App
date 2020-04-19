@@ -23,7 +23,7 @@ jobs:
 - job: build
   displayName: Build & Test
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'windows-latest'
   steps:
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 3.1.100'
