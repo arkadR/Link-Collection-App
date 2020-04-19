@@ -57,12 +57,6 @@ steps:
 #     workingDir: 'Main/ClientApp'
 #     customCommand: 'test'
 
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testRunner: VSTest
-    testResultsFiles: '**/*.trx'
-
 - task: DotNetCoreCLI@2
   displayName: dotnet publish
   inputs:
@@ -78,6 +72,13 @@ steps:
     appName: 'LinkCollectionApp'
     package: '$(Build.ArtifactStagingDirectory)/*.zip'
     runtimeStack: 'DOTNETCORE|LTS'
+
+- task: DotNetCoreCLI@2
+  displayName: install ef core
+  inputs:
+    command: 'custom'
+    custom: 'install dotnet-ef'
+    arguments: '-g'
 
 - task: DotNetCoreCLI@2
   displayName: Generate migration script
