@@ -21,9 +21,9 @@ variables:
   buildConfiguration: 'Release'
   CI: true
 
-
 jobs:
-- job: Setup
+- job: build
+  displayName: Build & Test
   steps:
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 3.1.100'
@@ -45,10 +45,6 @@ jobs:
       command: 'ci'
       workingDir: 'Main/ClientApp'
 
-
-- job: Build
-  dependsOn: Setup
-  steps:
   - task: DotNetCoreCLI@2
     displayName: dotnet build $(buildConfiguration)
     inputs:
@@ -56,16 +52,21 @@ jobs:
       projects: 'Main/LinkCollectionApp.csproj'
       arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
 
-
-
-- job: Test
-  dependsOn: Build
-  steps:
   - task: DotNetCoreCLI@2
     displayName: dotnet test
     inputs:
       command: 'test'
       projects: 'Test/LinkCollectionApp.Test.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: dotnet publish
+    #TODO: Change to master
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev')) 
+    inputs:
+      command: 'publish'
+      publishWebProjects: true
+      arguments: '-o $(Build.ArtifactStagingDirectory)'
+  
 
   # - task: Npm@1
   #   displayName: npm test
@@ -74,20 +75,13 @@ jobs:
   #     workingDir: 'Main/ClientApp'
   #     customCommand: 'test'
 
-- deployment: Deploy
-  dependsOn: Test
+- deployment: deploy
+  dependsOn: build
   environment: LinkCollectionApp-dev
   strategy:
     runOnce:
       deploy:
         steps:
-        - task: DotNetCoreCLI@2
-          displayName: dotnet publish
-          inputs:
-            command: 'publish'
-            publishWebProjects: true
-            arguments: '-o $(Build.ArtifactStagingDirectory)'
-
         - task: AzureWebApp@1
           displayName: Publish to Azure
           inputs:
