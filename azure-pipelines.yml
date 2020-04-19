@@ -84,6 +84,13 @@ jobs:
         - download: current
           artifact: WebApp
 
+        - task: UseDotNet@2
+          displayName: 'Use .NET Core sdk 3.1.100'
+          inputs:
+            packageType: sdk
+            version: 3.1.100
+            installationPath: $(Agent.ToolsDirectory)/dotnet
+
         - task: DotNetCoreCLI@2
           displayName: dotnet install ef core
           inputs:
