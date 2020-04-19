@@ -73,6 +73,7 @@ jobs:
   #     customCommand: 'test'
 
 - deployment: Deploy
+  environment: LinkCollectionApp-dev
   strategy:
     runOnce:
       deploy:
