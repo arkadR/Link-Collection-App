@@ -31,6 +31,13 @@ jobs:
       packageType: sdk
       version: 3.1.100
       installationPath: $(Agent.ToolsDirectory)/dotnet
+      
+  - task: DotNetCoreCLI@2
+    displayName: dotnet install ef core
+    inputs:
+      command: 'custom'
+      custom: 'tool'
+      arguments: 'install --global dotnet-ef'
 
   - task: Npm@1
     displayName: npm ci
@@ -60,16 +67,22 @@ jobs:
       publishWebProjects: true
       arguments: '-o $(Build.ArtifactStagingDirectory)'
   
-  - publish: $(Build.ArtifactStagingDirectory)
-    artifact: WebApp
-  
-
   # - task: Npm@1
   #   displayName: npm test
   #   inputs:
   #     command: 'custom'
   #     workingDir: 'Main/ClientApp'
   #     customCommand: 'test'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet ef migrations script
+    inputs:
+      command: 'custom'
+      custom: 'ef'
+      arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)/Sql/migrations.sql -i'
+
+  - publish: $(Build.ArtifactStagingDirectory)
+    artifact: WebApp  
+
 
 - deployment: deploy
   displayName: Azure Deploy
@@ -84,20 +97,6 @@ jobs:
         - download: current
           artifact: WebApp
 
-        - task: UseDotNet@2
-          displayName: 'Use .NET Core sdk 3.1.100'
-          inputs:
-            packageType: sdk
-            version: 3.1.100
-            installationPath: $(Agent.ToolsDirectory)/dotnet
-
-        - task: DotNetCoreCLI@2
-          displayName: dotnet install ef core
-          inputs:
-            command: 'custom'
-            custom: 'tool'
-            arguments: 'install --global dotnet-ef'
-
         - task: AzureWebApp@1
           displayName: Publish to Azure
           inputs:
@@ -107,14 +106,6 @@ jobs:
             package: '$(Pipeline.Workspace)/WebApp/*.zip'
             runtimeStack: 'DOTNETCORE|Latest'
 
-        - script: dotnet ef migrations script --project Main/LinkCollectionApp.csproj --output $(Pipeline.Workspace)/Sql/migrations.sql -i
-        # - task: DotNetCoreCLI@2
-        #   displayName: dotnet ef migrations script
-        #   inputs:
-        #     command: 'custom'
-        #     custom: 'ef'
-        #     arguments: 'migrations script--output $(Pipeline.Workspace)/Sql/migrations.sql -i'
-
         - task: SqlAzureDacpacDeployment@1
           displayName: Update Azure database
           inputs:
@@ -122,6 +113,6 @@ jobs:
             AuthenticationType: 'connectionString'
             ConnectionString: '$(ApplicationDbContextConnection)'
             deployType: 'SqlTask'
-            SqlFile: '$(Build.ArtifactStagingDirectory)\sql\migrations.sql'
+            SqlFile: '$(Pipeline.Workspace)/WebApp/Sql/migrations.sql'
             IpDetectionMethod: 'AutoDetect' 
 
