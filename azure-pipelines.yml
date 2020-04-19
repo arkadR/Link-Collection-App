@@ -45,18 +45,18 @@ jobs:
       command: 'ci'
       workingDir: 'Main/ClientApp'
 
-  - task: DotNetCoreCLI@2
-    displayName: dotnet build $(buildConfiguration)
-    inputs:
-      command: 'build'
-      projects: 'Main/LinkCollectionApp.csproj'
-      arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet build $(buildConfiguration)
+  #   inputs:
+  #     command: 'build'
+  #     projects: 'Main/LinkCollectionApp.csproj'
+  #     arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
 
-  - task: DotNetCoreCLI@2
-    displayName: dotnet test
-    inputs:
-      command: 'test'
-      projects: 'Test/LinkCollectionApp.Test.csproj'
+  # - task: DotNetCoreCLI@2
+  #   displayName: dotnet test
+  #   inputs:
+  #     command: 'test'
+  #     projects: 'Test/LinkCollectionApp.Test.csproj'
 
   - task: DotNetCoreCLI@2
     displayName: dotnet publish
@@ -95,7 +95,7 @@ jobs:
             azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
             appType: 'webAppLinux'
             appName: 'LinkCollectionApp'
-            package: '$(Build.ArtifactStagingDirectory)/*.zip'
+            package: '$(Pipeline.Workspace)/WebApp/*.zip'
             runtimeStack: 'DOTNETCORE|LTS'
 
 
