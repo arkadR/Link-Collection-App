@@ -106,7 +106,7 @@ jobs:
           inputs:
             command: 'custom'
             custom: 'ef'
-            arguments: 'migrations script--output $(Build.ArtifactStagingDirectory)\sql\migrations.sql -i'
+            arguments: 'migrations script--output $(Pipeline.Workspace)\Sql\migrations.sql -i'
 
         - task: SqlAzureDacpacDeployment@1
           displayName: Update Azure database
