@@ -95,7 +95,7 @@ jobs:
             azureSubscription: 'Azure for Students(8d3cf290-9c6a-436e-b20d-8ca855b60e58)'
             appType: 'webAppLinux'
             appName: 'LinkCollectionApp'
-            package: '$(Pipeline.Workspace)/WebApp/*.zip'
+            package: 'WebApp/*.zip'
             runtimeStack: 'DOTNETCORE|Latest'
 
 
