@@ -35,7 +35,8 @@ steps:
   displayName: dotnet build $(buildConfiguration)
   inputs:
     command: 'build'
-    projects: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
+    projects: 'Main/LinkCollectionApp.csproj'
+    arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
 
 - task: DotNetCoreCLI@2
   displayName: dotnet test
