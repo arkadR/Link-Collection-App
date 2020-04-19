@@ -77,7 +77,8 @@ steps:
   displayName: install ef core
   inputs:
     command: 'custom'
-    custom: 'install --global dotnet-ef'
+    custom: 'tool install dotnet-ef'
+    arguments: '-g'
 
 - task: DotNetCoreCLI@2
   displayName: Generate migration script
