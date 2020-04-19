@@ -81,10 +81,14 @@ jobs:
 - deployment: deploy
   dependsOn: build
   environment: LinkCollectionApp-dev
+  pool:
+    vm-image: 'windows-latest'
   strategy:
     runOnce:
       deploy:
         steps:
+        - download: current
+          artifact: WebApp
         - task: AzureWebApp@1
           displayName: Publish to Azure
           inputs:
