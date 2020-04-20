@@ -47,7 +47,7 @@ export default function ElementView(props: ElementViewProps) {
 
   return (
     //TODO: change structure so clicking on menu doesn't redirect
-    <a href={elementUrl} className={classes.link}>
+    <a href={elementUrl} className={classes.link} target="_blank">
       <Card className={classes.root} elevation={3}>
         <CardHeader
           avatar={<Avatar alt="Thumbnail" src={faviconUrl} />}
