@@ -79,7 +79,7 @@ jobs:
   
   - task: DotNetCoreCLI@2
     displayName: dotnet ef migrations script
-    condition: and(succeeded(), eq(variables['deployment']), true)) 
+    condition: and(succeeded(), eq(variables['deployment'], true)) 
     inputs:
       command: 'custom'
       custom: 'ef'
