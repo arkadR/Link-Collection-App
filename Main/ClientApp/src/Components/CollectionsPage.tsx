@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Layout from "./Layout";
 import ContentWithDrawer from "./ContentWithDrawer";
-import { Route, useRouteMatch, RouteComponentProps } from "react-router-dom";
+import { Route, useRouteMatch } from "react-router-dom";
 import PanelWideMessage from "./Common/PanelWideMessage";
 import CollectionView from "./CollectionView";
 import SharedCollectionView from "./SharedCollectionView";

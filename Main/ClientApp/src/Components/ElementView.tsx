@@ -1,13 +1,8 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { Card } from "@material-ui/core";
+import { Card, CardHeader, Avatar, CardContent } from "@material-ui/core";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import { Element } from "../Model/Element";
-import {
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  IconButton,
-} from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import { MoreVert } from "@material-ui/icons";
 import { GetHostnameLink, GetProperUrl } from "../Infrastructure/UrlUtilities";
 
@@ -48,19 +43,29 @@ export default function ElementView(props: ElementViewProps) {
 
   const classes = useStyles();
   return (
-    <Card raised className={classes.card}>
-      <a href={elementUrl} className={classes.link}>
-        <ListItem>
-          <ListItemIcon>
-            <img src={faviconUrl} className={classes.icon} alt={"Thumbnail"} />
+    <a href={elementUrl} className={classes.link}>
+      <Card raised className={classes.card}>
+        <CardHeader
+          avatar={<Avatar alt="Thumbnail" src={faviconUrl} />}
+          title={displayedName}
+          subheader={elementUrl}
+          action={
+            <IconButton aria-label="settings">
+              <MoreVert />
+            </IconButton>
+          }
+        />
+        {/* <ListItem> */}
+        {/* <ListItemIcon>
+            <img  className={classes.icon} alt={"Thumbnail"} />
           </ListItemIcon>
           <ListItemText primary={displayedName} />
           <IconButton color="inherit">
             <MoreVert />
           </IconButton>
-        </ListItem>
-      </a>
-      {props.children}
-    </Card>
+        </ListItem> */}
+        {props.children ? <CardContent>{props.children}</CardContent> : <></>}
+      </Card>
+    </a>
   );
 }

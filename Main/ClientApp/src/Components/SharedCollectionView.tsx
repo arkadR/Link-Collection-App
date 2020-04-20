@@ -2,13 +2,11 @@ import { RouteComponentProps } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import SharedCollectionsStore from "../Stores/SharedCollectionsStore";
 import { SharedCollection } from "../Model/SharedCollection";
-import ElementWrapper from "./ElementWrapper";
-import { GridList, GridListTile, Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import AddElementDialog from "./Dialogs/AddElementDialog";
 import BaseCollectionView from "./BaseCollectionView";
 import PanelWideMessage from "./Common/PanelWideMessage";
+import { Fab } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

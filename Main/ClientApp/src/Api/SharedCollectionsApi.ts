@@ -16,7 +16,6 @@ class SharedCollectionsApi {
 
   async shareCollection(shareData: SharedCollectionData): Promise<Response> {
     var response = await authorizedPost("api/sharedcollections", shareData);
-    console.log(response);
     return response;
   }
 }

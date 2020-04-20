@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import {
-  List,
-  MenuItem,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-} from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 import { Lock, Widgets, Public, GroupAdd } from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../../Stores/CollectionsStore";
-import { Link } from "react-router-dom";
 import ListItemAdd from "../ListItemAdd";
 import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
 import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
@@ -66,31 +59,25 @@ export default function MyCollectionsSection() {
         nestedList={
           <List component="div" disablePadding>
             {collections?.map((collection) => (
-              <Link
-                to={`/collections/${collection.id}`}
-                className={classes.link}
+              <DrawerItemNested
                 key={collection.id}
-              >
-                <DrawerItemNested
-                  title={collection.name}
-                  icon={collection.isPublic ? <Public /> : <Lock />}
-                  menuItems={
-                    //<></>}
-                    /*
+                title={collection.name}
+                icon={collection.isPublic ? <Public /> : <Lock />}
+                link={`/collections/${collection.id}`}
+                menuItems={
+                  //<></>}
+                  /*
                   // @ts-ignore */
-                    <MenuItem
-                      onClick={() => onShareCollectionClick(collection.id)}
-                    >
-                      <ListItem>
-                        <ListItemIcon>
-                          <GroupAdd />
-                        </ListItemIcon>
-                        <ListItemText primary="Share" />
-                      </ListItem>
-                    </MenuItem>
-                  }
-                />
-              </Link>
+                  <ListItem
+                    onClick={() => onShareCollectionClick(collection.id)}
+                  >
+                    <ListItemIcon>
+                      <GroupAdd />
+                    </ListItemIcon>
+                    <ListItemText primary="Share" />
+                  </ListItem>
+                }
+              />
             ))}
             <ListItemAdd
               onClickHandler={() => {

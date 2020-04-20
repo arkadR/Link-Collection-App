@@ -8,7 +8,6 @@ class CollectionStore extends StoreBase {
   onActionReceived(action: Action): void {
     switch (action.actionType) {
       case ActionTypes.LOAD_COLLECTIONS: {
-        console.log(action.payload.collections);
         this._collections = action.payload.collections;
         this.emitChange();
         break;
@@ -26,6 +25,7 @@ class CollectionStore extends StoreBase {
   }
 
   public getCollection(id: number): Collection | null {
+    // eslint-disable-next-line eqeqeq
     let collection = this._collections?.find((c) => c.id == id);
     return collection ?? null;
   }

@@ -1,9 +1,9 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import {
   ListItem,
   ListItemText,
   ListItemAvatar,
-  Avatar
+  Avatar,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 

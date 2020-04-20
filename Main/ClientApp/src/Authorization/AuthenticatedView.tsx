@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Menu,
   IconButton,
@@ -7,14 +7,14 @@ import {
   ListItemText,
   ListItemIcon,
   MenuItem,
-  makeStyles
+  makeStyles,
 } from "@material-ui/core";
 import { ExitToApp, Settings, AccountCircle } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
-    width: 2300
-  }
+    width: 2300,
+  },
 });
 
 type AuthenticatedViewProps = {
@@ -67,28 +67,28 @@ export default function AuthenticatedView(props: AuthenticatedViewProps) {
             to={props.profilePath}
             style={{ color: "black", textDecoration: "none" }}
           >
-            <ListItem>
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItem>
+            {/* <ListItem> */}
+            <ListItemIcon>
+              <Settings />
+            </ListItemIcon>
+            <ListItemText primary="Settings" />
+            {/* </ListItem> */}
           </Link>
         </MenuItem>
-        <MenuItem onClick={closeMenu}>
+        <ListItem onClick={closeMenu}>
           <Link
             // tag={Link}
             to={props.logoutPath}
             style={{ color: "black", textDecoration: "none" }}
           >
-            <ListItem>
-              <ListItemIcon>
-                <ExitToApp />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItem>
+            {/* <ListItem> */}
+            <ListItemIcon>
+              <ExitToApp />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+            {/* </ListItem> */}
           </Link>
-        </MenuItem>
+        </ListItem>
       </Menu>
     </div>
   );
