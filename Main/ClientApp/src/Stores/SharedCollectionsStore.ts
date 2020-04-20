@@ -22,6 +22,7 @@ class SharedCollectionStore extends StoreBase {
 
   public getSharedCollection(collectionId: number): SharedCollection | null {
     let sharedCollection = this._sharedCollections?.find(
+      // eslint-disable-next-line eqeqeq
       (sc) => sc.collection.id == collectionId
     );
     return sharedCollection ?? null;
