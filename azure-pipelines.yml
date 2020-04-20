@@ -29,8 +29,6 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
-
-  - script: echo $(deployment)
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 3.1.100'
     inputs:
@@ -51,18 +49,25 @@ jobs:
       command: 'ci'
       workingDir: 'Main/ClientApp'
 
-  # - task: DotNetCoreCLI@2
-  #   displayName: dotnet build $(buildConfiguration)
-  #   inputs:
-  #     command: 'build'
-  #     projects: 'Main/LinkCollectionApp.csproj'
-  #     arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build $(buildConfiguration)
+    inputs:
+      command: 'build'
+      projects: 'Main/LinkCollectionApp.csproj'
+      arguments: '--configuration $(buildConfiguration) -o $(Build.BinariesDirectory)'
 
-  # - task: DotNetCoreCLI@2
-  #   displayName: dotnet test
-  #   inputs:
-  #     command: 'test'
-  #     projects: 'Test/LinkCollectionApp.Test.csproj'
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test
+    inputs:
+      command: 'test'
+      projects: 'Test/LinkCollectionApp.Test.csproj'
+
+  - task: Npm@1
+    displayName: npm test
+    inputs:
+      command: 'custom'
+      workingDir: 'Main/ClientApp'
+      customCommand: 'test'
 
   - task: DotNetCoreCLI@2
     displayName: dotnet publish
@@ -72,14 +77,9 @@ jobs:
       publishWebProjects: true
       arguments: '-o $(Build.ArtifactStagingDirectory)'
   
-  # - task: Npm@1
-  #   displayName: npm test
-  #   inputs:
-  #     command: 'custom'
-  #     workingDir: 'Main/ClientApp'
-  #     customCommand: 'test'
   - task: DotNetCoreCLI@2
     displayName: dotnet ef migrations script
+    condition: and(succeeded(), eq($(deployment), true)) 
     inputs:
       command: 'custom'
       custom: 'ef'
@@ -87,6 +87,7 @@ jobs:
 
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: WebApp  
+    condition: and(succeeded(), eq($(deployment), true)) 
 
 
 - deployment: deploy
