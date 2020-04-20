@@ -16,6 +16,10 @@ pr:
 
 variables:
   buildConfiguration: 'Release'
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+    deployment: true
+  ${{ if eq(eq(variables['Build.SourceBranchName'], 'master'), false) }}:
+    deployment: false
   # CI: true
 
 
@@ -25,6 +29,8 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   steps:
+
+  - script: echo $(deployment)
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 3.1.100'
     inputs:
