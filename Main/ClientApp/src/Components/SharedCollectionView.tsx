@@ -2,8 +2,7 @@ import { RouteComponentProps } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import SharedCollectionsStore from "../Stores/SharedCollectionsStore";
 import { SharedCollection } from "../Model/SharedCollection";
-import ElementWrapper from "./ElementWrapper";
-import { GridList, GridListTile, Fab } from "@material-ui/core";
+import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import AddElementDialog from "./Dialogs/AddElementDialog";
@@ -30,10 +29,10 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
     sharedCollection,
     setSharedCollection,
   ] = useState<SharedCollection | null>(null);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [addElementDialogOpen, setAddElementDialogOpen] = React.useState(false);
 
   const toggleAddElementDialogOpen = () => {
-    setDialogOpen(!dialogOpen);
+    setAddElementDialogOpen(!addElementDialogOpen);
   };
 
   useEffect(() => {
@@ -69,7 +68,7 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
               </Fab>
               <AddElementDialog
                 toggleDialogOpen={toggleAddElementDialogOpen}
-                open={dialogOpen}
+                open={addElementDialogOpen}
                 collectionId={props.match.params.collectionId}
               />
             </>

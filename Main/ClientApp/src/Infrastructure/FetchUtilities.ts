@@ -9,18 +9,18 @@ export async function authorizedGet(apiEndpoint: string) {
 }
 
 export async function authorizedPost(apiEndpoint: string, data = {}) {
-  return authorizedGenericFetch(apiEndpoint, data, "POST");
+  return authorizedRequest(apiEndpoint, data, "POST");
 }
 
 export async function authorizedDelete(apiEndpoint: string, data = {}) {
-  return authorizedGenericFetch(apiEndpoint, data, "DELETE");
+  return authorizedRequest(apiEndpoint, data, "DELETE");
 }
 
 export async function authorizedPatch(apiEndpoint: string, data = {}) {
-  return authorizedGenericFetch(apiEndpoint, data, "PATCH");
+  return authorizedRequest(apiEndpoint, data, "PATCH");
 }
 
-async function authorizedGenericFetch(
+async function authorizedRequest(
   apiEndpoint: string,
   data = {},
   method: string

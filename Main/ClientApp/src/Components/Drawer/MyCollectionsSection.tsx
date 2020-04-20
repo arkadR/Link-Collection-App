@@ -136,7 +136,7 @@ export default function MyCollectionsSection() {
                           <ListItemIcon>
                             <LockOpen />
                           </ListItemIcon>
-                          <ListItemText primary="Share with everyone" />
+                          <ListItemText primary="Get sharable link" />
                         </ListItem>
                       </MenuItem>
                       {/* //<></>}

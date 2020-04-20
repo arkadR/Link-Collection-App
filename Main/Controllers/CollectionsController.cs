@@ -89,12 +89,14 @@ namespace LinkCollectionApp.Controllers
       var collection = _dbContext.Collection.Single(c => c.Id == data.Id);
       if (collection == null)
         return NotFound();
+
       var sharedCollection = _dbContext.SharedCollection.SingleOrDefault(sc => sc.CollectionId == data.Id && sc.UserId == userId);
       bool canEditSharedCollection = sharedCollection == null 
         ? false 
         : sharedCollection.EditRights == null 
           ? false 
           : (bool)sharedCollection.EditRights;
+
       if (collection.OwnerId == userId || canEditSharedCollection) 
       {
         collection.Name = data.Name;
