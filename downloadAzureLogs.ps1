@@ -1,0 +1,1 @@
+az webapp log download --name LinkCollectionApp --resource-group LinkCollectionApp
