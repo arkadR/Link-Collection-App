@@ -16,9 +16,9 @@ pr:
 
 variables:
   buildConfiguration: 'Release'
-  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+  ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
     deployment: true
-  ${{ if eq(eq(variables['Build.SourceBranchName'], 'master'), false) }}:
+  ${{ if eq(eq(variables['Build.SourceBranchName'], 'dev'), false) }}:
     deployment: false
   # CI: true
 
