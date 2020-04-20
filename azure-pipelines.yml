@@ -71,7 +71,7 @@ jobs:
 
   - task: DotNetCoreCLI@2
     displayName: dotnet publish
-    condition: and(succeeded(), eq($(deployment), true)) 
+    condition: and(succeeded(), eq(variables['deployment'], true)) 
     inputs:
       command: 'publish'
       publishWebProjects: true
@@ -79,7 +79,7 @@ jobs:
   
   - task: DotNetCoreCLI@2
     displayName: dotnet ef migrations script
-    condition: and(succeeded(), eq($(deployment), true)) 
+    condition: and(succeeded(), eq(variables['deployment']), true)) 
     inputs:
       command: 'custom'
       custom: 'ef'
@@ -87,13 +87,13 @@ jobs:
 
   - publish: $(Build.ArtifactStagingDirectory)
     artifact: WebApp  
-    condition: and(succeeded(), eq($(deployment), true)) 
+    condition: and(succeeded(), eq(variables['deployment'], true)) 
 
 
 - deployment: deploy
   displayName: Azure Deploy
   dependsOn: build
-  condition: eq($(deployment), true)
+  condition: eq(variables['deployment'], true)
   environment: LinkCollectionApp-dev
   pool:
     vmImage: 'windows-latest'
