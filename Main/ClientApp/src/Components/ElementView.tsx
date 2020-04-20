@@ -8,7 +8,9 @@ import { GetHostnameLink, GetProperUrl } from "../Infrastructure/UrlUtilities";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    card: {
+    root: {
+      margin: "10px",
+
       background: "rgba(34, 35, 78, 0.05)",
     },
     link: {
@@ -29,6 +31,8 @@ type ElementViewProps = {
 };
 
 export default function ElementView(props: ElementViewProps) {
+  const classes = useStyles();
+
   const [elementUrl, setElementUrl] = useState("");
   const [displayedName, setDisplayedName] = useState("");
   const [faviconUrl, setFaviconUrl] = useState("");
@@ -41,10 +45,10 @@ export default function ElementView(props: ElementViewProps) {
     setFaviconUrl(GetHostnameLink(url) + "/favicon.ico");
   }, [props.element]);
 
-  const classes = useStyles();
   return (
+    //TODO: change structure so clicking on menu doesn't redirect
     <a href={elementUrl} className={classes.link}>
-      <Card raised className={classes.card}>
+      <Card className={classes.root} elevation={3}>
         <CardHeader
           avatar={<Avatar alt="Thumbnail" src={faviconUrl} />}
           title={displayedName}
@@ -55,15 +59,6 @@ export default function ElementView(props: ElementViewProps) {
             </IconButton>
           }
         />
-        {/* <ListItem> */}
-        {/* <ListItemIcon>
-            <img  className={classes.icon} alt={"Thumbnail"} />
-          </ListItemIcon>
-          <ListItemText primary={displayedName} />
-          <IconButton color="inherit">
-            <MoreVert />
-          </IconButton>
-        </ListItem> */}
         {props.children ? <CardContent>{props.children}</CardContent> : <></>}
       </Card>
     </a>

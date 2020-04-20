@@ -7,6 +7,7 @@ import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import BaseCollectionView from "./BaseCollectionView";
 import PanelWideMessage from "./Common/PanelWideMessage";
 import { Fab } from "@material-ui/core";
+import AddElementDialog from "./Dialogs/AddElementDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,6 +30,12 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
     setSharedCollection,
   ] = useState<SharedCollection | null>(null);
 
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+
+  const toggleAddElementDialogOpen = () => {
+    setDialogOpen(!dialogOpen);
+  };
+
   useEffect(() => {
     const collectionId = props.match.params.collectionId;
     setSharedCollection(
@@ -49,18 +56,25 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
   return (
     <>
       {sharedCollection?.viewRights ? (
-        <BaseCollectionView collection={sharedCollection?.collection}>
-          {sharedCollection?.editRights && (
-            <Fab
-              color="primary"
-              aria-label="add"
-              className={classes.fab}
-              // onClick={toggleAddElementDialogOpen}
-            >
-              <AddIcon />
-            </Fab>
-          )}
-        </BaseCollectionView>
+        <>
+          <BaseCollectionView collection={sharedCollection?.collection}>
+            {sharedCollection?.editRights && (
+              <Fab
+                color="primary"
+                aria-label="add"
+                className={classes.fab}
+                onClick={toggleAddElementDialogOpen}
+              >
+                <AddIcon />
+              </Fab>
+            )}
+          </BaseCollectionView>
+          <AddElementDialog
+            toggleDialogOpen={toggleAddElementDialogOpen}
+            open={dialogOpen}
+            collectionId={props.match.params.collectionId}
+          />
+        </>
       ) : (
         <PanelWideMessage text="You have no rights to view this collection" />
       )}

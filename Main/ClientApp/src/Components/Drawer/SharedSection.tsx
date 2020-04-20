@@ -31,6 +31,7 @@ export default function SharedSection() {
             <DrawerItemNested
               title={sharedCollection.collection.name}
               link={`/collections/shared/${sharedCollection.collection.id}`}
+              key={sharedCollection.collection.id}
               icon={
                 sharedCollection.editRights ? (
                   <Edit />
