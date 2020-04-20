@@ -48,29 +48,61 @@ namespace LinkCollectionApp.Controllers
       return Ok();
     }
 
-    [HttpDelete]
-    public IActionResult DeleteCollection([FromBody] int id)
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCollection(int id)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var collection = _dbContext.Collection.Single(c => c.Id == id);
+      var collection = _dbContext.Collection.SingleOrDefault(c => c.Id == id);
+      if (collection == null)
+        return NotFound();
       if (collection.OwnerId == userId)
       {
-        _dbContext.Remove(collection);
-        _dbContext.SaveChanges();
+        using (var dbContextTransaction = _dbContext.Database.BeginTransaction())
+        {
+          //delete connected saved collections
+          var savedCollections = _dbContext.SavedCollection.Where(sc => sc.CollectionId == id).ToArray();
+          _dbContext.RemoveRange(savedCollections);
+
+          //delete connected shared collections
+          var sharedCollections = _dbContext.SharedCollection.Where(sc => sc.CollectionId == id).ToArray();
+          _dbContext.RemoveRange(sharedCollections);
+
+          //delete collection's elements
+          var elements = _dbContext.Element.Where(sc => sc.CollectionId == id).ToArray();
+          _dbContext.RemoveRange(elements);
+
+          //delete collection
+          _dbContext.Remove(collection);
+
+          _dbContext.SaveChanges();
+          dbContextTransaction.Commit();
+        }
         return Ok();
       }
       return Forbid();
     }
 
-    [HttpPut]
+    [HttpPatch]
     public IActionResult UpdateCollection([FromBody] CollectionUpdateData data)
     {
       var userId = _userProvider.GetCurrentUserId();
       var collection = _dbContext.Collection.Single(c => c.Id == data.Id);
-      collection.Name = data.Name;
-      _dbContext.Update(collection);
-      _dbContext.SaveChanges();
-      return Ok();
+      if (collection == null)
+        return NotFound();
+      var sharedCollection = _dbContext.SharedCollection.SingleOrDefault(sc => sc.CollectionId == data.Id && sc.UserId == userId);
+      bool canEditSharedCollection = sharedCollection == null 
+        ? false 
+        : sharedCollection.EditRights == null 
+          ? false 
+          : (bool)sharedCollection.EditRights;
+      if (collection.OwnerId == userId || canEditSharedCollection) 
+      {
+        collection.Name = data.Name;
+        _dbContext.Update(collection);
+        _dbContext.SaveChanges();
+        return Ok();
+      }
+      return Forbid();
     }
   }
 }
