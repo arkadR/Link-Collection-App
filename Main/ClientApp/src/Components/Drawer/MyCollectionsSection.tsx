@@ -27,7 +27,6 @@ import EditCollectionDialog from "../Dialogs/EditCollectionDialog";
 import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
 import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
 import { Collection } from "../../Model/Collection";
-import { deleteCollection, updateCollection } from "../../Actions/Actions";
 import DeleteCollectionDialog from "../Dialogs/DeleteCollectionDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -182,7 +181,7 @@ export default function MyCollectionsSection() {
       <DeleteCollectionDialog
         open={deleteDialogOpen}
         toggleDialogOpen={() => setDeleteDialogOpen(!deleteDialogOpen)}
-        confirmAction={() => deleteCollection(selectedCollection)}
+        collectionId={selectedCollection}
       />
       <EditCollectionDialog
         open={updateDialogOpen}

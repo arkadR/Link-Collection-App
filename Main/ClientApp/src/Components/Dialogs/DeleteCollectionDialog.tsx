@@ -1,10 +1,11 @@
 import React from "react";
 import DeleteDialog from "./DeleteDialog";
+import { deleteCollection } from "../../Actions/Actions";
 
 type DeleteCollectionDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
-  confirmAction: () => void;
+  collectionId: number;
 };
 
 export default function DeleteCollectionDialog(
@@ -19,7 +20,7 @@ export default function DeleteCollectionDialog(
       toggleDialogOpen={props.toggleDialogOpen}
       title={title}
       description={description}
-      confirmAction={props.confirmAction}
+      confirmAction={() => deleteCollection(props.collectionId)}
     />
   );
 }

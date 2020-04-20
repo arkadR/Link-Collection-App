@@ -23,7 +23,7 @@ export default function DeleteDialog(props: DeleteDialogProps) {
             props.confirmAction();
             props.toggleDialogOpen();
           }}
-          color="primary"
+          color="secondary"
           autoFocus
         >
           Confirm

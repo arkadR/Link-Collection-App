@@ -5,8 +5,14 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
 } from "@material-ui/core";
+import { blue, red } from "@material-ui/core/colors";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+
+const blueRedTheme = createMuiTheme({
+  palette: { primary: blue, secondary: red },
+});
 
 type SimpleDialogProps = {
   open: boolean;
@@ -26,10 +32,12 @@ export default function SimpleDialog(props: SimpleDialogProps) {
         {props.content}
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.toggleDialogOpen} color="primary">
-          Cancel
-        </Button>
-        {props.actions}
+        <MuiThemeProvider theme={blueRedTheme}>
+          <Button onClick={props.toggleDialogOpen} color="primary">
+            Cancel
+          </Button>
+          {props.actions}
+        </MuiThemeProvider>
       </DialogActions>
     </Dialog>
   );
