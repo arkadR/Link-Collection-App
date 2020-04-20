@@ -52,7 +52,7 @@ export default function MyCollectionsSection() {
   );
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState(-1);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export default function MyCollectionsSection() {
 
   const onUpdateCollectionClick = (collectionId: number) => {
     setSelectedCollection(collectionId);
-    setUpdateDialogOpen(true);
+    setEditDialogOpen(true);
   };
 
   return (
@@ -184,8 +184,8 @@ export default function MyCollectionsSection() {
         collectionId={selectedCollection}
       />
       <EditCollectionDialog
-        open={updateDialogOpen}
-        toggleDialogOpen={() => setUpdateDialogOpen(!updateDialogOpen)}
+        open={editDialogOpen}
+        toggleDialogOpen={() => setEditDialogOpen(!editDialogOpen)}
         collectionId={selectedCollection}
       />
     </>
