@@ -45,20 +45,22 @@ export default function CollectionView(props: CollectionViewProps) {
   }, [props.match.params.collectionId]);
 
   return (
-    <BaseCollectionView collection={collection}>
-      <Fab
-        color="primary"
-        aria-label="add"
-        className={classes.fab}
-        onClick={toggleAddElementDialogOpen}
-      >
-        <AddIcon />
-      </Fab>
+    <>
+      <BaseCollectionView collection={collection}>
+        <Fab
+          color="primary"
+          aria-label="add"
+          className={classes.fab}
+          onClick={toggleAddElementDialogOpen}
+        >
+          <AddIcon />
+        </Fab>
+      </BaseCollectionView>
       <AddElementDialog
         toggleDialogOpen={toggleAddElementDialogOpen}
         open={dialogOpen}
         collectionId={props.match.params.collectionId}
       />
-    </BaseCollectionView>
+    </>
   );
 }

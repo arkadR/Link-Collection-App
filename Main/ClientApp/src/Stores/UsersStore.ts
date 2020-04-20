@@ -9,7 +9,6 @@ class UsersStore extends StoreBase {
     switch (action.actionType) {
       case ActionTypes.LOAD_USERS: {
         this._users = action.payload.users;
-        debugger;
         this.emitChange();
         break;
       }

@@ -38,8 +38,10 @@ export async function updateCollection(id: number, name: string) {
 
 export async function addElement(elementCreationData: ElementCreationData) {
   let success = await ElementsApi.addElement(elementCreationData);
-  if (success) loadCollections();
-  else console.error("Could not add element");
+  if (success) {
+    loadCollections();
+    loadSharedCollections();
+  } else console.error("Could not add element");
 }
 
 export async function loadSharedCollections() {

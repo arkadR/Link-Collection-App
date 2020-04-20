@@ -1,27 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import {
-  List,
-  MenuItem,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Typography,
-  Divider,
-} from "@material-ui/core";
-import {
-  Lock,
-  Widgets,
-  Public,
-  GroupAdd,
-  Delete,
-  Edit,
-  LockOpen,
-} from "@material-ui/icons";
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { Lock, Widgets, Public, GroupAdd } from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../../Stores/CollectionsStore";
-import { Link } from "react-router-dom";
 import ListItemAdd from "../ListItemAdd";
 import EditCollectionDialog from "../Dialogs/EditCollectionDialog";
 import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
@@ -93,71 +76,67 @@ export default function MyCollectionsSection() {
         nestedList={
           <List component="div" disablePadding>
             {collections?.map((collection) => (
-              <Link
-                to={`/collections/${collection.id}`}
-                className={classes.link}
+              <DrawerItemNested
                 key={collection.id}
-              >
-                <DrawerItemNested
-                  title={collection.name}
-                  icon={collection.isPublic ? <Public /> : <Lock />}
-                  menuItems={
+                title={collection.name}
+                icon={collection.isPublic ? <Public /> : <Lock />}
+                link={`/collections/${collection.id}`}
+                menuItems={
                     <>
-                      <Typography
-                        variant="h5"
-                        className={classes.collectionSettingsMenuTitle}
-                      >
-                        Settings
+                        <Typography
+                            variant="h5"
+                            className={classes.collectionSettingsMenuTitle}
+                        >
+                            Settings
                       </Typography>
-                      <MenuItem
-                        onClick={() => onDeleteCollectionClick(collection.id)}
-                      >
-                        <ListItem>
-                          <ListItemIcon>
-                            <Delete />
-                          </ListItemIcon>
-                          <ListItemText primary="Delete" />
-                        </ListItem>
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => onUpdateCollectionClick(collection.id)}
-                      >
-                        <ListItem>
-                          <ListItemIcon>
-                            <Edit />
-                          </ListItemIcon>
-                          <ListItemText primary="Edit" />
-                        </ListItem>
-                      </MenuItem>
-                      <Divider />
-                      <MenuItem>
-                        {/* TODO: on click */}
-                        <ListItem>
-                          <ListItemIcon>
-                            <LockOpen />
-                          </ListItemIcon>
-                          <ListItemText primary="Get sharable link" />
-                        </ListItem>
-                      </MenuItem>
-                      {/* //<></>}
+                        <MenuItem
+                            onClick={() => onDeleteCollectionClick(collection.id)}
+                        >
+                            <ListItem>
+                                <ListItemIcon>
+                                    <Delete />
+                                </ListItemIcon>
+                                <ListItemText primary="Delete" />
+                            </ListItem>
+                        </MenuItem>
+                        <MenuItem
+                            onClick={() => onUpdateCollectionClick(collection.id)}
+                        >
+                            <ListItem>
+                                <ListItemIcon>
+                                    <Edit />
+                                </ListItemIcon>
+                                <ListItemText primary="Edit" />
+                            </ListItem>
+                        </MenuItem>
+                        <Divider />
+                        <MenuItem>
+                            {/* TODO: on click */}
+                            <ListItem>
+                                <ListItemIcon>
+                                    <LockOpen />
+                                </ListItemIcon>
+                                <ListItemText primary="Get sharable link" />
+                            </ListItem>
+                        </MenuItem>
+                        {/* //<></>}
                     /*
                   // @ts-ignore */}
-                      <MenuItem
-                        onClick={() => onShareCollectionClick(collection.id)}
-                      >
-                        <ListItem>
-                          <ListItemIcon>
-                            <GroupAdd />
-                          </ListItemIcon>
-                          <ListItemText primary="Share" />
-                        </ListItem>
-                      </MenuItem>
-                      <Divider />
-                      {/* TODO: list of contributors */}
+                        <MenuItem
+                            onClick={() => onShareCollectionClick(collection.id)}
+                        >
+                            <ListItem>
+                                <ListItemIcon>
+                                    <GroupAdd />
+                                </ListItemIcon>
+                                <ListItemText primary="Share" />
+                            </ListItem>
+                        </MenuItem>
+                        <Divider />
+                        {/* TODO: list of contributors */}
                     </>
-                  }
-                />
-              </Link>
+                }
+              />
             ))}
             <ListItemAdd
               onClickHandler={() => {

@@ -2,12 +2,12 @@ import { RouteComponentProps } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import SharedCollectionsStore from "../Stores/SharedCollectionsStore";
 import { SharedCollection } from "../Model/SharedCollection";
-import { Fab } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import AddElementDialog from "./Dialogs/AddElementDialog";
 import BaseCollectionView from "./BaseCollectionView";
 import PanelWideMessage from "./Common/PanelWideMessage";
+import { Fab } from "@material-ui/core";
+import AddElementDialog from "./Dialogs/AddElementDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -55,9 +55,9 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
   return (
     <>
       {sharedCollection?.viewRights ? (
-        <BaseCollectionView collection={sharedCollection?.collection}>
-          {sharedCollection?.editRights && (
-            <>
+        <>
+          <BaseCollectionView collection={sharedCollection?.collection}>
+            {sharedCollection?.editRights && (
               <Fab
                 color="primary"
                 aria-label="add"
@@ -66,14 +66,14 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
               >
                 <AddIcon />
               </Fab>
-              <AddElementDialog
-                toggleDialogOpen={toggleAddElementDialogOpen}
-                open={addElementDialogOpen}
-                collectionId={props.match.params.collectionId}
-              />
-            </>
-          )}
-        </BaseCollectionView>
+            )}
+          </BaseCollectionView>
+          <AddElementDialog
+            toggleDialogOpen={toggleAddElementDialogOpen}
+                      open={addElementDialogOpen}
+            collectionId={props.match.params.collectionId}
+          />
+        </>
       ) : (
         <PanelWideMessage text="You have no rights to view this collection" />
       )}

@@ -40,13 +40,27 @@ namespace LinkCollectionApp.Controllers
     }
 
     [HttpPost]
-    public void ShareCollection(SharedCollectionCreationData data)
+    public IActionResult ShareCollection(SharedCollectionCreationData data)
     {
       var userId = _userProvider.GetCurrentUserId();
-      _dbContext.Users
+      var collectionToShare = _dbContext.Collection.SingleOrDefault(c => c.Id == data.CollectionId);
+      if (collectionToShare == null)
+        return NotFound();
+
+      if (collectionToShare.OwnerId != userId)
+        return Forbid();
+
+      var userToShare = _dbContext.Users
         .Include(user => user.SharedCollections)
-        .Single(user => user.Id == data.UserId).SharedCollections
-        .Add(new SharedCollection
+        .SingleOrDefault(user => user.Id == data.UserId);
+
+      if (userToShare == null)
+        return NotFound();
+
+      if (userToShare.SharedCollections.Any(sc => sc.CollectionId == data.CollectionId))
+        return NoContent();
+
+      userToShare.SharedCollections.Add(new SharedCollection
       {
         CollectionId = data.CollectionId,
         UserId = data.UserId,
@@ -54,6 +68,7 @@ namespace LinkCollectionApp.Controllers
         EditRights = data.EditRights
       });
       _dbContext.SaveChanges();
+      return Ok();
     }
   }
 }

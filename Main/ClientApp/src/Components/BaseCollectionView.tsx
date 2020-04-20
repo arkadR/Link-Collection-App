@@ -47,7 +47,7 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
 function GridColumnList(elements: Element[]) {
   return (
     <GridListTile>
-      <GridList cols={1} cellHeight="auto" spacing={50}>
+      <GridList cols={1} cellHeight="auto" spacing={20}>
         {elements.map((element) => {
           return (
             <GridListTile key={element.id}>
