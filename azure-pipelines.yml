@@ -16,9 +16,9 @@ pr:
 
 variables:
   buildConfiguration: 'Release'
-  ${{ if eq(variables['Build.SourceBranchName'], 'dev') }}:
+  ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
     deployment: true
-  ${{ if eq(eq(variables['Build.SourceBranchName'], 'dev'), false) }}:
+  ${{ if eq(eq(variables['Build.SourceBranchName'], 'master'), false) }}:
     deployment: false
   # CI: true
 
@@ -66,8 +66,7 @@ jobs:
 
   - task: DotNetCoreCLI@2
     displayName: dotnet publish
-    #TODO: Change to master
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/dev')) 
+    condition: and(succeeded(), eq($(deployment), true)) 
     inputs:
       command: 'publish'
       publishWebProjects: true
@@ -93,6 +92,7 @@ jobs:
 - deployment: deploy
   displayName: Azure Deploy
   dependsOn: build
+  condition: eq($(deployment), true)
   environment: LinkCollectionApp-dev
   pool:
     vmImage: 'windows-latest'
