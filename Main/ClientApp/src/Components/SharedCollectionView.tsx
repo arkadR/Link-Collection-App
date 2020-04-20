@@ -70,7 +70,7 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
           </BaseCollectionView>
           <AddElementDialog
             toggleDialogOpen={toggleAddElementDialogOpen}
-                      open={addElementDialogOpen}
+            open={addElementDialogOpen}
             collectionId={props.match.params.collectionId}
           />
         </>

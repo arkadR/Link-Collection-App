@@ -39,27 +39,30 @@ export default function DrawerItemNested(props: DrawerItemNestedProps) {
   return (
     <>
       <ListItem button className={classes.nested}>
-        <Link to={props.link} className={classes.link}>
-          {props.icon != null ? (
-            <ListItemIcon children={props.icon} />
-          ) : (
-            <ListItemIcon
-              children={<Clear style={{ visibility: "hidden" }} />}
-            />
-          )}
-          <ListItemText primary={props.title} />
-        </Link>
+        {/* <Link to={props.link} className={classes.link}> */}
+        {props.icon != null ? (
+          <ListItemIcon children={props.icon} />
+        ) : (
+          <ListItemIcon children={<Clear style={{ visibility: "hidden" }} />} />
+        )}
+        <ListItemText primary={props.title} />
+        {/* </Link> */}
         {/*
         // @ts-ignore */}
         <IconButton color="inherit" onClick={onMenuOpen}>
           <MoreVert />
         </IconButton>
       </ListItem>
-          <Menu open={anchorEl !== null} anchorEl={anchorEl} onClose={onMenuClose} PaperProps={{
-              style: {
-                  maxHeight: 350,
-              },
-          }}>
+      <Menu
+        open={anchorEl !== null}
+        anchorEl={anchorEl}
+        onClose={onMenuClose}
+        PaperProps={{
+          style: {
+            maxHeight: 350,
+          },
+        }}
+      >
         {props.menuItems}
       </Menu>
     </>
