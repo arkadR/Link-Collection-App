@@ -23,7 +23,7 @@ jobs:
 - job: build
   displayName: Build & Test
   pool:
-    vmImage: 'windows-latest'
+    vmImage: 'ubuntu-latest'
   steps:
   - task: UseDotNet@2
     displayName: 'Use .NET Core sdk 3.1.100'
@@ -89,7 +89,7 @@ jobs:
   dependsOn: build
   environment: LinkCollectionApp-dev
   pool:
-    vm-image: 'windows-latest'
+    vmImage: 'windows-latest'
   strategy:
     runOnce:
       deploy:
