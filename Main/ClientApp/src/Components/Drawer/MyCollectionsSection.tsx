@@ -130,9 +130,6 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Get sharable link" />
                     </ListItem>
-                    {/* //<></>}
-                    /*
-                  // @ts-ignore */}
                     <ListItem
                       onClick={() => onShareCollectionClick(collection.id)}
                       button

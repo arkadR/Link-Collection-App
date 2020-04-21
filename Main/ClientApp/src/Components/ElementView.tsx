@@ -45,27 +45,38 @@ export default function ElementView(props: ElementViewProps) {
     setFaviconUrl(GetHostnameLink(url) + "/favicon.ico");
   }, [props.element]);
 
+  let onCardClick = () => {
+    let link = document.getElementById(elementUrl);
+    link?.click();
+  };
+
   return (
-    //TODO: change structure so clicking on menu doesn't redirect
-    <a
-      href={elementUrl}
-      className={classes.link}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Card className={classes.root} elevation={3}>
+    <>
+      <a
+        id={elementUrl}
+        href={elementUrl}
+        className={classes.link}
+        target="_blank"
+        rel="noopener noreferrer"
+      />
+      <Card className={classes.root} elevation={3} onClick={onCardClick}>
         <CardHeader
           avatar={<Avatar alt="Thumbnail" src={faviconUrl} />}
           title={displayedName}
           subheader={elementUrl}
           action={
-            <IconButton aria-label="settings">
+            <IconButton
+              aria-label="settings"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               <MoreVert />
             </IconButton>
           }
         />
         {props.children ? <CardContent>{props.children}</CardContent> : <></>}
       </Card>
-    </a>
+    </>
   );
 }

@@ -1,14 +1,15 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useState, useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListItemSecondaryAction,
   IconButton,
   Menu,
 } from "@material-ui/core";
 import { Clear, MoreVert } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,35 +26,46 @@ const useStyles = makeStyles((theme: Theme) =>
 type DrawerItemNestedProps = {
   title: string;
   icon?: ReactElement;
-  menuItems: ReactElement;
+  menuItems?: ReactElement;
   link: string;
 };
 
 export default function DrawerItemNested(props: DrawerItemNestedProps) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+  const [redirectToCollection, setRedirectToCollection] = useState<boolean>(
+    false
+  );
   const onMenuOpen = (event: MouseEvent) => {
-    setAnchorEl(event.currentTarget as Element);
+    if (props.menuItems) setAnchorEl(event.currentTarget as Element);
   };
   const onMenuClose = () => setAnchorEl(null);
+
+  useEffect(() => {
+    setRedirectToCollection(false);
+  }, [redirectToCollection]);
+
   return (
     <>
-      <ListItem button className={classes.nested}>
-        <Link to={props.link} className={classes.link}>
-          {props.icon != null ? (
-            <ListItemIcon children={props.icon} />
-          ) : (
-            <ListItemIcon
-              children={<Clear style={{ visibility: "hidden" }} />}
-            />
-          )}
-          <ListItemText primary={props.title} />
-        </Link>
-        {/*
-        // @ts-ignore */}
-        <IconButton color="inherit" onClick={onMenuOpen}>
-          <MoreVert />
-        </IconButton>
+      {redirectToCollection && <Redirect push to={props.link} />}
+      <ListItem
+        button
+        className={classes.nested}
+        onClick={() => setRedirectToCollection(true)}
+      >
+        {props.icon != null ? (
+          <ListItemIcon children={props.icon} />
+        ) : (
+          <ListItemIcon children={<Clear style={{ visibility: "hidden" }} />} />
+        )}
+        <ListItemText primary={props.title} />
+        <ListItemSecondaryAction>
+          {/*
+          // @ts-ignore */}
+          <IconButton color="inherit" onClick={onMenuOpen}>
+            <MoreVert />
+          </IconButton>
+        </ListItemSecondaryAction>
       </ListItem>
       <Menu
         open={anchorEl !== null}
