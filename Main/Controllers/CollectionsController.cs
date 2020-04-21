@@ -47,5 +47,58 @@ namespace LinkCollectionApp.Controllers
       _dbContext.SaveChanges();
       return Ok();
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCollection(int id)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var collection = _dbContext.Collection.SingleOrDefault(c => c.Id == id);
+      if (collection == null)
+        return NotFound();
+      if (collection.OwnerId != userId)
+        return Forbid();
+      
+      using var dbContextTransaction = _dbContext.Database.BeginTransaction();
+
+      //delete connected saved collections
+      var savedCollections = _dbContext.SavedCollection.Where(sc => sc.CollectionId == id).ToArray();
+      _dbContext.RemoveRange(savedCollections);
+
+      //delete connected shared collections
+      var sharedCollections = _dbContext.SharedCollection.Where(sc => sc.CollectionId == id).ToArray();
+      _dbContext.RemoveRange(sharedCollections);
+
+      //delete collection's elements
+      var elements = _dbContext.Element.Where(sc => sc.CollectionId == id).ToArray();
+      _dbContext.RemoveRange(elements);
+
+      //delete collection
+      _dbContext.Remove(collection);
+
+      _dbContext.SaveChanges();
+      dbContextTransaction.Commit();
+      return Ok();
+    }
+
+    [HttpPatch]
+    public IActionResult UpdateCollection([FromBody] CollectionUpdateData data)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var collection = _dbContext.Collection.Single(c => c.Id == data.Id);
+      if (collection == null)
+        return NotFound();
+
+      var sharedCollection = _dbContext.SharedCollection.SingleOrDefault(sc => sc.CollectionId == data.Id && sc.UserId == userId);
+      bool canEditSharedCollection = sharedCollection?.EditRights == true;
+
+      if(collection.OwnerId != userId && !canEditSharedCollection)
+        return Forbid();
+      
+
+      collection.Name = data.Name;
+      _dbContext.Update(collection);
+      _dbContext.SaveChanges();
+      return Ok();
+    }
   }
 }

@@ -6,7 +6,6 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  MenuItem,
   makeStyles,
 } from "@material-ui/core";
 import { ExitToApp, Settings, AccountCircle } from "@material-ui/icons";
@@ -37,10 +36,9 @@ export default function AuthenticatedView(props: AuthenticatedViewProps) {
   };
 
   return (
-    <div>
+    <>
       <Fragment>
         <Link
-          // tag={Link}
           className="text-dark"
           to={props.profilePath}
           style={{ color: "white", textDecoration: "none" }}
@@ -61,35 +59,29 @@ export default function AuthenticatedView(props: AuthenticatedViewProps) {
         onClose={closeMenu}
         className={classes.root}
       >
-        <MenuItem onClick={closeMenu}>
-          <Link
-            // tag={Link}
-            to={props.profilePath}
-            style={{ color: "black", textDecoration: "none" }}
-          >
-            {/* <ListItem> */}
+        <Link
+          to={props.profilePath}
+          style={{ color: "black", textDecoration: "none" }}
+        >
+          <ListItem onClick={closeMenu} button>
             <ListItemIcon>
               <Settings />
             </ListItemIcon>
             <ListItemText primary="Settings" />
-            {/* </ListItem> */}
-          </Link>
-        </MenuItem>
-        <ListItem onClick={closeMenu}>
-          <Link
-            // tag={Link}
-            to={props.logoutPath}
-            style={{ color: "black", textDecoration: "none" }}
-          >
-            {/* <ListItem> */}
+          </ListItem>
+        </Link>
+        <Link
+          to={props.logoutPath}
+          style={{ color: "black", textDecoration: "none" }}
+        >
+          <ListItem onClick={closeMenu} button>
             <ListItemIcon>
               <ExitToApp />
             </ListItemIcon>
             <ListItemText primary="Logout" />
-            {/* </ListItem> */}
-          </Link>
-        </ListItem>
+          </ListItem>
+        </Link>
       </Menu>
-    </div>
+    </>
   );
 }

@@ -24,6 +24,20 @@ export async function addCollection(
   else console.error("Could not add collection");
 }
 
+export async function deleteCollection(id: number) {
+  let success = await CollectionsApi.deleteCollection(id);
+  if (success) loadCollections();
+  else console.error("Could not delete collection");
+}
+
+export async function updateCollection(id: number, name: string) {
+  let success = await CollectionsApi.updateCollection(id, name);
+  if (success) {
+    loadCollections();
+    loadSharedCollections();
+  } else console.error("Could not update collection");
+}
+
 export async function addElement(elementCreationData: ElementCreationData) {
   let success = await ElementsApi.addElement(elementCreationData);
   if (success) {

@@ -29,11 +29,10 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
     sharedCollection,
     setSharedCollection,
   ] = useState<SharedCollection | null>(null);
-
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [addElementDialogOpen, setAddElementDialogOpen] = React.useState(false);
 
   const toggleAddElementDialogOpen = () => {
-    setDialogOpen(!dialogOpen);
+    setAddElementDialogOpen(!addElementDialogOpen);
   };
 
   useEffect(() => {
@@ -71,7 +70,7 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
           </BaseCollectionView>
           <AddElementDialog
             toggleDialogOpen={toggleAddElementDialogOpen}
-            open={dialogOpen}
+            open={addElementDialogOpen}
             collectionId={props.match.params.collectionId}
           />
         </>
