@@ -41,7 +41,7 @@ export default function SharedSection() {
                   <VisibilityOff />
                 )
               }
-              menuItems={<></>}
+              // menuItems={<></>}
             />
           ))}
         </List>
