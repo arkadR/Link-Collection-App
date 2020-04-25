@@ -46,18 +46,19 @@ namespace LinkCollectionApp.Controllers
       return Ok();
     }
 
-    [HttpDelete("{id}")]
-    public IActionResult DeleteElement(int id)
+    [HttpDelete("{collectionId}/{elementId}")]
+    public IActionResult DeleteElement(int collectionId, int elementId)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var element = _dbContext.Element.SingleOrDefault(el => el.Id == id);
-
+      var parentCollection = _dbContext.Collection
+        .Include(c => c.Elements)
+        .SingleOrDefault(c => c.Id == collectionId);
+      var element = parentCollection?.Elements.SingleOrDefault(el => el.Id == elementId);
       if (element == null)
         return NotFound();
 
-      var parentCollection = _dbContext.Collection.Single(c => c.Id == element.CollectionId);
       var usersWithEditPermission = _dbContext.SharedCollection
-        .Where(sc => sc.CollectionId == element.CollectionId)
+        .Where(sc => sc.CollectionId == collectionId)
         .Where(sc => sc.EditRights == true)
         .Select(sc => sc.UserId)
         .ToList();
@@ -67,7 +68,7 @@ namespace LinkCollectionApp.Controllers
 
       var succeedingElements = _dbContext.Collection
         .Include(c => c.Elements)
-        .Single(c => c.Id == element.CollectionId)
+        .Single(c => c.Id == collectionId)
         .Elements.Where(el => el.Sequence > element.Sequence)
         .ToList();
 
@@ -77,18 +78,19 @@ namespace LinkCollectionApp.Controllers
       return Ok();
     }
 
-    [HttpPatch("{id}")]
-    public IActionResult UpdateElement(int id, ElementUpdateData updateData)
+    [HttpPatch("{collectionId}/{elementId}")]
+    public IActionResult UpdateElement(int collectionId, int elementId, ElementUpdateData updateData)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var element = _dbContext.Element.SingleOrDefault(el => el.Id == id);
-
+      var parentCollection = _dbContext.Collection
+        .Include(col => col.Elements)
+        .SingleOrDefault(c => c.Id == collectionId);
+      var element = parentCollection?.Elements.SingleOrDefault(el => el.Id == elementId);
       if (element == null)
         return NotFound();
 
-      var parentCollection = _dbContext.Collection.Single(c => c.Id == element.CollectionId);
       var usersWithEditPermission = _dbContext.SharedCollection
-        .Where(sc => sc.CollectionId == element.CollectionId)
+        .Where(sc => sc.CollectionId == collectionId)
         .Where(sc => sc.EditRights == true)
         .Select(sc => sc.UserId)
         .ToList();

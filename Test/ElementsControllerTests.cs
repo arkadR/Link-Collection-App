@@ -110,7 +110,7 @@ namespace LinkCollectionApp.Test
       var newName = NewGuid;
       var updateData = new ElementUpdateData { Name = newName };
       AddUser(userId);
-      AddCollection(userId, 5);
+      var collection = AddCollection(userId, 5);
       Element element = null;
       InTransaction(context =>
       {
@@ -122,7 +122,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId));
-        result = controller.UpdateElement(element.Id, updateData);
+        result = controller.UpdateElement(collection.Id, element.Id, updateData);
       });
 
       //Assert
@@ -141,7 +141,7 @@ namespace LinkCollectionApp.Test
       var newLink = NewGuid;
       var updateData = new ElementUpdateData { Link = newLink };
       AddUser(userId);
-      AddCollection(userId, 50);
+      var collection = AddCollection(userId, 50);
       Element element = null;
       InTransaction(context =>
       {
@@ -153,7 +153,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId));
-        result = controller.UpdateElement(element.Id, updateData);
+        result = controller.UpdateElement(collection.Id, element.Id, updateData);
       });
 
       //Assert
@@ -174,7 +174,7 @@ namespace LinkCollectionApp.Test
       var userId = NewGuid;
       var updateData = new ElementUpdateData { Link = newLink, Name = newName};
       AddUser(userId);
-      AddCollection(userId, 50);
+      var collection = AddCollection(userId, 50);
       Element element = null;
       InTransaction(context =>
       {
@@ -186,7 +186,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId));
-        result = controller.UpdateElement(element.Id, updateData);
+        result = controller.UpdateElement(collection.Id, element.Id, updateData);
       });
 
       //Assert
@@ -206,7 +206,7 @@ namespace LinkCollectionApp.Test
       var newLink = NewGuid;
       var updateData = new ElementUpdateData { Link = newLink };
       AddUser(userId);
-      AddCollection(userId, 1);
+      var collection = AddCollection(userId, 1);
       Element element = null;
       InTransaction(context =>
       {
@@ -218,7 +218,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId));
-        result = controller.UpdateElement(element.Id + 1, updateData);
+        result = controller.UpdateElement(collection.Id, element.Id + 1, updateData);
       });
 
       //Assert
@@ -235,7 +235,7 @@ namespace LinkCollectionApp.Test
       var updateData = new ElementUpdateData { Link = newLink };
       AddUser(userId1);
       AddUser(userId2);
-      AddCollection(userId1, 50);
+      var collection = AddCollection(userId1, 50);
       Element element = null;
       InTransaction(context =>
       {
@@ -247,7 +247,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId2));
-        result = controller.UpdateElement(element.Id, updateData);
+        result = controller.UpdateElement(collection.Id, element.Id, updateData);
       });
 
       //Assert
@@ -277,7 +277,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId2));
-        result = controller.UpdateElement(element.Id, updateData);
+        result = controller.UpdateElement(collection.Id, element.Id, updateData);
       });
 
       //Assert
@@ -307,7 +307,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId2));
-        result = controller.UpdateElement(element.Id, updateData);
+        result = controller.UpdateElement(collection.Id, element.Id, updateData);
       });
 
       //Assert
@@ -320,9 +320,8 @@ namespace LinkCollectionApp.Test
     {
       //Arrange
       var userId = NewGuid;
-      var newLink = NewGuid;
       AddUser(userId);
-      AddCollection(userId, 1);
+      var collection = AddCollection(userId, 1);
       Element element = null;
       InTransaction(context =>
       {
@@ -334,7 +333,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId));
-        result = controller.DeleteElement(element.Id + 1);
+        result = controller.DeleteElement(collection.Id, element.Id + 1);
       });
 
       //Assert
@@ -347,10 +346,9 @@ namespace LinkCollectionApp.Test
       //Arrange
       var userId1 = NewGuid;
       var userId2 = NewGuid;
-      var newLink = NewGuid;
       AddUser(userId1);
       AddUser(userId2);
-      AddCollection(userId1, 50);
+      var collection = AddCollection(userId1, 50);
       Element element = null;
       InTransaction(context =>
       {
@@ -362,7 +360,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId2));
-        result = controller.DeleteElement(element.Id);
+        result = controller.DeleteElement(collection.Id, element.Id);
       });
 
       //Assert
@@ -391,7 +389,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId2));
-        result = controller.DeleteElement(element.Id);
+        result = controller.DeleteElement(collection.Id, element.Id);
       });
 
       //Assert
@@ -420,7 +418,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId2));
-        result = controller.DeleteElement(element.Id);
+        result = controller.DeleteElement(collection.Id, element.Id);
       });
 
       //Assert
@@ -448,7 +446,7 @@ namespace LinkCollectionApp.Test
       InTransaction(context =>
       {
         var controller = new ElementsController(context, GetUserProviderMock(userId2));
-        result = controller.DeleteElement(element.Id);
+        result = controller.DeleteElement(collection.Id, element.Id);
       });
 
       //Assert

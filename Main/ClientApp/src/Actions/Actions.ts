@@ -8,7 +8,7 @@ import {
   CollectionCreationData,
   CollectionUpdateData,
 } from "../Model/Collection";
-import { ElementCreationData } from "../Model/Element";
+import { ElementCreationData, ElementUpdateData } from "../Model/Element";
 import { SharedCollectionData } from "../Model/SharedCollection";
 
 export async function loadCollections() {
@@ -70,4 +70,32 @@ export async function loadUsers() {
     actionType: ActionTypes.LOAD_USERS,
     payload: { users: users },
   });
+}
+
+export async function updateElement(
+  collectionId: number,
+  elementId: number,
+  updateData: ElementUpdateData
+) {
+  let result = await ElementsApi.updateElement(
+    collectionId,
+    elementId,
+    updateData
+  );
+  if (result === true) {
+    loadCollections();
+    loadSharedCollections();
+  } else {
+    console.error("Could not update element");
+  }
+}
+
+export async function deleteElement(collectionId: number, elementId: number) {
+  let result = await ElementsApi.deleteElement(collectionId, elementId);
+  if (result === true) {
+    loadCollections();
+    loadSharedCollections();
+  } else {
+    console.error("Could not delete element");
+  }
 }
