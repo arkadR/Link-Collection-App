@@ -60,9 +60,12 @@ namespace LinkCollectionApp.Test
       {
         OwnerId = ownerId,
         Description = description ?? NewGuid,
+        Name = name ?? NewGuid,
         Elements = Enumerable.Range(0, numOfElements).Select(num => new Element
         {
-          Name = name ?? NewGuid
+          Name = NewGuid,
+          Link = NewGuid,
+          Sequence = num
         }).ToList()
       };
       InTransaction(context =>
