@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using IdentityServer4.Extensions;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
@@ -42,7 +43,7 @@ namespace LinkCollectionApp.Controllers
     public IActionResult AddCollection([FromBody] CollectionCreationData data)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var collection = new Collection {Name = data.Name, IsPublic = data.IsPublic, OwnerId = userId};
+      var collection = new Collection {Name = data.Name, IsPublic = data.IsPublic, OwnerId = userId, Description = data.Description};
       _dbContext.Add(collection);
       _dbContext.SaveChanges();
       return Ok();
@@ -80,22 +81,24 @@ namespace LinkCollectionApp.Controllers
       return Ok();
     }
 
-    [HttpPatch]
-    public IActionResult UpdateCollection([FromBody] CollectionUpdateData data)
+    [HttpPatch("{id}")]
+    public IActionResult UpdateCollection(int id, [FromBody] CollectionUpdateData data)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var collection = _dbContext.Collection.Single(c => c.Id == data.Id);
+      var collection = _dbContext.Collection.SingleOrDefault(c => c.Id == id);
       if (collection == null)
         return NotFound();
 
-      var sharedCollection = _dbContext.SharedCollection.SingleOrDefault(sc => sc.CollectionId == data.Id && sc.UserId == userId);
+      var sharedCollection = _dbContext.SharedCollection.SingleOrDefault(sc => sc.CollectionId == id && sc.UserId == userId);
       bool canEditSharedCollection = sharedCollection?.EditRights == true;
 
       if(collection.OwnerId != userId && !canEditSharedCollection)
         return Forbid();
       
-
-      collection.Name = data.Name;
+      if (data.Name.IsNullOrEmpty() == false)
+        collection.Name = data.Name;
+      if (data.Description.IsNullOrEmpty() == false)
+        collection.Description = data.Description;
       _dbContext.Update(collection);
       _dbContext.SaveChanges();
       return Ok();

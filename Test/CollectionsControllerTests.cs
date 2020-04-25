@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using FluentAssertions;
 using LinkCollectionApp.Controllers;
 using LinkCollectionApp.Models;
 using LinkCollectionApp.Models.DTO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -194,5 +197,184 @@ namespace LinkCollectionApp.Test
         collectionFromContext.OwnerId.Should().Be(userId);
       });
     }
+
+    [Theory]
+    [InlineData("CollectionName", "CollectionName")]
+    [InlineData("oldName", "newName")]
+    [InlineData("collectionname", "COLLECTIONNAME")]
+    public void UpdateCollection_NewNameProvided_CollectionNameUpdated(string initialName, string newName)
+    {
+      //Arrange
+      var userId = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, 5, initialName);
+      var collectionData = new CollectionUpdateData { Name = newName };
+
+      //Act
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        controller.UpdateCollection(collection.Id, collectionData);
+      });
+
+      //Assert 
+      InTransaction(context =>
+      {
+        var collectionFromContext = context.Collection.Single();
+        collectionFromContext.Name.Should().Be(newName);
+      });
+    }
+
+    [Theory]
+    [InlineData("CollectionDescription", "CollectionDescription")]
+    [InlineData("initialDescription", "newDescription")]
+    [InlineData("description", "DESCRIPTION")]
+    public void UpdateCollection_NewDescriptionProvided_CollectionDescriptionUpdated(string initialDescription, string newDescription)
+    {
+      //Arrange
+      var userId = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, 5, description: initialDescription);
+      var collectionData = new CollectionUpdateData { Description = newDescription };
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        result = controller.UpdateCollection(collection.Id, collectionData);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        var collectionFromContext = context.Collection.Single();
+        collectionFromContext.Description.Should().Be(newDescription);
+      });
+    }
+
+
+    [Theory]
+    [InlineData("NEWNAME", "NEWDESCRIPTION")]
+    [InlineData("NEWNAME", null)]
+    [InlineData(null, "NEWDESCRIPTION")]
+    [InlineData(null, null)]
+    public void UpdateCollection_MultipleFieldsUpdate_ProperlyUpdated(string newName, string newDescription)
+    {
+      //Arrange
+      var userId = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, 5);
+      var collectionData = new CollectionUpdateData { Description = newDescription, Name = newName };
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        result = controller.UpdateCollection(collection.Id, collectionData);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        var collectionFromContext = context.Collection.Single();
+        collectionFromContext.Description.Should().Be(newDescription ?? collection.Description);
+        collectionFromContext.Name.Should().Be(newName ?? collection.Name);
+      });
+    }
+
+    [Fact]
+    public void UpdateCollection_CollectionDoesntExist_NotFound()
+    {
+      //Arrange
+      var userId = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, 5);
+      var collectionData = new CollectionUpdateData { Description = NewGuid, Name = NewGuid};
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        result = controller.UpdateCollection(collection.Id + 1, collectionData);
+      });
+
+      //Assert 
+      result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public void UpdateCollection_CollectionNotOwnedByUserAndNoEditRights_Forbidden()
+    {
+      //Arrange
+      var userId = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, 5);
+      var collectionData = new CollectionUpdateData { Description = NewGuid, Name = NewGuid };
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(NewGuid));
+        result = controller.UpdateCollection(collection.Id, collectionData);
+      });
+
+      //Assert 
+      result.Should().BeOfType<ForbidResult>();
+    }
+
+    [Fact]
+    public void UpdateCollection_CollectionSharedButNoEditRights_Forbid()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+      ShareCollection(collection.Id, userId2, false);
+      var collectionData = new CollectionUpdateData { Description = NewGuid, Name = NewGuid };
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        result = controller.UpdateCollection(collection.Id, collectionData);
+      });
+
+      //Assert 
+      result.Should().BeOfType<ForbidResult>();
+    }
+
+    [Fact]
+    public void UpdateCollection_CollectionNotOwnedByUserButHasEditRights_Ok()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+      ShareCollection(collection.Id, userId2, true);
+      var collectionData = new CollectionUpdateData { Description = NewGuid, Name = NewGuid };
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        result = controller.UpdateCollection(collection.Id, collectionData);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+    }
+
   }
 }

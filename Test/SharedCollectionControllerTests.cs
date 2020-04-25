@@ -336,20 +336,6 @@ namespace LinkCollectionApp.Test
 
 
 
-    private SharedCollection ShareCollection(int collectionId, string userId, bool editRights)
-    {
-      var sharedCollection = new SharedCollection
-      {
-        CollectionId = collectionId,
-        UserId = userId,
-        EditRights = editRights
-      };
-      InTransaction(context =>
-      {
-        context.SharedCollection.Add(sharedCollection);
-        context.SaveChanges();
-      });
-      return sharedCollection;
-    }
+
   }
 }
