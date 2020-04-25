@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
 using FluentAssertions;
 using LinkCollectionApp.Controllers;
 using LinkCollectionApp.Models;
 using LinkCollectionApp.Models.DTO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
@@ -374,6 +372,193 @@ namespace LinkCollectionApp.Test
 
       //Assert 
       result.Should().BeOfType<OkResult>();
+    }
+
+    [Fact]
+    public void DeleteCollection_CollectionNotOwnedByUser_Forbidden()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        result = controller.DeleteCollection(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<ForbidResult>();
+    }
+
+    [Fact]
+    public void DeleteCollection_CollectionNotOwnedByUserButHasUserRights_Forbidden()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+      ShareCollection(collection.Id, userId2, true);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        result = controller.DeleteCollection(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<ForbidResult>();
+    }
+
+    [Fact]
+    public void DeleteCollection_CollectionOwnedByUser_CollectionDeleted()
+    {
+      //Arrange
+      var userId = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, 5);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        result = controller.DeleteCollection(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        var collections = context.Collection.ToList();
+        collections.Should().BeEmpty();
+      });
+    }
+
+    [Fact]
+    public void DeleteCollection_UserHasMultipleCollections_Only1CollectionDeleted()
+    {
+      //Arrange
+      var userId = NewGuid;
+      var collectionToDeleteName = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, 5, name: collectionToDeleteName);
+      for (var i = 0; i < 10; i++)
+        AddCollection(userId, 5);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        result = controller.DeleteCollection(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        var collections = context.Collection.ToList();
+        collections.Should().HaveCount(10);
+        collections.Where(c => c.Id == collection.Id).Should().HaveCount(0);
+        collections.Where(c => c.Name == collectionToDeleteName).Should().HaveCount(0);
+      });
+    }
+
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(5)]
+    [InlineData(100)]
+    public void DeleteCollection_CollectionHasNElements_AllElementsDeleted(int elementCount)
+    {
+      //Arrange
+      var userId = NewGuid;
+      AddUser(userId);
+      var collection = AddCollection(userId, elementCount);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        result = controller.DeleteCollection(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        var elements = context.Element.ToList();
+        elements.Should().BeEmpty();
+      });
+    }
+
+
+    [Fact]
+    public void DeleteCollection_CollectionIsShared_SharedCollectionDeleted()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+      ShareCollection(collection.Id, userId2, true);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        result = controller.DeleteCollection(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        var sharedCollections = context.SharedCollection.ToList();
+        sharedCollections.Should().BeEmpty();
+      });
+    }
+
+    [Fact]
+    public void DeleteCollection_CollectionIsSaved_SavedCollectionDeleted()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+      SaveCollection(collection.Id, userId2);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        result = controller.DeleteCollection(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        var savedCollections = context.SavedCollection.ToList();
+        savedCollections.Should().BeEmpty();
+      });
     }
 
   }

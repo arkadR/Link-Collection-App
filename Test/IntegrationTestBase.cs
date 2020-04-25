@@ -89,6 +89,21 @@ namespace LinkCollectionApp.Test
       return sharedCollection;
     }
 
+    protected SavedCollection SaveCollection(int collectionId, string userId)
+    {
+      var savedCollection = new SavedCollection
+      {
+        CollectionId = collectionId,
+        UserId = userId
+      };
+      InTransaction(context =>
+      {
+        context.SavedCollection.Add(savedCollection);
+        context.SaveChanges();
+      });
+      return savedCollection;
+    }
+
     protected IUserContextProvider GetUserProviderMock(string userId)
     {
       var userProviderMock = new Mock<IUserContextProvider>();

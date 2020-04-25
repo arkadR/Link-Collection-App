@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using IdentityServer4.Extensions;
 using LinkCollectionApp.Data;
+using LinkCollectionApp.Extensions;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using LinkCollectionApp.Models.DTO;
@@ -59,25 +60,13 @@ namespace LinkCollectionApp.Controllers
       if (collection.OwnerId != userId)
         return Forbid();
       
-      using var dbContextTransaction = _dbContext.Database.BeginTransaction();
+      _dbContext.SavedCollection.RemoveAll(sc => sc.CollectionId == id);
+      _dbContext.SharedCollection.RemoveAll(sc => sc.CollectionId == id);
+      _dbContext.Element.RemoveAll(el => el.CollectionId == id);
 
-      //delete connected saved collections
-      var savedCollections = _dbContext.SavedCollection.Where(sc => sc.CollectionId == id).ToArray();
-      _dbContext.RemoveRange(savedCollections);
-
-      //delete connected shared collections
-      var sharedCollections = _dbContext.SharedCollection.Where(sc => sc.CollectionId == id).ToArray();
-      _dbContext.RemoveRange(sharedCollections);
-
-      //delete collection's elements
-      var elements = _dbContext.Element.Where(sc => sc.CollectionId == id).ToArray();
-      _dbContext.RemoveRange(elements);
-
-      //delete collection
       _dbContext.Remove(collection);
 
       _dbContext.SaveChanges();
-      dbContextTransaction.Commit();
       return Ok();
     }
 
