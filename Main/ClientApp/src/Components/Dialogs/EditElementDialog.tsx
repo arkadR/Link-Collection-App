@@ -29,17 +29,6 @@ export default function EditElementDialog(props: EditElementDialogProps) {
     setElement(
       collection?.elements.find((el) => el.id === props.elementId) ?? null
     );
-    const changeHandler = () => {
-      let collection = CollectionsStore.getCollection(props.collectionId);
-      setElement(
-        collection?.elements.find((el) => el.id === props.elementId) ?? null
-      );
-    };
-
-    CollectionsStore.addChangeListener(changeHandler);
-    return () => {
-      CollectionsStore.removeChangeListener(changeHandler);
-    };
   }, [props.collectionId, props.elementId]);
 
   const handleInputChange = (newInput: string) => {

@@ -18,6 +18,8 @@ import {
   GetProperUrl,
   OpenInNewTab,
 } from "../Infrastructure/UrlUtilities";
+import EditElementDialog from "../Components/Dialogs/EditElementDialog";
+import { deleteElement } from "../Actions/Actions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,14 +48,15 @@ export default function ElementView(props: ElementViewProps) {
   const [displayedName, setDisplayedName] = useState("");
   const [faviconUrl, setFaviconUrl] = useState("");
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const onMenuOpen = (event: React.MouseEvent) => {
     setAnchorEl(event.currentTarget as Element);
   };
   const onMenuClose = () => setAnchorEl(null);
 
-  const onDeleteElementClick = () => {};
-
-  const onUpdateElementClick = () => {};
+  const onDeleteElementClick = () => {
+    deleteElement(props.element.collectionId, props.element.id);
+  };
 
   useEffect(() => {
     let url = props.element.link;
@@ -105,7 +108,7 @@ export default function ElementView(props: ElementViewProps) {
             </ListItemIcon>
             <ListItemText primary="Delete" />
           </ListItem>
-          <ListItem onClick={onUpdateElementClick} button>
+          <ListItem onClick={() => setEditDialogOpen(true)} button>
             <ListItemIcon>
               <Edit />
             </ListItemIcon>
@@ -113,6 +116,12 @@ export default function ElementView(props: ElementViewProps) {
           </ListItem>
         </div>
       </Menu>
+      <EditElementDialog
+        open={editDialogOpen}
+        toggleDialogOpen={() => setEditDialogOpen(!editDialogOpen)}
+        collectionId={props.element.collectionId}
+        elementId={props.element.id}
+      />
     </>
   );
 }
