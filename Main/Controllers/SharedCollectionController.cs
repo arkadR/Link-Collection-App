@@ -64,7 +64,6 @@ namespace LinkCollectionApp.Controllers
       {
         CollectionId = data.CollectionId,
         UserId = data.UserId,
-        ViewRights = data.ViewRights,
         EditRights = data.EditRights
       });
       _dbContext.SaveChanges();

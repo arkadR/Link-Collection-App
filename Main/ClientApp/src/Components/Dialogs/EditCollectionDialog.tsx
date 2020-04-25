@@ -61,7 +61,7 @@ export default function EditCollectionDialog(props: EditCollectionDialogProps) {
           color="primary"
           autoFocus
         >
-          Edit
+          Save changes
         </Button>
       }
     />

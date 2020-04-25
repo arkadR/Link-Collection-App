@@ -21,7 +21,7 @@ namespace LinkCollectionApp.Test
       AddUser(ownerId);
       AddUser(userId);
       var collection = AddCollection(ownerId, 5);
-      ShareCollection(collection.Id, userId, true, true);
+      ShareCollection(collection.Id, userId, true);
 
       //Act
       ICollection<SharedCollection> sharedCollections = null;
@@ -43,11 +43,9 @@ namespace LinkCollectionApp.Test
 
 
     [Theory]
-    [InlineData(true, true)]
-    [InlineData(true, false)]
-    [InlineData(false, true)]
-    [InlineData(false, false)]
-    public void GetUserSharedCollections_CollectionSharedWithRights_ProperRightsFetched(bool viewRights, bool editRights)
+    [InlineData(true)]
+    [InlineData(false)]
+    public void GetUserSharedCollections_CollectionSharedWithRights_ProperRightsFetched(bool editRights)
     {
       //Arrange
       var ownerId = "someOwner";
@@ -55,7 +53,7 @@ namespace LinkCollectionApp.Test
       AddUser(ownerId);
       AddUser(userId);
       var collection = AddCollection(ownerId, 1);
-      ShareCollection(collection.Id, userId, viewRights, editRights);
+      ShareCollection(collection.Id, userId, editRights);
 
       //Act
       ICollection<SharedCollection> sharedCollections = null;
@@ -67,7 +65,6 @@ namespace LinkCollectionApp.Test
 
       //Assert
       var singleCollection = sharedCollections.Single();
-      singleCollection.ViewRights.Should().Be(viewRights);
       singleCollection.EditRights.Should().Be(editRights);
     }
 
@@ -87,7 +84,7 @@ namespace LinkCollectionApp.Test
       var collections = Enumerable.Range(0, numOfCollections)
         .Select(i => AddCollection(ownerId, 5))
         .ToList();
-      collections.ForEach(c => ShareCollection(c.Id, userId, true, true));
+      collections.ForEach(c => ShareCollection(c.Id, userId, true));
 
       //Act
       List<SharedCollection> sharedCollections = null;
@@ -124,8 +121,8 @@ namespace LinkCollectionApp.Test
       var collectionsOfUser2 = Enumerable.Range(0, numCollectionsOfUser2)
         .Select(i => AddCollection(user2, 5))
         .ToList();
-      collectionsOfUser1.ForEach(c => ShareCollection(c.Id, user2, true, true));
-      collectionsOfUser2.ForEach(c => ShareCollection(c.Id, user1, true, true));
+      collectionsOfUser1.ForEach(c => ShareCollection(c.Id, user2, true));
+      collectionsOfUser2.ForEach(c => ShareCollection(c.Id, user1, true));
 
       //Act
       List<SharedCollection> sharedCollectionsOfUser1 = null;
@@ -164,7 +161,6 @@ namespace LinkCollectionApp.Test
       {
         CollectionId = collection.Id,
         EditRights = true,
-        ViewRights = true,
         UserId = user2
       };
       InTransaction(context =>
@@ -202,7 +198,6 @@ namespace LinkCollectionApp.Test
       {
         CollectionId = collection.Id,
         EditRights = editRights,
-        ViewRights = viewRights,
         UserId = user2
       };
       InTransaction(context =>
@@ -216,7 +211,6 @@ namespace LinkCollectionApp.Test
       {
         var singleCollection = context.SharedCollection.Single();
         singleCollection.EditRights.Should().Be(editRights);
-        singleCollection.ViewRights.Should().Be(viewRights);
       });
     }
 
@@ -236,7 +230,6 @@ namespace LinkCollectionApp.Test
       {
         CollectionId = collection.Id,
         EditRights = true,
-        ViewRights = true,
         UserId = user2
       };
       InTransaction(context =>
@@ -272,7 +265,6 @@ namespace LinkCollectionApp.Test
       {
         CollectionId = collection.Id,
         EditRights = true,
-        ViewRights = true,
         UserId = user3
       };
       IActionResult result = null;
@@ -300,7 +292,6 @@ namespace LinkCollectionApp.Test
       {
         CollectionId = 100,
         EditRights = true,
-        ViewRights = true,
         UserId = user2
       };
       IActionResult result = null;
@@ -328,7 +319,6 @@ namespace LinkCollectionApp.Test
       {
         CollectionId = collection.Id,
         EditRights = true,
-        ViewRights = true,
         UserId = NewGuid
       };
       IActionResult result = null;
@@ -346,14 +336,13 @@ namespace LinkCollectionApp.Test
 
 
 
-    private SharedCollection ShareCollection(int collectionId, string userId, bool viewRights, bool editRights)
+    private SharedCollection ShareCollection(int collectionId, string userId, bool editRights)
     {
       var sharedCollection = new SharedCollection
       {
         CollectionId = collectionId,
         UserId = userId,
-        EditRights = editRights,
-        ViewRights = viewRights
+        EditRights = editRights
       };
       InTransaction(context =>
       {

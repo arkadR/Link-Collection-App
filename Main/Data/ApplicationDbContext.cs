@@ -44,7 +44,7 @@ namespace LinkCollectionApp.Data
 
       modelBuilder.Entity<Collection>(entity =>
       {
-        entity.ToTable("Collection", "app");
+        entity.ToTable("Collections", "app");
 
         entity.Property(e => e.CreatedDate)
             .HasColumnType("datetime")
@@ -73,7 +73,7 @@ namespace LinkCollectionApp.Data
 
       modelBuilder.Entity<Element>(entity =>
       {
-        entity.ToTable("Element", "app");
+        entity.ToTable("Elements", "app");
 
         entity.Property(e => e.Description)
             .HasMaxLength(255)
@@ -110,7 +110,7 @@ namespace LinkCollectionApp.Data
         entity.HasKey(e => new { e.UserId, e.CollectionId })
             .HasName("PK__SavedCol__4056A78C17156444");
 
-        entity.ToTable("SavedCollection", "app");
+        entity.ToTable("SavedCollections", "app");
 
         entity.HasOne(d => d.Collection)
             .WithMany(p => p.SavedCollections)
@@ -130,11 +130,10 @@ namespace LinkCollectionApp.Data
         entity.HasKey(e => new { e.UserId, e.CollectionId })
             .HasName("PK__SharedCo__4056A78CB4AA5C4A");
 
-        entity.ToTable("SharedCollection", "app");
+        entity.ToTable("SharedCollections", "app");
 
-        entity.Property(e => e.EditRights).HasDefaultValueSql("((0))");
-
-        entity.Property(e => e.ViewRights).HasDefaultValueSql("((1))");
+        entity.Property(e => e.EditRights)
+          .IsRequired();
 
         entity.HasOne(d => d.Collection)
             .WithMany(p => p.SharedCollections)

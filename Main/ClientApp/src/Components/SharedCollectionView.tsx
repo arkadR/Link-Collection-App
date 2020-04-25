@@ -5,7 +5,6 @@ import { SharedCollection } from "../Model/SharedCollection";
 import AddIcon from "@material-ui/icons/Add";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import BaseCollectionView from "./BaseCollectionView";
-import PanelWideMessage from "./Common/PanelWideMessage";
 import { Fab } from "@material-ui/core";
 import AddElementDialog from "./Dialogs/AddElementDialog";
 
@@ -54,29 +53,23 @@ export default function SharedCollectionView(props: SharedCollectionViewProps) {
 
   return (
     <>
-      {sharedCollection?.viewRights ? (
-        <>
-          <BaseCollectionView collection={sharedCollection?.collection}>
-            {sharedCollection?.editRights && (
-              <Fab
-                color="primary"
-                aria-label="add"
-                className={classes.fab}
-                onClick={toggleAddElementDialogOpen}
-              >
-                <AddIcon />
-              </Fab>
-            )}
-          </BaseCollectionView>
-          <AddElementDialog
-            toggleDialogOpen={toggleAddElementDialogOpen}
-            open={addElementDialogOpen}
-            collectionId={props.match.params.collectionId}
-          />
-        </>
-      ) : (
-        <PanelWideMessage text="You have no rights to view this collection" />
-      )}
+      <BaseCollectionView collection={sharedCollection?.collection ?? null}>
+        {sharedCollection?.editRights && (
+          <Fab
+            color="primary"
+            aria-label="add"
+            className={classes.fab}
+            onClick={toggleAddElementDialogOpen}
+          >
+            <AddIcon />
+          </Fab>
+        )}
+      </BaseCollectionView>
+      <AddElementDialog
+        toggleDialogOpen={toggleAddElementDialogOpen}
+        open={addElementDialogOpen}
+        collectionId={props.match.params.collectionId}
+      />
     </>
   );
 }
