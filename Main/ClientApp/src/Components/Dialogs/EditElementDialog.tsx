@@ -16,6 +16,7 @@ export default function EditElementDialog(props: EditElementDialogProps) {
   const title = "Edit element";
   const description = "Enter new name for this element.";
   let [element, setElement] = useState<Element | null>(null);
+  //TODO: input for link editing
   const [inputText, setInputText] = React.useState("");
 
   const createElementUpdateData = () => {
