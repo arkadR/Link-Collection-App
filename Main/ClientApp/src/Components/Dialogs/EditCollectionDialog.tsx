@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextField } from "@material-ui/core";
 import { updateCollection } from "../../Actions/Actions";
-import { Collection } from "../../Model/Collection";
+import { Collection, CollectionUpdateData } from "../../Model/Collection";
 import CollectionsStore from "../../Stores/CollectionsStore";
 import SimpleDialog from "./SimpleDialog";
 
@@ -16,6 +16,12 @@ export default function EditCollectionDialog(props: EditCollectionDialogProps) {
   const description = "Enter new name for this collection.";
   let [collection, setCollection] = useState<Collection | null>(null);
   const [inputText, setInputText] = React.useState("");
+
+  const createCollectionUpdateData = () => {
+    return {
+      name: inputText,
+    } as CollectionUpdateData;
+  };
 
   useEffect(() => {
     setCollection(CollectionsStore.getCollection(props.collectionId));
@@ -55,7 +61,7 @@ export default function EditCollectionDialog(props: EditCollectionDialogProps) {
         <Button
           disabled={inputText.length === 0 || inputText === collection?.name}
           onClick={() => {
-            updateCollection(props.collectionId, inputText);
+            updateCollection(props.collectionId, createCollectionUpdateData());
             props.toggleDialogOpen();
           }}
           color="primary"

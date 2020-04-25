@@ -4,7 +4,10 @@ import UsersApi from "../Api/UsersApi";
 import CollectionsApi from "../Api/CollectionsApi";
 import ElementsApi from "../Api/ElementsApi";
 import ActionTypes from "./ActionTypes";
-import { CollectionCreationData } from "../Model/Collection";
+import {
+  CollectionCreationData,
+  CollectionUpdateData,
+} from "../Model/Collection";
 import { ElementCreationData } from "../Model/Element";
 import { SharedCollectionData } from "../Model/SharedCollection";
 
@@ -30,8 +33,11 @@ export async function deleteCollection(id: number) {
   else console.error("Could not delete collection");
 }
 
-export async function updateCollection(id: number, name: string) {
-  let success = await CollectionsApi.updateCollection(id, name);
+export async function updateCollection(
+  id: number,
+  updateData: CollectionUpdateData
+) {
+  let success = await CollectionsApi.updateCollection(id, updateData);
   if (success) {
     loadCollections();
     loadSharedCollections();
