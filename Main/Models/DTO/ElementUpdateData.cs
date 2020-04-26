@@ -1,8 +1,8 @@
 ﻿namespace LinkCollectionApp.Models.DTO
 {
-  public class CollectionUpdateData
+  public class ElementUpdateData
   {
     public string Name { get; set; }
-    public string Description { get; set; }
+    public string Link { get; set; }
   }
 }

@@ -4,8 +4,11 @@ import UsersApi from "../Api/UsersApi";
 import CollectionsApi from "../Api/CollectionsApi";
 import ElementsApi from "../Api/ElementsApi";
 import ActionTypes from "./ActionTypes";
-import { CollectionCreationData } from "../Model/Collection";
-import { ElementCreationData } from "../Model/Element";
+import {
+  CollectionCreationData,
+  CollectionUpdateData,
+} from "../Model/Collection";
+import { ElementCreationData, ElementUpdateData } from "../Model/Element";
 import { SharedCollectionData } from "../Model/SharedCollection";
 
 export async function loadCollections() {
@@ -30,8 +33,11 @@ export async function deleteCollection(id: number) {
   else console.error("Could not delete collection");
 }
 
-export async function updateCollection(id: number, name: string) {
-  let success = await CollectionsApi.updateCollection(id, name);
+export async function updateCollection(
+  id: number,
+  updateData: CollectionUpdateData
+) {
+  let success = await CollectionsApi.updateCollection(id, updateData);
   if (success) {
     loadCollections();
     loadSharedCollections();
@@ -64,4 +70,32 @@ export async function loadUsers() {
     actionType: ActionTypes.LOAD_USERS,
     payload: { users: users },
   });
+}
+
+export async function updateElement(
+  collectionId: number,
+  elementId: number,
+  updateData: ElementUpdateData
+) {
+  let result = await ElementsApi.updateElement(
+    collectionId,
+    elementId,
+    updateData
+  );
+  if (result === true) {
+    loadCollections();
+    loadSharedCollections();
+  } else {
+    console.error("Could not update element");
+  }
+}
+
+export async function deleteElement(collectionId: number, elementId: number) {
+  let result = await ElementsApi.deleteElement(collectionId, elementId);
+  if (result === true) {
+    loadCollections();
+    loadSharedCollections();
+  } else {
+    console.error("Could not delete element");
+  }
 }

@@ -13,3 +13,8 @@ export type ElementCreationData = {
   link: string;
   name: string;
 };
+
+export type ElementUpdateData = {
+  link: string;
+  name: string;
+};

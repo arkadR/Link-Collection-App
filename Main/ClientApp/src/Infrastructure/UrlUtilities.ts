@@ -9,3 +9,11 @@ export function GetProperUrl(rawUrl: string) {
     return rawUrl;
   return `https://${rawUrl}`;
 }
+
+export function OpenInNewTab(href: string) {
+  Object.assign(document.createElement("a"), {
+    target: "_blank",
+    href,
+    rel: "noopener noreferrer",
+  }).click();
+}

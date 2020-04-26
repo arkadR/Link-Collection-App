@@ -62,7 +62,7 @@ export default function AddElementDialog(props: AddElementDialogProps) {
       }
       actions={
         <Button
-          disabled={name.length === 0}
+          disabled={url.length === 0}
           onClick={() => {
             addElement(createElementData(name, url));
             props.toggleDialogOpen();

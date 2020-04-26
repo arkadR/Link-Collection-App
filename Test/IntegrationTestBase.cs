@@ -54,15 +54,18 @@ namespace LinkCollectionApp.Test
       });
     }
 
-    protected Collection AddCollection(string ownerId, int numOfElements)
+    protected Collection AddCollection(string ownerId, int numOfElements, string name = null, string description = null)
     {
       var collection = new Collection
       {
         OwnerId = ownerId,
-        Description = Guid.NewGuid().ToString(),
+        Description = description ?? NewGuid,
+        Name = name ?? NewGuid,
         Elements = Enumerable.Range(0, numOfElements).Select(num => new Element
         {
-          Name = Guid.NewGuid().ToString()
+          Name = NewGuid,
+          Link = NewGuid,
+          Sequence = num
         }).ToList()
       };
       InTransaction(context =>
@@ -71,6 +74,37 @@ namespace LinkCollectionApp.Test
         context.SaveChanges();
       });
       return collection;
+    }
+
+    protected SharedCollection ShareCollection(int collectionId, string userId, bool editRights)
+    {
+      var sharedCollection = new SharedCollection
+      {
+        CollectionId = collectionId,
+        UserId = userId,
+        EditRights = editRights
+      };
+      InTransaction(context =>
+      {
+        context.SharedCollection.Add(sharedCollection);
+        context.SaveChanges();
+      });
+      return sharedCollection;
+    }
+
+    protected SavedCollection SaveCollection(int collectionId, string userId)
+    {
+      var savedCollection = new SavedCollection
+      {
+        CollectionId = collectionId,
+        UserId = userId
+      };
+      InTransaction(context =>
+      {
+        context.SavedCollection.Add(savedCollection);
+        context.SaveChanges();
+      });
+      return savedCollection;
     }
 
     protected IUserContextProvider GetUserProviderMock(string userId)
