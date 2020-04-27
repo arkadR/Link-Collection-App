@@ -8,16 +8,15 @@ import SimpleDialog from "./SimpleDialog";
 type EditElementDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
-  collectionId: number;
-  elementId: number;
+  element: Element;
 };
 
 export default function EditElementDialog(props: EditElementDialogProps) {
   const title = "Edit element";
   const description = "Enter new name for this element.";
-  let [element, setElement] = useState<Element | null>(null);
-  const [inputName, setInputName] = React.useState("");
-  const [inputUrl, setInputUrl] = React.useState("");
+  let [element, setElement] = useState<Element>(props.element);
+  const [inputName, setInputName] = React.useState(props.element.name);
+  const [inputUrl, setInputUrl] = React.useState(props.element.link);
 
   const createElementUpdateData = () => {
     return {
@@ -27,11 +26,11 @@ export default function EditElementDialog(props: EditElementDialogProps) {
   };
 
   useEffect(() => {
-    let collection = CollectionsStore.getCollection(props.collectionId);
-    setElement(
-      collection?.elements.find((el) => el.id === props.elementId) ?? null
-    );
-  }, [props.collectionId, props.elementId]);
+    setElement(props.element);
+    setInputName(props.element.name);
+    setInputUrl(props.element.link);
+    debugger;
+  }, [props.element]);
 
   const handleInputNameChange = (newInput: string) => {
     setInputName(newInput);
@@ -42,8 +41,8 @@ export default function EditElementDialog(props: EditElementDialogProps) {
   };
 
   const saveChangesEnabled =
-    (inputName.length !== 0 && inputName !== element?.name) ||
-    (inputUrl.length !== 0 && inputUrl !== element?.link);
+    (inputName.length !== 0 && inputName !== element.name) ||
+    (inputUrl.length !== 0 && inputUrl !== element.link);
 
   return (
     <SimpleDialog
@@ -54,23 +53,24 @@ export default function EditElementDialog(props: EditElementDialogProps) {
       content={
         <>
           <TextField
+            defaultValue={element.name}
             onChange={(e) => handleInputNameChange(e.target.value)}
             autoFocus
             margin="dense"
             id="elementName"
             label="Element name"
             type="email"
-            placeholder={element?.name}
+            placeholder={element.name}
             fullWidth
           />
           <TextField
+            defaultValue={element.link}
             onChange={(e) => handleInputUrlChange(e.target.value)}
-            autoFocus
             margin="dense"
             id="elementUrl"
             label="Url"
             type="email"
-            placeholder={element?.link}
+            placeholder={element.link}
             fullWidth
           />
         </>
@@ -80,8 +80,8 @@ export default function EditElementDialog(props: EditElementDialogProps) {
           disabled={!saveChangesEnabled}
           onClick={() => {
             updateElement(
-              props.collectionId,
-              props.elementId,
+              props.element.collectionId,
+              props.element.id,
               createElementUpdateData()
             );
             props.toggleDialogOpen();

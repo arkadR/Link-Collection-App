@@ -116,8 +116,7 @@ export default function ElementView(props: ElementViewProps) {
       <EditElementDialog
         open={editDialogOpen}
         toggleDialogOpen={() => setEditDialogOpen(!editDialogOpen)}
-        collectionId={props.element.collectionId}
-        elementId={props.element.id}
+        element={props.element}
       />
       <DeleteElementDialog
         open={deleteDialogOpen}
