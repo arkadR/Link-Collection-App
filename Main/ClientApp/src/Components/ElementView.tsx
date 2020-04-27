@@ -71,7 +71,7 @@ export default function ElementView(props: ElementViewProps) {
         onClick={(ev) => OpenInNewTab(elementUrl)}
       >
         <CardHeader
-          avatar={<Avatar alt="Thumbnail" src={faviconUrl} />}
+          avatar={<Avatar alt={displayedName.toUpperCase()} src={faviconUrl} />}
           title={displayedName}
           subheader={elementUrl}
           action={
