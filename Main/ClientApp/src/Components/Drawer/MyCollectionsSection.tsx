@@ -139,7 +139,7 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Share" />
                     </ListItem>
-                    <Divider />
+                    {/* <Divider /> */}
                     {/* TODO: list of contributors */}
                   </div>
                 }

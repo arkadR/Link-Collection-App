@@ -16,12 +16,13 @@ export default function EditElementDialog(props: EditElementDialogProps) {
   const title = "Edit element";
   const description = "Enter new name for this element.";
   let [element, setElement] = useState<Element | null>(null);
-  //TODO: input for link editing
-  const [inputText, setInputText] = React.useState("");
+  const [inputName, setInputName] = React.useState("");
+  const [inputUrl, setInputUrl] = React.useState("");
 
   const createElementUpdateData = () => {
     return {
-      name: inputText,
+      name: inputName.length === 0 ? element?.name : inputName,
+      link: inputUrl.length === 0 ? element?.link : inputUrl,
     } as ElementUpdateData;
   };
 
@@ -32,9 +33,17 @@ export default function EditElementDialog(props: EditElementDialogProps) {
     );
   }, [props.collectionId, props.elementId]);
 
-  const handleInputChange = (newInput: string) => {
-    setInputText(newInput);
+  const handleInputNameChange = (newInput: string) => {
+    setInputName(newInput);
   };
+
+  const handleInputUrlChange = (newInput: string) => {
+    setInputUrl(newInput);
+  };
+
+  const saveChangesEnabled =
+    (inputName.length !== 0 && inputName !== element?.name) ||
+    (inputUrl.length !== 0 && inputUrl !== element?.link);
 
   return (
     <SimpleDialog
@@ -43,20 +52,32 @@ export default function EditElementDialog(props: EditElementDialogProps) {
       title={title}
       description={description}
       content={
-        <TextField
-          onChange={(e) => handleInputChange(e.target.value)}
-          autoFocus
-          margin="dense"
-          id="elementName"
-          label="Element name"
-          type="email"
-          placeholder={element?.name}
-          fullWidth
-        />
+        <>
+          <TextField
+            onChange={(e) => handleInputNameChange(e.target.value)}
+            autoFocus
+            margin="dense"
+            id="elementName"
+            label="Element name"
+            type="email"
+            placeholder={element?.name}
+            fullWidth
+          />
+          <TextField
+            onChange={(e) => handleInputUrlChange(e.target.value)}
+            autoFocus
+            margin="dense"
+            id="elementUrl"
+            label="Url"
+            type="email"
+            placeholder={element?.link}
+            fullWidth
+          />
+        </>
       }
       actions={
         <Button
-          disabled={inputText.length === 0 || inputText === element?.name}
+          disabled={!saveChangesEnabled}
           onClick={() => {
             updateElement(
               props.collectionId,
