@@ -28,7 +28,6 @@ export default function EditElementDialog(props: EditElementDialogProps) {
     setElement(props.element);
     setInputName(props.element.name);
     setInputUrl(props.element.link);
-    debugger;
   }, [props.element]);
 
   const handleInputNameChange = (newInput: string) => {
