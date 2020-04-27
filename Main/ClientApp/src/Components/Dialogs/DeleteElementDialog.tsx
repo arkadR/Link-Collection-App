@@ -1,6 +1,6 @@
 import React from "react";
 import DeleteDialog from "./DeleteDialog";
-import { deleteElement } from "../../Actions/Actions";
+import { deleteElement } from "../../Actions/ElementActions";
 
 type DeleteElementDialogProps = {
   open: boolean;

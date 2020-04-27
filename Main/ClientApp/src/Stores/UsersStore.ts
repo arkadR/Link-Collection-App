@@ -1,7 +1,7 @@
 import ActionTypes from "../Actions/ActionTypes";
 import StoreBase from "../Infrastructure/StoreBase";
 import Action from "../Infrastructure/Action";
-import { loadUsers } from "../Actions/Actions";
+import { loadUsers } from "../Actions/UserActions";
 import { User } from "../Model/User";
 
 class UsersStore extends StoreBase {

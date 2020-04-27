@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextField } from "@material-ui/core";
-import { updateElement } from "../../Actions/Actions";
+import { updateElement } from "../../Actions/ElementActions";
 import { Element, ElementUpdateData } from "../../Model/Element";
 import SimpleDialog from "./SimpleDialog";
 

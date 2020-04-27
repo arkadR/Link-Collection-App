@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import SimpleDialog from "./SimpleDialog";
-import { shareCollection } from "../../Actions/Actions";
+import { shareCollection } from "../../Actions/CollectionActions";
 import {
   Button,
   TextField,

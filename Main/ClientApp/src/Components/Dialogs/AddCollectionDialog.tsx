@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, TextField } from "@material-ui/core";
-import { addCollection } from "../../Actions/Actions";
 import { CollectionCreationData } from "../../Model/Collection";
 import SimpleDialog from "./SimpleDialog";
+import { addCollection } from "../../Actions/CollectionActions";
 
 type AddCollectionDialogProps = {
   open: boolean;

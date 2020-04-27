@@ -2,7 +2,7 @@ import { Collection } from "../Model/Collection";
 import ActionTypes from "../Actions/ActionTypes";
 import StoreBase from "../Infrastructure/StoreBase";
 import Action from "../Infrastructure/Action";
-import { loadCollections } from "../Actions/Actions";
+import { loadCollections } from "../Actions/CollectionActions";
 
 class CollectionStore extends StoreBase {
   onActionReceived(action: Action): void {
