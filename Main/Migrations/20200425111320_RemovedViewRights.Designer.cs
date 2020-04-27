@@ -4,14 +4,16 @@ using LinkCollectionApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LinkCollectionApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200425111320_RemovedViewRights")]
+    partial class RemovedViewRights
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +168,7 @@ namespace LinkCollectionApp.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.Collections", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.Collection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -205,7 +207,7 @@ namespace LinkCollectionApp.Migrations
                     b.ToTable("Collections","app");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.CreatedElements", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.Element", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -245,10 +247,10 @@ namespace LinkCollectionApp.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("CreatedElements","app");
+                    b.ToTable("Elements","app");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollections", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollection", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -264,7 +266,7 @@ namespace LinkCollectionApp.Migrations
                     b.ToTable("SavedCollections","app");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollections", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollection", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -272,15 +274,8 @@ namespace LinkCollectionApp.Migrations
                     b.Property<int>("CollectionId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("EditRights")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValueSql("((0))");
-
-                    b.Property<bool?>("ViewRights")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValueSql("((1))");
+                    b.Property<bool>("EditRights")
+                        .HasColumnType("bit");
 
                     b.HasKey("UserId", "CollectionId")
                         .HasName("PK__SharedCo__4056A78CB4AA5C4A");
@@ -425,7 +420,7 @@ namespace LinkCollectionApp.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.Collections", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.Collection", b =>
                 {
                     b.HasOne("LinkCollectionApp.Models.ApplicationUser", "Owner")
                         .WithMany("Collections")
@@ -434,10 +429,10 @@ namespace LinkCollectionApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.CreatedElements", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.Element", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Models.Collections", "Collections")
-                        .WithMany("CreatedElements")
+                    b.HasOne("LinkCollectionApp.Models.Collection", "Collection")
+                        .WithMany("Elements")
                         .HasForeignKey("CollectionId")
                         .HasConstraintName("FK__Element__Collect__4E88ABD4")
                         .IsRequired();
@@ -449,9 +444,9 @@ namespace LinkCollectionApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollections", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SavedCollection", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Models.Collections", "Collections")
+                    b.HasOne("LinkCollectionApp.Models.Collection", "Collection")
                         .WithMany("SavedCollections")
                         .HasForeignKey("CollectionId")
                         .HasConstraintName("FK__SavedColl__Colle__59063A47")
@@ -464,9 +459,9 @@ namespace LinkCollectionApp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollections", b =>
+            modelBuilder.Entity("LinkCollectionApp.Models.SharedCollection", b =>
                 {
-                    b.HasOne("LinkCollectionApp.Models.Collections", "Collections")
+                    b.HasOne("LinkCollectionApp.Models.Collection", "Collection")
                         .WithMany("SharedCollections")
                         .HasForeignKey("CollectionId")
                         .HasConstraintName("FK__SharedCol__Colle__52593CB8")

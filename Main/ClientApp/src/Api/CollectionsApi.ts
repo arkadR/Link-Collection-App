@@ -1,4 +1,8 @@
-import { Collection, CollectionCreationData } from "../Model/Collection";
+import {
+  Collection,
+  CollectionCreationData,
+  CollectionUpdateData,
+} from "../Model/Collection";
 import {
   authorizedPost,
   authorizedGet,
@@ -21,12 +25,15 @@ class CollectionsApi {
   }
 
   async deleteCollection(id: number): Promise<boolean> {
-    let response = await authorizedDelete("api/collections/" + id);
+    let response = await authorizedDelete(`api/collections/${id}`);
     return response.ok;
   }
 
-  async updateCollection(id: number, name: string): Promise<boolean> {
-    let response = await authorizedPatch("api/collections", { id, name });
+  async updateCollection(
+    id: number,
+    updateData: CollectionUpdateData
+  ): Promise<boolean> {
+    let response = await authorizedPatch(`api/collections/${id}`, updateData);
     return response.ok;
   }
 }

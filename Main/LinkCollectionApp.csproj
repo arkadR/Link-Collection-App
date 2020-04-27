@@ -36,6 +36,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200425105414_RemovedViewRights.cs" />
+    <Compile Remove="Migrations\20200425105414_RemovedViewRights.Designer.cs" />
+    <Compile Remove="Migrations\20200425105712_RemovedViewRights.cs" />
+    <Compile Remove="Migrations\20200425105712_RemovedViewRights.Designer.cs" />
+    <Compile Remove="Migrations\20200425110922_RemovedViewRights.cs" />
+    <Compile Remove="Migrations\20200425110922_RemovedViewRights.Designer.cs" />
+    <Compile Remove="Migrations\20200425111158_RemovedViewRights.cs" />
+    <Compile Remove="Migrations\20200425111158_RemovedViewRights.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ClientApp\src\App.tsx" />
     <None Remove="ClientApp\src\Home.tsx" />
     <None Remove="ClientApp\src\Layout1.tsx" />

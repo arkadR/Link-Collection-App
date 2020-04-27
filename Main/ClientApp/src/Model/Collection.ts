@@ -13,4 +13,10 @@ export type Collection = {
 export type CollectionCreationData = {
   isPublic: boolean;
   name: string;
+  description: string;
+};
+
+export type CollectionUpdateData = {
+  name: string;
+  description: string;
 };

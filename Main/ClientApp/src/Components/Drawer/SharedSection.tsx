@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DrawerItem from "./DrawerItem";
-import { People, Edit, Visibility, VisibilityOff } from "@material-ui/icons";
+import { People, Edit, Visibility } from "@material-ui/icons";
 import { List } from "@material-ui/core";
 import SharedCollectionsStore from "../../Stores/SharedCollectionsStore";
 import DrawerItemNested from "./DrawerItemNested";
@@ -32,16 +32,7 @@ export default function SharedSection() {
               title={sharedCollection.collection.name}
               link={`/collections/shared/${sharedCollection.collection.id}`}
               key={sharedCollection.collection.id}
-              icon={
-                sharedCollection.editRights ? (
-                  <Edit />
-                ) : sharedCollection.viewRights ? (
-                  <Visibility />
-                ) : (
-                  <VisibilityOff />
-                )
-              }
-              // menuItems={<></>}
+              icon={sharedCollection.editRights ? <Edit /> : <Visibility />}
             />
           ))}
         </List>

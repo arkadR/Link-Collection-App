@@ -1,35 +1,46 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import SimpleDialog from "./SimpleDialog";
 import { shareCollection } from "../../Actions/Actions";
 import {
   Button,
   TextField,
-  FormControl,
-  Select,
   MenuItem,
+  FormControl,
   InputLabel,
+  Select,
+  makeStyles,
+  Theme,
+  createStyles,
   Grid,
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { SharedCollectionData } from "../../Model/SharedCollection";
 import UsersStore from "../../Stores/UsersStore";
-import { User } from "../../Model/User";
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    formControl: {
-      marginLeft: theme.spacing(2),
-      minWidth: 100,
-    },
-  })
-);
 
 type ShareCollectionDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
   collectionId: number;
 };
+
+type User = {
+  id: string;
+  name: string;
+  email: string;
+};
+
+enum UserRights {
+  ViewRights,
+  EditRights,
+}
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      marginBlockEnd: "10px",
+    },
+  })
+);
 
 export default function ShareCollectionDialog(
   props: ShareCollectionDialogProps
@@ -38,16 +49,12 @@ export default function ShareCollectionDialog(
   const title = "Share collection";
   const description = `You can share this collection with others for them to see and edit. 
     After sharing, the collection will be visible in their "Shared with me" section.`;
-  const selectView = "View";
-  const selectEdit = "Edit";
-  const inputLabel = "User can:";
 
   const createSharedCollectionData = () => {
     return {
       collectionId: props.collectionId,
       userId: selectedUser!.id,
-      viewRights: true,
-      editRights: selectedRights === selectEdit,
+      editRights: selectedUserRights === UserRights.EditRights,
     } as SharedCollectionData;
   };
 
@@ -65,11 +72,9 @@ export default function ShareCollectionDialog(
     setSelectedUser(newUser);
   };
 
-  const [selectedRights, setSelectedRights] = useState<string>(selectView);
-  const onRightsSelectChange = (
-    event: React.ChangeEvent<{ value: unknown }>
-  ) => {
-    setSelectedRights(event.target.value as string);
+  const [selectedUserRights, setUserRights] = useState(UserRights.ViewRights);
+  const onUserRightsChange = (event: React.ChangeEvent<{ value: any }>) => {
+    setUserRights(event.target.value);
   };
   return (
     <SimpleDialog
@@ -78,31 +83,27 @@ export default function ShareCollectionDialog(
       title={title}
       description={description}
       content={
-        <Grid container direction="row" alignItems="center">
-          <Autocomplete
-            style={{ flex: "1" }}
-            options={users}
-            getOptionLabel={(user) => user.email}
-            id="auto-select"
-            autoSelect
-            value={selectedUser}
-            onChange={onUserInputChange}
-            renderInput={(params) => (
-              <TextField {...params} label="User" margin="normal" />
-            )}
-          />
-          <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel id="rights-select">{inputLabel}</InputLabel>
-            <Select
-              labelId="rights-select"
-              value={selectedRights}
-              onChange={onRightsSelectChange}
-              label={inputLabel}
-            >
-              <MenuItem value={selectView}>{selectView}</MenuItem>
-              <MenuItem value={selectEdit}>{selectEdit}</MenuItem>
-            </Select>
-          </FormControl>
+        <Grid container spacing={3} className={classes.root}>
+          <Grid item xs={8}>
+            <Autocomplete
+              options={users}
+              getOptionLabel={(user) => user.email}
+              id="auto-select"
+              autoSelect
+              value={selectedUser}
+              onChange={onUserInputChange}
+              renderInput={(params) => <TextField {...params} label="User" />}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl>
+              <InputLabel>Permissions</InputLabel>
+              <Select value={selectedUserRights} onChange={onUserRightsChange}>
+                <MenuItem value={UserRights.ViewRights}>View Rights</MenuItem>
+                <MenuItem value={UserRights.EditRights}>Edit Rights</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
       }
       actions={
