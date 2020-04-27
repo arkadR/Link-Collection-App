@@ -15,18 +15,13 @@ import {
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { SharedCollectionData } from "../../Model/SharedCollection";
+import { User } from "../../Model/User";
 import UsersStore from "../../Stores/UsersStore";
 
 type ShareCollectionDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
   collectionId: number;
-};
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
 };
 
 enum UserRights {
