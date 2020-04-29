@@ -1,5 +1,9 @@
 import { parse } from "tldts";
 
+export function GetUserFriendlyHostname(url: string) {
+  return parse(url).hostname;
+}
+
 export function GetHostnameLink(url: string) {
   return "https://" + parse(url).hostname;
 }

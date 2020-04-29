@@ -4,12 +4,15 @@ import { Element } from "../Model/Element";
 import ElementWrapper from "./ElementWrapper";
 import { GridList, GridListTile, Chip, Divider } from "@material-ui/core";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import { GetHostnameLink } from "../Infrastructure/UrlUtilities";
+import { GetUserFriendlyHostname } from "../Infrastructure/UrlUtilities";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     list: {
       padding: "25px 30px 25px 30px",
+    },
+    chip: {
+      margin: "0px 5px 20px 5px",
     },
   })
 );
@@ -36,30 +39,30 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
 
   // TODO: try to make a distinct() on Array prototype
   let [hostFilters, setHostFilters] = useState<HostFilter[]>(
-    Array.from(new Set(elements.map((el) => GetHostnameLink(el.link)))).map(
-      (host) => {
-        return { host: host, enabled: true } as HostFilter;
-      }
-    )
+    Array.from(
+      new Set(elements.map((el) => GetUserFriendlyHostname(el.link)))
+    ).map((host) => {
+      return { host: host, enabled: true } as HostFilter;
+    })
   );
 
   useEffect(() => {
     let elems = props.collection?.elements;
     setHostFilters(
-      Array.from(new Set(elems?.map((el) => GetHostnameLink(el.link)))).map(
-        (host) => {
-          return { host: host, enabled: true } as HostFilter;
-        }
-      )
+      Array.from(
+        new Set(elems?.map((el) => GetUserFriendlyHostname(el.link)))
+      ).map((host) => {
+        return { host: host, enabled: true } as HostFilter;
+      })
     );
   }, [props.collection]);
 
   let onChipClick = (label: string) => {
     setHostFilters(
       hostFilters.map((filter) => {
-        if (filter.host === label)
-          return { host: filter.host, enabled: !filter.enabled } as HostFilter;
-        else return filter;
+        return filter.host === label
+          ? ({ host: filter.host, enabled: !filter.enabled } as HostFilter)
+          : filter;
       })
     );
   };
@@ -68,7 +71,7 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
 
   let filteredElements = elements.filter((el) => {
     let filter = hostFilters.find(
-      (filter) => filter.host === GetHostnameLink(el.link)
+      (filter) => filter.host === GetUserFriendlyHostname(el.link)
     );
     return filter?.enabled;
   });
@@ -79,6 +82,7 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
         return (
           <Chip
             clickable
+            className={classes.chip}
             label={filter.host}
             onClick={() => onChipClick(filter.host)}
             color={"primary"}
