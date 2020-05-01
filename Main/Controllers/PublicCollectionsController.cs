@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LinkCollectionApp.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("api/public")]
   [ApiController]
   public class PublicCollectionsController : Controller
   {

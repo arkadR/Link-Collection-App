@@ -36,6 +36,11 @@ class CollectionsApi {
     let response = await authorizedPatch(`api/collections/${id}`, updateData);
     return response.ok;
   }
+
+  async makePublic(id: number): Promise<boolean> {
+    let response = await authorizedPatch(`api/collections/${id}/makePublic`);
+    return response.ok;
+  }
 }
 
 let api = new CollectionsApi();

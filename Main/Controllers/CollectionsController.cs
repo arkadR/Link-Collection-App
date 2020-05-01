@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using IdentityServer4.Extensions;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Extensions;
@@ -89,6 +88,20 @@ namespace LinkCollectionApp.Controllers
       if (data.Description.IsNullOrEmpty() == false)
         collection.Description = data.Description;
       _dbContext.Update(collection);
+      _dbContext.SaveChanges();
+      return Ok();
+    }
+
+    [HttpPatch("{id}/makePublic")]
+    public IActionResult MakePublic(int id)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var collection = _dbContext.Collection.SingleOrDefault(c => c.Id == id);
+      if (collection == null)
+        return NotFound();
+      if (collection.OwnerId != userId)
+        return Forbid();
+      collection.IsPublic = true;
       _dbContext.SaveChanges();
       return Ok();
     }

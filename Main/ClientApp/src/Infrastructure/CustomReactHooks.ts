@@ -10,7 +10,7 @@ export function useCookie<T>(
     Cookies.set(cookieName, JSON.stringify(defaultValue));
     value = defaultValue;
   }
-  let [cookieVal, setCookieVal] = useState(value);
+  const [cookieVal, setCookieVal] = useState(value);
   const onChange = (newValue: T): void => {
     Cookies.set(cookieName, JSON.stringify(newValue));
     setCookieVal(newValue);
