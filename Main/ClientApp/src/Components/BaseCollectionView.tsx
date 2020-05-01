@@ -5,11 +5,7 @@ import ElementWrapper from "./ElementWrapper";
 import { GridList, GridListTile, Divider } from "@material-ui/core";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import { GetUserFriendlyHostname } from "../Infrastructure/UrlUtilities";
-import {
-  ElementControlMenu,
-  sortDefault,
-  ElementOrderFunc,
-} from "./ElementControlMenu";
+import { ElementControlMenu, sortDefault } from "./ElementControlMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,6 +31,7 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
   let [sortedAscending, setSortedAscending] = useState(true);
   let [selectedHosts, setSelectedHosts] = useState(allHosts);
   let [elementOrderFunction, setElementOrderFunction] = useState(sortDefault);
+  let [columnCount, setColumnCount] = useState(3);
 
   useEffect(() => {
     let elems = props.collection?.elements ?? [];
@@ -53,6 +50,8 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
     displayedElements.reverse();
   }
 
+  let columnRange = Array.from({ length: columnCount }, (x, i) => i);
+
   return (
     <>
       <ElementControlMenu
@@ -62,17 +61,20 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
           setElementOrderFunction(orderFunc)
         }
         onSortingDirectionChange={(isAsc) => setSortedAscending(isAsc)}
+        onColumnCountChange={(newColCount) => setColumnCount(newColCount)}
       />
       <Divider />
       <GridList
-        cols={3}
+        cols={columnCount}
         cellHeight="auto"
-        spacing={50}
+        spacing={30}
         className={classes.list}
       >
-        {GridColumnList(displayedElements.filter((el, idx) => idx % 3 === 0))}
-        {GridColumnList(displayedElements.filter((el, idx) => idx % 3 === 1))}
-        {GridColumnList(displayedElements.filter((el, idx) => idx % 3 === 2))}
+        {columnRange.map((i) => {
+          return GridColumnList(
+            displayedElements.filter((el, idx) => idx % columnCount === i)
+          );
+        })}
       </GridList>
       {props.children}
     </>

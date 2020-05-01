@@ -9,8 +9,10 @@ import {
   Select,
   MenuItem,
   IconButton,
+  Slider,
 } from "@material-ui/core";
 import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
+import { useCookie } from "../Infrastructure/CustomReactHooks";
 
 type HostFilter = {
   host: string;
@@ -28,6 +30,7 @@ type SortingOption = {
 
 interface ElementControlMenuProps {
   hosts: string[];
+  onColumnCountChange: (newColumnCount: number) => void;
   onHostFilterChange: (newHosts: string[]) => void;
   onSortingOptionChange: (newOrderFunc: ElementOrderFunc) => void;
   onSortingDirectionChange: (isAscending: boolean) => void;
@@ -37,6 +40,9 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     chip: {
       margin: "0px 5px 20px 5px",
+    },
+    slider: {
+      width: "150px",
     },
   })
 );
@@ -75,7 +81,6 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
   ] as SortingOption[];
 
   let [sortingOption, setSortingOption] = useState(sortingOptions[0]);
-  // TODO: try to make a distinct() on Array prototype
   let [hostFilters, setHostFilters] = useState(
     props.hosts.map((h) => {
       return { host: h, enabled: true } as HostFilter;
@@ -112,6 +117,15 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
     setSortedAscending(!sortedAscending);
   };
 
+  let [columnCount, setColumnCount] = useCookie("columnCount", 3);
+  const onColumnCountChange = (event: any, newValue: number | number[]) => {
+    let val = newValue as number;
+    setColumnCount(val);
+    props.onColumnCountChange(val);
+  };
+  props.onColumnCountChange(columnCount);
+
+  //TODO: Layout
   return (
     <>
       {hostFilters.map((filter) => {
@@ -126,6 +140,18 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
           />
         );
       })}
+      <Slider
+        marks
+        value={columnCount}
+        step={1}
+        min={1}
+        max={5}
+        getAriaValueText={(v) => v.toString()}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        className={classes.slider}
+        onChange={onColumnCountChange}
+      ></Slider>
       <Select
         value={sortingOption.key}
         onChange={(ev) => onSortingOptionChange(ev.target.value as number)}
