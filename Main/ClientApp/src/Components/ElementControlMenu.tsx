@@ -10,6 +10,7 @@ import {
   MenuItem,
   IconButton,
   Slider,
+  Grid,
 } from "@material-ui/core";
 import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
 import { useCookie } from "../Infrastructure/CustomReactHooks";
@@ -127,46 +128,54 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
 
   //TODO: Layout
   return (
-    <>
-      {hostFilters.map((filter) => {
-        return (
-          <Chip
-            clickable
-            className={classes.chip}
-            label={filter.host}
-            onClick={() => onChipClick(filter)}
-            color={"primary"}
-            variant={filter.enabled ? "default" : "outlined"}
-          />
-        );
-      })}
-      <Slider
-        marks
-        value={columnCount}
-        step={1}
-        min={1}
-        max={5}
-        getAriaValueText={(v) => v.toString()}
-        aria-labelledby="discrete-slider"
-        valueLabelDisplay="auto"
-        className={classes.slider}
-        onChange={onColumnCountChange}
-      ></Slider>
-      <Select
-        value={sortingOption.key}
-        onChange={(ev) => onSortingOptionChange(ev.target.value as number)}
-      >
-        {sortingOptions.map((opt) => {
+    <Grid container spacing={2}>
+      <Grid item xs container>
+        {hostFilters.map((filter) => {
           return (
-            <MenuItem key={opt.key} value={opt.key}>
-              {opt.label}
-            </MenuItem>
+            <Chip
+              clickable
+              className={classes.chip}
+              label={filter.host}
+              onClick={() => onChipClick(filter)}
+              color={"primary"}
+              variant={filter.enabled ? "default" : "outlined"}
+            />
           );
         })}
-      </Select>
-      <IconButton onClick={onSortingDirectionToggle}>
-        {sortedAscending ? <ArrowDownward /> : <ArrowUpward />}
-      </IconButton>
-    </>
+      </Grid>
+      <Grid item>
+        <Slider
+          marks
+          value={columnCount}
+          step={1}
+          min={1}
+          max={5}
+          getAriaValueText={(v) => v.toString()}
+          aria-labelledby="discrete-slider"
+          valueLabelDisplay="auto"
+          className={classes.slider}
+          onChange={onColumnCountChange}
+        />
+      </Grid>
+      <Grid item>
+        <Select
+          value={sortingOption.key}
+          onChange={(ev) => onSortingOptionChange(ev.target.value as number)}
+        >
+          {sortingOptions.map((opt) => {
+            return (
+              <MenuItem key={opt.key} value={opt.key}>
+                {opt.label}
+              </MenuItem>
+            );
+          })}
+        </Select>
+      </Grid>
+      <Grid item>
+        <IconButton onClick={onSortingDirectionToggle}>
+          {sortedAscending ? <ArrowDownward /> : <ArrowUpward />}
+        </IconButton>
+      </Grid>
+    </Grid>
   );
 }
