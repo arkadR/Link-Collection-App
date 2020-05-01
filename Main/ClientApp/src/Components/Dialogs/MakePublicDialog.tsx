@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SimpleDialog from "./SimpleDialog";
 import {
   Button,
@@ -9,12 +9,12 @@ import {
   Snackbar,
 } from "@material-ui/core";
 import CollectionsApi from "../../Api/CollectionsApi";
+import CollectionsStore from "../../Stores/CollectionsStore";
 
 type MakePublicDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
   collectionId: number;
-  alreadyPublic?: boolean;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -62,11 +62,13 @@ export default function MakePublicDialog(props: MakePublicDialogProps) {
     setLoading(false);
   };
 
-  if (props.alreadyPublic) {
-    setSharableLink(
-      `https://${window.location.host}/public/${props.collectionId}`
-    );
-  }
+  useEffect(() => {
+    let collection = CollectionsStore.getCollection(props.collectionId);
+    if (collection?.isPublic === true)
+      setSharableLink(
+        `https://${window.location.host}/public/${props.collectionId}`
+      );
+  }, [props.collectionId]);
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(sharableLink);
