@@ -77,6 +77,14 @@ export default function MyCollectionsSection() {
     };
   }, []);
 
+  const getContributors = (collectionId: number) => {
+    let keys = Object.keys(contributors);
+    let index = keys.indexOf(`${collectionId}`);
+    if (index === -1) return [];
+    let values = Object.values(contributors);
+    return values[index] as User[];
+  };
+
   const toggleAddElementDialogOpen = () => {
     setDialogOpen(!addCollectionDialogOpen);
   };
@@ -159,22 +167,19 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Share" />
                     </ListItem>
-                    <Divider />
-                    {/* {console.log(JSON.stringify(contributors))} */}
+                    {getContributors(collection.id).length > 0 && <Divider />}
 
-                    {/* {
-                      contributors.get(collection.id)?.forEach((u) => (
-                        <ListItem
-                          // onClick={() => onShareCollectionClick(collection.id)}
-                          button
-                        >
-                          <ListItemIcon>
-                            <Person />
-                          </ListItemIcon>
-                          <ListItemText primary={u.name} />
-                        </ListItem>
-                      ))
-                    } */}
+                    {getContributors(collection.id).map((u) => (
+                      <ListItem
+                        // onClick={() => onShareCollectionClick(collection.id)}
+                        button
+                      >
+                        <ListItemIcon>
+                          <Person />
+                        </ListItemIcon>
+                        <ListItemText primary={u.name} />
+                      </ListItem>
+                    ))}
                   </div>
                 }
               />
