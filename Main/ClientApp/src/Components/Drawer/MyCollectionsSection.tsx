@@ -7,6 +7,8 @@ import {
   ListItemText,
   Typography,
   Divider,
+  ListItemAvatar,
+  Avatar,
 } from "@material-ui/core";
 import {
   Lock,
@@ -21,13 +23,14 @@ import {
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../../Stores/CollectionsStore";
-import UsersStore from "../../Stores/UsersStore";
+import SharedCollectionsStore from "../../Stores/SharedCollectionsStore";
 import ListItemAdd from "../ListItemAdd";
 import EditCollectionDialog from "../Dialogs/EditCollectionDialog";
+import EditContributorDialog from "../Dialogs/EditContributorDialog";
 import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
 import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
 import { Collection } from "../../Model/Collection";
-import { User } from "../../Model/User";
+import { SharedCollection } from "../../Model/SharedCollection";
 import DeleteCollectionDialog from "../Dialogs/DeleteCollectionDialog";
 import MakePublicDialog from "../Dialogs/MakePublicDialog";
 
@@ -52,37 +55,47 @@ export default function MyCollectionsSection() {
   const [collections, setCollections] = useState<Collection[]>(
     CollectionsStore.getCollections()
   );
-  const [contributors, setContributors] = useState<Map<number, User[]>>(
-    UsersStore.getContributors()
+  const [
+    contributorsSharedCollections,
+    setContributorsSharedCollections,
+  ] = useState<SharedCollection[] | null>(
+    SharedCollectionsStore.getCollectionsSharedCollections()
   );
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedCollectionId, setSelectedCollection] = useState(-1);
   const [makePublicDialogOpen, setMakePublicDialogOpen] = useState(false);
+  const [
+    makeEditContributorDialogOpen,
+    setMakeEditContributorDialogOpen,
+  ] = useState(false);
+  const [selectedContributorId, setSelectedContributorId] = useState(-1);
 
   useEffect(() => {
     const collectionChangeHandler = () => {
       setCollections(CollectionsStore.getCollections());
     };
-    const contributorsChangeHandler = () => {
-      setContributors(UsersStore.getContributors());
+    const contributorsSCChangeHandler = () => {
+      setContributorsSharedCollections(
+        SharedCollectionsStore.getCollectionsSharedCollections()
+      );
     };
     CollectionsStore.addChangeListener(collectionChangeHandler);
-    UsersStore.addChangeListener(contributorsChangeHandler);
+    SharedCollectionsStore.addChangeListener(contributorsSCChangeHandler);
 
     return () => {
       CollectionsStore.removeChangeListener(collectionChangeHandler);
-      UsersStore.removeChangeListener(contributorsChangeHandler);
+      SharedCollectionsStore.removeChangeListener(contributorsSCChangeHandler);
     };
   }, []);
 
-  const getContributors = (collectionId: number) => {
-    let keys = Object.keys(contributors);
-    let index = keys.indexOf(`${collectionId}`);
-    if (index === -1) return [];
-    let values = Object.values(contributors);
-    return values[index] as User[];
+  const haveSharedCollections = (collectionId: number) => {
+    let collectionSC = contributorsSharedCollections?.filter(
+      (csc) => csc.collectionId == collectionId
+    );
+    if (collectionSC == undefined) return false;
+    return collectionSC.length > 0;
   };
 
   const toggleAddElementDialogOpen = () => {
@@ -107,6 +120,15 @@ export default function MyCollectionsSection() {
   const onMakeCollectionPublicClick = (collectionId: number) => {
     setSelectedCollection(collectionId);
     setMakePublicDialogOpen(true);
+  };
+
+  const onEditContributorClick = (
+    collectionId: number,
+    contributorId: number
+  ) => {
+    setSelectedCollection(collectionId);
+    setSelectedContributorId(contributorId);
+    setMakeEditContributorDialogOpen(true);
   };
 
   return (
@@ -167,19 +189,24 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Share" />
                     </ListItem>
-                    {getContributors(collection.id).length > 0 && <Divider />}
-
-                    {getContributors(collection.id).map((u) => (
-                      <ListItem
-                        // onClick={() => onShareCollectionClick(collection.id)}
-                        button
-                      >
-                        <ListItemIcon>
-                          <Person />
-                        </ListItemIcon>
-                        <ListItemText primary={u.name} />
-                      </ListItem>
-                    ))}
+                    {haveSharedCollections(collection.id) && <Divider />}
+                    {contributorsSharedCollections
+                      ?.filter((csc) => csc.collectionId == collection.id)
+                      .map((sc) => (
+                        <ListItem
+                          onClick={() =>
+                            onEditContributorClick(collection.id, sc.userId)
+                          }
+                          button
+                        >
+                          <ListItemAvatar>
+                            <Avatar>
+                              <Person />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText primary={sc.user.name} />
+                        </ListItem>
+                      ))}
                   </div>
                 }
               />
@@ -202,7 +229,7 @@ export default function MyCollectionsSection() {
         open={shareDialogOpen}
         toggleDialogOpen={() => setShareDialogOpen(!shareDialogOpen)}
         collectionId={selectedCollectionId}
-      ></ShareCollectionDialog>
+      />
       <DeleteCollectionDialog
         open={deleteDialogOpen}
         toggleDialogOpen={() => setDeleteDialogOpen(!deleteDialogOpen)}
@@ -217,6 +244,14 @@ export default function MyCollectionsSection() {
         open={makePublicDialogOpen}
         toggleDialogOpen={() => setMakePublicDialogOpen(!makePublicDialogOpen)}
         collectionId={selectedCollectionId}
+      />
+      <EditContributorDialog
+        open={makeEditContributorDialogOpen}
+        toggleDialogOpen={() =>
+          setMakeEditContributorDialogOpen(!makeEditContributorDialogOpen)
+        }
+        collectionId={selectedCollectionId}
+        userId={selectedContributorId}
       />
     </>
   );

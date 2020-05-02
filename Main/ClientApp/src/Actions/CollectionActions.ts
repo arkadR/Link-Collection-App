@@ -49,6 +49,14 @@ export async function loadSharedCollections() {
   });
 }
 
+export async function loadContributorsSharedCollections() {
+  let contributorsSharedCollections = await SharedCollectionsApi.getContributorsSharedCollections();
+  Dispatcher.dispatch({
+    actionType: ActionTypes.LOAD_CONTRIBUTORS_SHARED_COLLECTIONS,
+    payload: { contributorsSharedCollections: contributorsSharedCollections },
+  });
+}
+
 export async function shareCollection(shareData: SharedCollectionData) {
   await SharedCollectionsApi.shareCollection(shareData);
 }

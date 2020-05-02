@@ -69,5 +69,20 @@ namespace LinkCollectionApp.Controllers
       _dbContext.SaveChanges();
       return Ok();
     }
+
+    [HttpGet("contributors")]
+    public ActionResult<List<SharedCollectionContributorData>> GetContributorsSharedCollections()
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var userCollections = _dbContext.Users
+      .Include(u => u.Collections)
+      .ThenInclude(c => c.SharedCollections)
+      .ThenInclude(sc => sc.User)
+      .Single(u => u.Id == userId)
+      .Collections.ToList();
+
+      var sharedCollections = userCollections.Select(c => c.SharedCollections).SelectMany( sc => sc ).ToList();
+      return sharedCollections.Select(sc => SharedCollectionContributorData.Create(sc)).ToList();
+    }
   }
 }

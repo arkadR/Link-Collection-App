@@ -9,11 +9,3 @@ export async function loadUsers() {
     payload: { users: users },
   });
 }
-
-export async function loadContributors() {
-  let contributors = await UsersApi.getContributors();
-  Dispatcher.dispatch({
-    actionType: ActionTypes.LOAD_CONTRIBUTORS,
-    payload: { contributors: contributors },
-  });
-}

@@ -14,6 +14,12 @@ class SharedCollectionsApi {
     return sharedCollections;
   }
 
+  async getContributorsSharedCollections(): Promise<SharedCollection[]> {
+    var response = await authorizedGet("api/sharedcollections/contributors");
+    let contributorsSharedCollections = (await response.json()) as SharedCollection[];
+    return contributorsSharedCollections;
+  }
+
   async shareCollection(shareData: SharedCollectionData): Promise<Response> {
     var response = await authorizedPost("api/sharedcollections", shareData);
     return response;
