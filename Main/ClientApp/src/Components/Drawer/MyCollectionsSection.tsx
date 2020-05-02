@@ -26,6 +26,7 @@ import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
 import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
 import { Collection } from "../../Model/Collection";
 import DeleteCollectionDialog from "../Dialogs/DeleteCollectionDialog";
+import MakePublicDialog from "../Dialogs/MakePublicDialog";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,7 +52,8 @@ export default function MyCollectionsSection() {
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedCollection, setSelectedCollection] = useState(-1);
+  const [selectedCollectionId, setSelectedCollection] = useState(-1);
+  const [makePublicDialogOpen, setMakePublicDialogOpen] = useState(false);
 
   useEffect(() => {
     const changeHandler = () => {
@@ -81,6 +83,11 @@ export default function MyCollectionsSection() {
   const onUpdateCollectionClick = (collectionId: number) => {
     setSelectedCollection(collectionId);
     setEditDialogOpen(true);
+  };
+
+  const onMakeCollectionPublicClick = (collectionId: number) => {
+    setSelectedCollection(collectionId);
+    setMakePublicDialogOpen(true);
   };
 
   return (
@@ -123,8 +130,10 @@ export default function MyCollectionsSection() {
                       <ListItemText primary="Edit" />
                     </ListItem>
                     <Divider />
-                    {/* TODO: on click */}
-                    <ListItem button>
+                    <ListItem
+                      onClick={() => onMakeCollectionPublicClick(collection.id)}
+                      button
+                    >
                       <ListItemIcon>
                         <LockOpen />
                       </ListItemIcon>
@@ -139,7 +148,7 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Share" />
                     </ListItem>
-                    <Divider />
+                    {/* <Divider /> */}
                     {/* TODO: list of contributors */}
                   </div>
                 }
@@ -152,27 +161,32 @@ export default function MyCollectionsSection() {
               text="Add collection"
               className={classes.addItem}
             />
-            <AddCollectionDialog
-              open={addCollectionDialogOpen}
-              toggleDialogOpen={toggleAddElementDialogOpen}
-            />
           </List>
         }
+      />
+      <AddCollectionDialog
+        open={addCollectionDialogOpen}
+        toggleDialogOpen={toggleAddElementDialogOpen}
       />
       <ShareCollectionDialog
         open={shareDialogOpen}
         toggleDialogOpen={() => setShareDialogOpen(!shareDialogOpen)}
-        collectionId={selectedCollection}
+        collectionId={selectedCollectionId}
       ></ShareCollectionDialog>
       <DeleteCollectionDialog
         open={deleteDialogOpen}
         toggleDialogOpen={() => setDeleteDialogOpen(!deleteDialogOpen)}
-        collectionId={selectedCollection}
+        collectionId={selectedCollectionId}
       />
       <EditCollectionDialog
         open={editDialogOpen}
         toggleDialogOpen={() => setEditDialogOpen(!editDialogOpen)}
-        collectionId={selectedCollection}
+        collectionId={selectedCollectionId}
+      />
+      <MakePublicDialog
+        open={makePublicDialogOpen}
+        toggleDialogOpen={() => setMakePublicDialogOpen(!makePublicDialogOpen)}
+        collectionId={selectedCollectionId}
       />
     </>
   );

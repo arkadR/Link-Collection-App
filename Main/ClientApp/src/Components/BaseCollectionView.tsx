@@ -1,9 +1,11 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import { Collection } from "../Model/Collection";
 import { Element } from "../Model/Element";
 import ElementWrapper from "./ElementWrapper";
-import { GridList, GridListTile } from "@material-ui/core";
+import { GridList, GridListTile, Divider } from "@material-ui/core";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import { GetUserFriendlyHostname } from "../Infrastructure/UrlUtilities";
+import { ElementControlMenu, sortDefault } from "./ElementControlMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,23 +23,58 @@ type BaseCollectionViewProps = {
 export default function BaseCollectionView(props: BaseCollectionViewProps) {
   const classes = useStyles();
 
-  let elements =
-    props.collection?.elements.sort((el1, el2) => {
-      if (el1.sequence === null) return 1;
-      if (el2.sequence === null) return -1;
-      return el1.sequence - el2.sequence;
-    }) ?? [];
+  let elements = props.collection?.elements ?? [];
+  let allHosts = Array.from(
+    new Set(elements.map((el) => GetUserFriendlyHostname(el.link) ?? ""))
+  );
+
+  let [sortedAscending, setSortedAscending] = useState(true);
+  let [selectedHosts, setSelectedHosts] = useState(allHosts);
+  let [elementOrderFunction, setElementOrderFunction] = useState(sortDefault);
+  let [columnCount, setColumnCount] = useState(3);
+
+  useEffect(() => {
+    let elems = props.collection?.elements ?? [];
+    let hosts = Array.from(
+      new Set(elems.map((el) => GetUserFriendlyHostname(el.link) ?? ""))
+    );
+    setSelectedHosts(hosts);
+  }, [props.collection]);
+
+  let displayedElements = elements
+    .filter((el) =>
+      selectedHosts.includes(GetUserFriendlyHostname(el.link) ?? "")
+    )
+    .sort(elementOrderFunction.orderFunc);
+  if (sortedAscending === false) {
+    displayedElements.reverse();
+  }
+
+  let columnRange = Array.from({ length: columnCount }, (x, i) => i);
+
   return (
     <>
+      <ElementControlMenu
+        hosts={allHosts}
+        onHostFilterChange={(hosts) => setSelectedHosts(hosts)}
+        onSortingOptionChange={(orderFunc) =>
+          setElementOrderFunction(orderFunc)
+        }
+        onSortingDirectionChange={(isAsc) => setSortedAscending(isAsc)}
+        onColumnCountChange={(newColCount) => setColumnCount(newColCount)}
+      />
+      <Divider />
       <GridList
-        cols={3}
+        cols={columnCount}
         cellHeight="auto"
-        spacing={50}
+        spacing={30}
         className={classes.list}
       >
-        {GridColumnList(elements.filter((el, idx) => idx % 3 === 0))}
-        {GridColumnList(elements.filter((el, idx) => idx % 3 === 1))}
-        {GridColumnList(elements.filter((el, idx) => idx % 3 === 2))}
+        {columnRange.map((i) => {
+          return GridColumnList(
+            displayedElements.filter((el, idx) => idx % columnCount === i)
+          );
+        })}
       </GridList>
       {props.children}
     </>

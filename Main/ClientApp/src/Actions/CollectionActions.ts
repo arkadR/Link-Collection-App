@@ -1,14 +1,11 @@
 import Dispatcher from "../Infrastructure/Dispatcher";
 import SharedCollectionsApi from "../Api/SharedCollectionsApi";
-import UsersApi from "../Api/UsersApi";
 import CollectionsApi from "../Api/CollectionsApi";
-import ElementsApi from "../Api/ElementsApi";
 import ActionTypes from "./ActionTypes";
 import {
   CollectionCreationData,
   CollectionUpdateData,
 } from "../Model/Collection";
-import { ElementCreationData, ElementUpdateData } from "../Model/Element";
 import { SharedCollectionData } from "../Model/SharedCollection";
 
 export async function loadCollections() {
@@ -44,14 +41,6 @@ export async function updateCollection(
   } else console.error("Could not update collection");
 }
 
-export async function addElement(elementCreationData: ElementCreationData) {
-  let success = await ElementsApi.addElement(elementCreationData);
-  if (success) {
-    loadCollections();
-    loadSharedCollections();
-  } else console.error("Could not add element");
-}
-
 export async function loadSharedCollections() {
   let sharedCollections = await SharedCollectionsApi.getSharedCollections();
   Dispatcher.dispatch({
@@ -62,40 +51,4 @@ export async function loadSharedCollections() {
 
 export async function shareCollection(shareData: SharedCollectionData) {
   await SharedCollectionsApi.shareCollection(shareData);
-}
-
-export async function loadUsers() {
-  let users = await UsersApi.getUsers();
-  Dispatcher.dispatch({
-    actionType: ActionTypes.LOAD_USERS,
-    payload: { users: users },
-  });
-}
-
-export async function updateElement(
-  collectionId: number,
-  elementId: number,
-  updateData: ElementUpdateData
-) {
-  let result = await ElementsApi.updateElement(
-    collectionId,
-    elementId,
-    updateData
-  );
-  if (result === true) {
-    loadCollections();
-    loadSharedCollections();
-  } else {
-    console.error("Could not update element");
-  }
-}
-
-export async function deleteElement(collectionId: number, elementId: number) {
-  let result = await ElementsApi.deleteElement(collectionId, elementId);
-  if (result === true) {
-    loadCollections();
-    loadSharedCollections();
-  } else {
-    console.error("Could not delete element");
-  }
 }

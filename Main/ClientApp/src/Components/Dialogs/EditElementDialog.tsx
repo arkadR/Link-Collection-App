@@ -1,40 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { Button, TextField } from "@material-ui/core";
-import { updateElement } from "../../Actions/Actions";
+import { updateElement } from "../../Actions/ElementActions";
 import { Element, ElementUpdateData } from "../../Model/Element";
-import CollectionsStore from "../../Stores/CollectionsStore";
 import SimpleDialog from "./SimpleDialog";
 
 type EditElementDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
-  collectionId: number;
-  elementId: number;
+  element: Element;
 };
 
 export default function EditElementDialog(props: EditElementDialogProps) {
   const title = "Edit element";
-  const description = "Enter new name for this element.";
-  let [element, setElement] = useState<Element | null>(null);
-  //TODO: input for link editing
-  const [inputText, setInputText] = React.useState("");
+  const description = "Change the name or link of this element.";
+  let [element, setElement] = useState<Element>(props.element);
+  const [inputName, setInputName] = React.useState(props.element.name);
+  const [inputUrl, setInputUrl] = React.useState(props.element.link);
 
   const createElementUpdateData = () => {
     return {
-      name: inputText,
+      name: inputName.length === 0 ? element?.name : inputName,
+      link: inputUrl.length === 0 ? element?.link : inputUrl,
     } as ElementUpdateData;
   };
 
   useEffect(() => {
-    let collection = CollectionsStore.getCollection(props.collectionId);
-    setElement(
-      collection?.elements.find((el) => el.id === props.elementId) ?? null
-    );
-  }, [props.collectionId, props.elementId]);
+    setElement(props.element);
+    setInputName(props.element.name);
+    setInputUrl(props.element.link);
+  }, [props.element]);
 
-  const handleInputChange = (newInput: string) => {
-    setInputText(newInput);
+  const handleInputNameChange = (newInput: string) => {
+    setInputName(newInput);
   };
+
+  const handleInputUrlChange = (newInput: string) => {
+    setInputUrl(newInput);
+  };
+
+  const saveChangesEnabled =
+    (inputName.length !== 0 && inputName !== element.name) ||
+    (inputUrl.length !== 0 && inputUrl !== element.link);
 
   return (
     <SimpleDialog
@@ -43,24 +49,37 @@ export default function EditElementDialog(props: EditElementDialogProps) {
       title={title}
       description={description}
       content={
-        <TextField
-          onChange={(e) => handleInputChange(e.target.value)}
-          autoFocus
-          margin="dense"
-          id="elementName"
-          label="Element name"
-          type="email"
-          placeholder={element?.name}
-          fullWidth
-        />
+        <>
+          <TextField
+            defaultValue={element.name}
+            onChange={(e) => handleInputNameChange(e.target.value)}
+            autoFocus
+            margin="dense"
+            id="elementName"
+            label="Element name"
+            type="email"
+            placeholder={element.name}
+            fullWidth
+          />
+          <TextField
+            defaultValue={element.link}
+            onChange={(e) => handleInputUrlChange(e.target.value)}
+            margin="dense"
+            id="elementUrl"
+            label="Url"
+            type="email"
+            placeholder={element.link}
+            fullWidth
+          />
+        </>
       }
       actions={
         <Button
-          disabled={inputText.length === 0 || inputText === element?.name}
+          disabled={!saveChangesEnabled}
           onClick={() => {
             updateElement(
-              props.collectionId,
-              props.elementId,
+              props.element.collectionId,
+              props.element.id,
               createElementUpdateData()
             );
             props.toggleDialogOpen();

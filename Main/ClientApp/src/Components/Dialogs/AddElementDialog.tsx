@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, TextField } from "@material-ui/core";
 import SimpleDialog from "./SimpleDialog";
-import { addElement } from "../../Actions/Actions";
+import { addElement } from "../../Actions/ElementActions";
 import { ElementCreationData } from "../../Model/Element";
 
 type AddElementDialogProps = {

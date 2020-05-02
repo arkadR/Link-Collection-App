@@ -2,7 +2,7 @@ import { SharedCollection } from "../Model/SharedCollection";
 import ActionTypes from "../Actions/ActionTypes";
 import StoreBase from "../Infrastructure/StoreBase";
 import Action from "../Infrastructure/Action";
-import { loadSharedCollections } from "../Actions/Actions";
+import { loadSharedCollections } from "../Actions/CollectionActions";
 
 class SharedCollectionStore extends StoreBase {
   onActionReceived(action: Action): void {
