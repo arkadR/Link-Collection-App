@@ -6,6 +6,11 @@ class UsersApi {
     let response = await authorizedGet("api/users");
     return (await response.json()) as User[];
   }
+
+  async getContributors(): Promise<Map<number, User[]>> {
+    let response = await authorizedGet(`api/users/contributors`);
+    return (await response.json()) as Map<number, User[]>;
+  }
 }
 
 let api = new UsersApi();

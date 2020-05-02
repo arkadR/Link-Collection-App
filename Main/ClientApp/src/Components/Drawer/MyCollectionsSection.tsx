@@ -13,6 +13,7 @@ import {
   Widgets,
   Public,
   GroupAdd,
+  Person,
   Delete,
   Edit,
   LockOpen,
@@ -20,11 +21,13 @@ import {
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
 import CollectionsStore from "../../Stores/CollectionsStore";
+import UsersStore from "../../Stores/UsersStore";
 import ListItemAdd from "../ListItemAdd";
 import EditCollectionDialog from "../Dialogs/EditCollectionDialog";
 import ShareCollectionDialog from "../Dialogs/ShareCollectionDialog";
 import AddCollectionDialog from "../Dialogs/AddCollectionDialog";
 import { Collection } from "../../Model/Collection";
+import { User } from "../../Model/User";
 import DeleteCollectionDialog from "../Dialogs/DeleteCollectionDialog";
 import MakePublicDialog from "../Dialogs/MakePublicDialog";
 
@@ -49,6 +52,9 @@ export default function MyCollectionsSection() {
   const [collections, setCollections] = useState<Collection[]>(
     CollectionsStore.getCollections()
   );
+  const [contributors, setContributors] = useState<Map<number, User[]>>(
+    UsersStore.getContributors()
+  );
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -56,13 +62,18 @@ export default function MyCollectionsSection() {
   const [makePublicDialogOpen, setMakePublicDialogOpen] = useState(false);
 
   useEffect(() => {
-    const changeHandler = () => {
+    const collectionChangeHandler = () => {
       setCollections(CollectionsStore.getCollections());
     };
-    CollectionsStore.addChangeListener(changeHandler);
+    const contributorsChangeHandler = () => {
+      setContributors(UsersStore.getContributors());
+    };
+    CollectionsStore.addChangeListener(collectionChangeHandler);
+    UsersStore.addChangeListener(contributorsChangeHandler);
 
     return () => {
-      CollectionsStore.removeChangeListener(changeHandler);
+      CollectionsStore.removeChangeListener(collectionChangeHandler);
+      UsersStore.removeChangeListener(contributorsChangeHandler);
     };
   }, []);
 
@@ -148,8 +159,22 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Share" />
                     </ListItem>
-                    {/* <Divider /> */}
-                    {/* TODO: list of contributors */}
+                    <Divider />
+                    {/* {console.log(JSON.stringify(contributors))} */}
+
+                    {/* {
+                      contributors.get(collection.id)?.forEach((u) => (
+                        <ListItem
+                          // onClick={() => onShareCollectionClick(collection.id)}
+                          button
+                        >
+                          <ListItemIcon>
+                            <Person />
+                          </ListItemIcon>
+                          <ListItemText primary={u.name} />
+                        </ListItem>
+                      ))
+                    } */}
                   </div>
                 }
               />
