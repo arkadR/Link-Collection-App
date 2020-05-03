@@ -62,6 +62,7 @@ export async function shareCollection(shareData: SharedCollectionData) {
   if (success) {
     loadCollections();
     loadSharedCollections();
+    loadContributorsSharedCollections();
   }
 }
 

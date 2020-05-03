@@ -98,16 +98,21 @@ export default function EditContributorDialog(
         title={title}
         description={description}
         content={
-          <Grid container spacing={3} className={classes.root}>
-            <Grid item xs={2}>
+          <Grid
+            container
+            spacing={3}
+            alignItems="center"
+            className={classes.root}
+          >
+            <Grid item>
               <Avatar>
                 <Person />
               </Avatar>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={7}>
               {sharedCollection?.user.name}
             </Grid>
-            <Grid item xs={4}>
+            <Grid item>
               <FormControl>
                 <InputLabel>Permissions</InputLabel>
                 <Select
