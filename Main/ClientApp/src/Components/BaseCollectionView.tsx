@@ -2,14 +2,14 @@ import React, { ReactNode, useState, useEffect } from "react";
 import { Collection } from "../Model/Collection";
 import { Element } from "../Model/Element";
 import ElementWrapper from "./ElementWrapper";
-import { GridList, GridListTile, Divider } from "@material-ui/core";
+import { GridList, GridListTile, Divider, Box } from "@material-ui/core";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import { GetUserFriendlyHostname } from "../Infrastructure/UrlUtilities";
 import { ElementControlMenu, sortDefault } from "./ElementControlMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    list: {
+    root: {
       padding: "25px 30px 25px 30px",
     },
   })
@@ -53,7 +53,7 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
   let columnRange = Array.from({ length: columnCount }, (x, i) => i);
 
   return (
-    <>
+    <Box className={classes.root}>
       <ElementControlMenu
         hosts={allHosts}
         onHostFilterChange={(hosts) => setSelectedHosts(hosts)}
@@ -64,12 +64,7 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
         onColumnCountChange={(newColCount) => setColumnCount(newColCount)}
       />
       <Divider />
-      <GridList
-        cols={columnCount}
-        cellHeight="auto"
-        spacing={30}
-        className={classes.list}
-      >
+      <GridList cols={columnCount} cellHeight="auto" spacing={30}>
         {columnRange.map((i) => {
           return GridColumnList(
             displayedElements.filter((el, idx) => idx % columnCount === i),
@@ -78,7 +73,7 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
         })}
       </GridList>
       {props.children}
-    </>
+    </Box>
   );
 }
 
