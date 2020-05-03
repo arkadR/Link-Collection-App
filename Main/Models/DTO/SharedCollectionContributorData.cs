@@ -10,7 +10,7 @@
     public static SharedCollectionContributorData Create(SharedCollection sharedCollection)
     {
       var user = UserSimpleData.Create(sharedCollection.User);
-      return new SharedCollectionContributorData { CollectionId = sharedCollection.CollectionId, EditRights = sharedCollection.EditRights, User = user, UserId = user.UserId };
+      return new SharedCollectionContributorData { CollectionId = sharedCollection.CollectionId, EditRights = sharedCollection.EditRights, User = user, UserId = user.Id };
     }
   }
 }

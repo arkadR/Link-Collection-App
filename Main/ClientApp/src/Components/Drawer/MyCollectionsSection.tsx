@@ -92,9 +92,9 @@ export default function MyCollectionsSection() {
 
   const haveSharedCollections = (collectionId: number) => {
     let collectionSC = contributorsSharedCollections?.filter(
-      (csc) => csc.collectionId == collectionId
+      (csc) => csc.collectionId === collectionId
     );
-    if (collectionSC == undefined) return false;
+    if (collectionSC === undefined) return false;
     return collectionSC.length > 0;
   };
 
@@ -191,7 +191,7 @@ export default function MyCollectionsSection() {
                     </ListItem>
                     {haveSharedCollections(collection.id) && <Divider />}
                     {contributorsSharedCollections
-                      ?.filter((csc) => csc.collectionId == collection.id)
+                      ?.filter((csc) => csc.collectionId === collection.id)
                       .map((sc) => (
                         <ListItem
                           onClick={() =>

@@ -44,7 +44,7 @@ class SharedCollectionStore extends StoreBase {
     if (this._contributorsSharedCollections == null)
       loadContributorsSharedCollections();
     let sharedCollection = this._contributorsSharedCollections?.find(
-      (sc) => sc.collectionId == collectionId && sc.userId == userId
+      (sc) => sc.collectionId === collectionId && sc.userId === userId
     );
     return sharedCollection ?? null;
   }

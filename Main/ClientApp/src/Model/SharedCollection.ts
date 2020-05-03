@@ -11,6 +11,6 @@ export type SharedCollection = {
 
 export type SharedCollectionData = {
   collectionId: number;
-  userId: number;
+  userId: string;
   editRights: boolean;
 };

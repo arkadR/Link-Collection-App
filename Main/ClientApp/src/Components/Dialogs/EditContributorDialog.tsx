@@ -96,7 +96,7 @@ export default function EditContributorDialog(
   return (
     <>
       {mode === Mode.Edit
-        ? EditModeView(props, changeMode)
+        ? EditModeView(props, sharedCollection, changeMode)
         : DeleteModeView(props)}
     </>
   );
@@ -104,25 +104,27 @@ export default function EditContributorDialog(
 
 function EditModeView(
   props: EditContributorDialogProps,
+  sharedCollection: SharedCollection | null,
   changeMode: (mode: Mode) => void
 ) {
   const classes = useStyles();
   const title = "Edit contributor";
   const description = `You can change contributor permissions or delete this contributor`;
 
-  //TODO: initial state change to actual userrights
-  const [selectedUserRights, setUserRights] = useState(UserRights.ViewRights);
+  const [selectedUserRights, setUserRights] = useState(
+    sharedCollection?.editRights ? UserRights.EditRights : UserRights.ViewRights
+  );
   const onUserRightsChange = (event: React.ChangeEvent<{ value: any }>) => {
     setUserRights(event.target.value);
   };
 
-  const createSharedCollectionData = () => {
-    return {
-      collectionId: props.collectionId,
-      userId: props.userId,
-      editRights: selectedUserRights === UserRights.EditRights,
-    } as SharedCollectionData;
-  };
+  // const createSharedCollectionData = () => {
+  //   return {
+  //     collectionId: props.collectionId,
+  //     userId: props.userId,
+  //     editRights: selectedUserRights === UserRights.EditRights,
+  //   } as SharedCollectionData;
+  // };
 
   return (
     <SimpleDialog
@@ -132,13 +134,14 @@ function EditModeView(
       description={description}
       content={
         <Grid container spacing={3} className={classes.root}>
-          <Grid item xs={8}>
+          <Grid item xs={2}>
             <Avatar>
               <Person />
             </Avatar>
           </Grid>
-          {/* TODO: change to user name */}
-          {props.userId}
+          <Grid item xs={6}>
+            {sharedCollection?.user.name}
+          </Grid>
           <Grid item xs={4}>
             <FormControl>
               <InputLabel>Permissions</InputLabel>
@@ -151,9 +154,14 @@ function EditModeView(
         </Grid>
       }
       actions={
-        //TODO: validation if rights  changed
         <>
           <Button
+            disabled={
+              (sharedCollection?.editRights &&
+                selectedUserRights == UserRights.EditRights) ||
+              (!sharedCollection?.editRights &&
+                selectedUserRights == UserRights.ViewRights)
+            }
             onClick={() => {
               // editSharedCollection(createSharedCollectionData());
               props.toggleDialogOpen();
