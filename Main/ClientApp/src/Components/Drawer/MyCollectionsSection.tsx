@@ -180,6 +180,7 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Get sharable link" />
                     </ListItem>
+                    {/* TODO: make private listitem */}
                     <ListItem
                       onClick={() => onShareCollectionClick(collection.id)}
                       button

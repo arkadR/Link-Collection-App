@@ -21,6 +21,7 @@ type SimpleDialogProps = {
   description?: string;
   content?: ReactNode;
   actions?: ReactNode;
+  additionalCancelAction?: () => void;
 };
 
 export default function SimpleDialog(props: SimpleDialogProps) {
@@ -33,7 +34,14 @@ export default function SimpleDialog(props: SimpleDialogProps) {
       </DialogContent>
       <DialogActions>
         <MuiThemeProvider theme={blueRedTheme}>
-          <Button onClick={props.toggleDialogOpen} color="primary">
+          <Button
+            onClick={() => {
+              props.additionalCancelAction !== undefined &&
+                props.additionalCancelAction();
+              props.toggleDialogOpen();
+            }}
+            color="primary"
+          >
             Cancel
           </Button>
           {props.actions}

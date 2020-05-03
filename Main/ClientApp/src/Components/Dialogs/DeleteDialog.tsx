@@ -8,6 +8,8 @@ type DeleteDialogProps = {
   confirmAction: () => void;
   title: string;
   description?: string;
+  additionalConfirmAction?: () => void;
+  additionalCancelAction?: () => void;
 };
 
 export default function DeleteDialog(props: DeleteDialogProps) {
@@ -17,9 +19,12 @@ export default function DeleteDialog(props: DeleteDialogProps) {
       toggleDialogOpen={props.toggleDialogOpen}
       title={props.title}
       description={props.description}
+      additionalCancelAction={props.additionalCancelAction}
       actions={
         <Button
           onClick={() => {
+            props.additionalConfirmAction !== undefined &&
+              props.additionalConfirmAction();
             props.confirmAction();
             props.toggleDialogOpen();
           }}
