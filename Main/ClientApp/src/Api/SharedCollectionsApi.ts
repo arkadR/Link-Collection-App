@@ -5,6 +5,7 @@ import {
 import {
   authorizedGet,
   authorizedPost,
+  authorizedPatch,
 } from "../Infrastructure/FetchUtilities";
 
 class SharedCollectionsApi {
@@ -23,6 +24,13 @@ class SharedCollectionsApi {
   async shareCollection(shareData: SharedCollectionData): Promise<Response> {
     var response = await authorizedPost("api/sharedcollections", shareData);
     return response;
+  }
+
+  async updateSharedCollection(
+    updateData: SharedCollectionData
+  ): Promise<boolean> {
+    let response = await authorizedPatch(`api/sharedcollections`, updateData);
+    return response.ok;
   }
 }
 

@@ -1,9 +1,8 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import SimpleDialog from "./SimpleDialog";
-import { shareCollection } from "../../Actions/CollectionActions";
+import { updateSharedCollection } from "../../Actions/CollectionActions";
 import {
   Button,
-  TextField,
   Avatar,
   MenuItem,
   FormControl,
@@ -14,24 +13,13 @@ import {
   createStyles,
   Grid,
 } from "@material-ui/core";
-import {
-  Lock,
-  Widgets,
-  Public,
-  GroupAdd,
-  Person,
-  Delete,
-  Edit,
-  LockOpen,
-} from "@material-ui/icons";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Person } from "@material-ui/icons";
 import {
   SharedCollectionData,
   SharedCollection,
 } from "../../Model/SharedCollection";
 import SharedCollectionStore from "../../Stores/SharedCollectionsStore";
-import { User } from "../../Model/User";
-import UsersStore from "../../Stores/UsersStore";
+import DeleteDialog from "./DeleteDialog";
 
 type EditContributorDialogProps = {
   open: boolean;
@@ -61,11 +49,30 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function EditContributorDialog(
   props: EditContributorDialogProps
 ) {
+  const classes = useStyles();
+  const title = "Edit contributor";
+  const description = `You can change contributor permissions or delete this contributor`;
   const [mode, setMode] = useState(Mode.Edit);
   const [
     sharedCollection,
     setSharedCollection,
   ] = useState<SharedCollection | null>(null);
+
+  const [selectedUserRights, setUserRights] = useState(
+    sharedCollection?.editRights ? UserRights.EditRights : UserRights.ViewRights
+  );
+
+  const createSharedCollectionData = () => {
+    return {
+      collectionId: props.collectionId,
+      userId: sharedCollection?.user.id,
+      editRights: selectedUserRights === UserRights.EditRights,
+    } as SharedCollectionData;
+  };
+
+  const onUserRightsChange = (event: React.ChangeEvent<{ value: any }>) => {
+    setUserRights(event.target.value);
+  };
 
   const changeMode = (mode: Mode) => {
     setMode(mode);
@@ -95,97 +102,89 @@ export default function EditContributorDialog(
 
   return (
     <>
-      {mode === Mode.Edit
-        ? EditModeView(props, sharedCollection, changeMode)
-        : DeleteModeView(props)}
+      {mode === Mode.Delete ? (
+        DeleteModeView(props)
+      ) : (
+        <SimpleDialog
+          open={props.open}
+          toggleDialogOpen={props.toggleDialogOpen}
+          title={title}
+          description={description}
+          content={
+            <Grid container spacing={3} className={classes.root}>
+              <Grid item xs={2}>
+                <Avatar>
+                  <Person />
+                </Avatar>
+              </Grid>
+              <Grid item xs={6}>
+                {sharedCollection?.user.name}
+              </Grid>
+              <Grid item xs={4}>
+                <FormControl>
+                  <InputLabel>Permissions</InputLabel>
+                  <Select
+                    value={selectedUserRights}
+                    onChange={onUserRightsChange}
+                  >
+                    <MenuItem value={UserRights.ViewRights}>
+                      View Rights
+                    </MenuItem>
+                    <MenuItem value={UserRights.EditRights}>
+                      Edit Rights
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          }
+          actions={
+            <>
+              <Button
+                disabled={
+                  (sharedCollection?.editRights &&
+                    selectedUserRights == UserRights.EditRights) ||
+                  (!sharedCollection?.editRights &&
+                    selectedUserRights == UserRights.ViewRights)
+                }
+                onClick={() => {
+                  updateSharedCollection(createSharedCollectionData());
+                  props.toggleDialogOpen();
+                }}
+                color="primary"
+                autoFocus
+              >
+                Change
+              </Button>
+              <Button
+                onClick={() => {
+                  changeMode(Mode.Delete);
+                }}
+                color="secondary"
+                autoFocus
+              >
+                Delete
+              </Button>
+            </>
+          }
+        />
+      )}
     </>
   );
 }
 
-function EditModeView(
-  props: EditContributorDialogProps,
-  sharedCollection: SharedCollection | null,
-  changeMode: (mode: Mode) => void
-) {
-  const classes = useStyles();
-  const title = "Edit contributor";
-  const description = `You can change contributor permissions or delete this contributor`;
-
-  const [selectedUserRights, setUserRights] = useState(
-    sharedCollection?.editRights ? UserRights.EditRights : UserRights.ViewRights
-  );
-  const onUserRightsChange = (event: React.ChangeEvent<{ value: any }>) => {
-    setUserRights(event.target.value);
-  };
-
-  // const createSharedCollectionData = () => {
-  //   return {
-  //     collectionId: props.collectionId,
-  //     userId: props.userId,
-  //     editRights: selectedUserRights === UserRights.EditRights,
-  //   } as SharedCollectionData;
-  // };
-
+function DeleteModeView(props: EditContributorDialogProps) {
+  const title = "Do you want to delete this contributor?";
+  const description =
+    "This contributor will lose permissions to this collection. Do you want to proceed?";
   return (
-    <SimpleDialog
+    <DeleteDialog
       open={props.open}
       toggleDialogOpen={props.toggleDialogOpen}
+      //TODO: confirm action
+      confirmAction={() => {}}
       title={title}
       description={description}
-      content={
-        <Grid container spacing={3} className={classes.root}>
-          <Grid item xs={2}>
-            <Avatar>
-              <Person />
-            </Avatar>
-          </Grid>
-          <Grid item xs={6}>
-            {sharedCollection?.user.name}
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl>
-              <InputLabel>Permissions</InputLabel>
-              <Select value={selectedUserRights} onChange={onUserRightsChange}>
-                <MenuItem value={UserRights.ViewRights}>View Rights</MenuItem>
-                <MenuItem value={UserRights.EditRights}>Edit Rights</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-      }
-      actions={
-        <>
-          <Button
-            disabled={
-              (sharedCollection?.editRights &&
-                selectedUserRights == UserRights.EditRights) ||
-              (!sharedCollection?.editRights &&
-                selectedUserRights == UserRights.ViewRights)
-            }
-            onClick={() => {
-              // editSharedCollection(createSharedCollectionData());
-              props.toggleDialogOpen();
-            }}
-            color="primary"
-            autoFocus
-          >
-            Change
-          </Button>
-          <Button
-            onClick={() => {
-              changeMode(Mode.Delete);
-            }}
-            color="secondary"
-            autoFocus
-          >
-            Delete
-          </Button>
-        </>
-      }
     />
   );
-}
-
-function DeleteModeView(props: EditContributorDialogProps) {
-  return <></>;
 }

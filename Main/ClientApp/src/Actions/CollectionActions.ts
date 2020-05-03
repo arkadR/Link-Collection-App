@@ -58,5 +58,17 @@ export async function loadContributorsSharedCollections() {
 }
 
 export async function shareCollection(shareData: SharedCollectionData) {
-  await SharedCollectionsApi.shareCollection(shareData);
+  let success = await SharedCollectionsApi.shareCollection(shareData);
+  if (success) {
+    loadCollections();
+    loadSharedCollections();
+  }
+}
+
+export async function updateSharedCollection(updateData: SharedCollectionData) {
+  let success = await SharedCollectionsApi.updateSharedCollection(updateData);
+  if (success) {
+    loadCollections();
+    loadSharedCollections();
+  } else console.error("Could not update shared collection");
 }

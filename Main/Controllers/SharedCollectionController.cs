@@ -70,6 +70,25 @@ namespace LinkCollectionApp.Controllers
       return Ok();
     }
 
+    [HttpPatch]
+    public IActionResult UpdateCollection([FromBody] SharedCollectionCreationData data)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var sharedCollection = _dbContext.SharedCollection.Include(sc => sc.Collection).SingleOrDefault(sc => sc.UserId == data.UserId && sc.CollectionId == data.CollectionId);
+      if (sharedCollection == null)
+        return NotFound();
+
+      if (sharedCollection.UserId != userId && sharedCollection.Collection.OwnerId != userId)
+        return Forbid();
+
+      sharedCollection.EditRights = data.EditRights;
+      _dbContext.Update(sharedCollection);
+      _dbContext.SaveChanges();
+      return Ok();
+    }
+
+    //TODO: delete
+
     [HttpGet("contributors")]
     public ActionResult<List<SharedCollectionContributorData>> GetContributorsSharedCollections()
     {
@@ -81,7 +100,7 @@ namespace LinkCollectionApp.Controllers
       .Single(u => u.Id == userId)
       .Collections.ToList();
 
-      var sharedCollections = userCollections.Select(c => c.SharedCollections).SelectMany( sc => sc ).ToList();
+      var sharedCollections = userCollections.Select(c => c.SharedCollections).SelectMany(sc => sc).ToList();
       return sharedCollections.Select(sc => SharedCollectionContributorData.Create(sc)).ToList();
     }
   }
