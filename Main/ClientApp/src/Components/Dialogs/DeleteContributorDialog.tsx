@@ -1,5 +1,6 @@
 import React from "react";
 import DeleteDialog from "./DeleteDialog";
+import { deleteContributorSharedCollection } from "../../Actions/CollectionActions";
 
 type DeleteContributorDialogProps = {
   open: boolean;
@@ -20,7 +21,9 @@ export default function DeleteContributorDialog(
       open={props.open}
       toggleDialogOpen={props.toggleDialogOpen}
       //TODO: confirm action
-      confirmAction={() => {}}
+      confirmAction={() =>
+        deleteContributorSharedCollection(props.collectionId, props.userId)
+      }
       additionalCancelAction={props.additionalCancelAction}
       title={title}
       description={description}

@@ -6,6 +6,7 @@ import {
   authorizedGet,
   authorizedPost,
   authorizedPatch,
+  authorizedDelete,
 } from "../Infrastructure/FetchUtilities";
 
 class SharedCollectionsApi {
@@ -30,6 +31,16 @@ class SharedCollectionsApi {
     updateData: SharedCollectionData
   ): Promise<boolean> {
     let response = await authorizedPatch(`api/sharedcollections`, updateData);
+    return response.ok;
+  }
+
+  async deleteSharedCollection(
+    collectionId: number,
+    userId: number
+  ): Promise<boolean> {
+    let response = await authorizedDelete(
+      `api/sharedcollections/${collectionId}/${userId}`
+    );
     return response.ok;
   }
 }

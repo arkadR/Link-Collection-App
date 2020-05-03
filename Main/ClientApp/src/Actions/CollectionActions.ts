@@ -72,3 +72,16 @@ export async function updateSharedCollection(updateData: SharedCollectionData) {
     loadContributorsSharedCollections();
   } else console.error("Could not update shared collection");
 }
+
+export async function deleteContributorSharedCollection(
+  collectionId: number,
+  userId: number
+) {
+  let success = await SharedCollectionsApi.deleteSharedCollection(
+    collectionId,
+    userId
+  );
+  if (success) {
+    loadContributorsSharedCollections();
+  } else console.error("Could not delete shared collection");
+}

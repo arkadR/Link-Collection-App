@@ -74,7 +74,9 @@ namespace LinkCollectionApp.Controllers
     public IActionResult UpdateCollection([FromBody] SharedCollectionCreationData data)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var sharedCollection = _dbContext.SharedCollection.Include(sc => sc.Collection).SingleOrDefault(sc => sc.UserId == data.UserId && sc.CollectionId == data.CollectionId);
+      var sharedCollection = _dbContext.SharedCollection
+        .Include(sc => sc.Collection)
+        .SingleOrDefault(sc => sc.UserId == data.UserId && sc.CollectionId == data.CollectionId);
       if (sharedCollection == null)
         return NotFound();
 
@@ -87,7 +89,24 @@ namespace LinkCollectionApp.Controllers
       return Ok();
     }
 
-    //TODO: delete
+    [HttpDelete("{collectionId}/{userId}")]
+    public IActionResult DeleteCollection(int collectionId, string userId)
+    {
+      var currentUserId = _userProvider.GetCurrentUserId();
+      var sharedCollection = _dbContext.SharedCollection
+        .Include(sc => sc.Collection)
+        .SingleOrDefault(sc => sc.UserId == userId && sc.CollectionId == collectionId);
+      if (sharedCollection == null)
+        return NotFound();
+
+      if (sharedCollection.Collection.OwnerId != currentUserId)
+        return Forbid();
+
+      _dbContext.SharedCollection.Remove(sharedCollection);
+
+      _dbContext.SaveChanges();
+      return Ok();
+    }
 
     [HttpGet("contributors")]
     public ActionResult<List<SharedCollectionContributorData>> GetContributorsSharedCollections()
