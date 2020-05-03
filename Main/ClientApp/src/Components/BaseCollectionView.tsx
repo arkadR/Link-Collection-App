@@ -72,7 +72,8 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
       >
         {columnRange.map((i) => {
           return GridColumnList(
-            displayedElements.filter((el, idx) => idx % columnCount === i)
+            displayedElements.filter((el, idx) => idx % columnCount === i),
+            i
           );
         })}
       </GridList>
@@ -81,9 +82,9 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
   );
 }
 
-function GridColumnList(elements: Element[]) {
+function GridColumnList(elements: Element[], key: number) {
   return (
-    <GridListTile>
+    <GridListTile key={key}>
       <GridList cols={1} cellHeight="auto" spacing={20}>
         {elements.map((element) => {
           return (

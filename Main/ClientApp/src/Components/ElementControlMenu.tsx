@@ -124,7 +124,7 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
     setColumnCount(val);
     props.onColumnCountChange(val);
   };
-  props.onColumnCountChange(columnCount);
+  // props.onColumnCountChange(columnCount);
 
   //TODO: Layout
   return (
@@ -134,6 +134,7 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
           return (
             <Chip
               clickable
+              key={filter.host}
               className={classes.chip}
               label={filter.host}
               onClick={() => onChipClick(filter)}
