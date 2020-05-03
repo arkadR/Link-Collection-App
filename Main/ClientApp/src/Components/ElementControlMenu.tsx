@@ -11,6 +11,7 @@ import {
   IconButton,
   Slider,
   Grid,
+  Typography,
 } from "@material-ui/core";
 import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
 import { useCookie } from "../Infrastructure/CustomReactHooks";
@@ -43,7 +44,12 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "0px 5px 20px 5px",
     },
     slider: {
+      padding: "15px 0px 15px 0px",
       width: "150px",
+    },
+    sortArrow: {
+      padding: "0px",
+      marginTop: "26px",
     },
   })
 );
@@ -124,7 +130,7 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
     setColumnCount(val);
     props.onColumnCountChange(val);
   };
-  props.onColumnCountChange(columnCount);
+  // props.onColumnCountChange(columnCount);
 
   //TODO: Layout
   return (
@@ -134,6 +140,7 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
           return (
             <Chip
               clickable
+              key={filter.host}
               className={classes.chip}
               label={filter.host}
               onClick={() => onChipClick(filter)}
@@ -144,6 +151,7 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
         })}
       </Grid>
       <Grid item>
+        <Typography id="continuous-slider">Columns</Typography>
         <Slider
           marks
           value={columnCount}
@@ -157,8 +165,10 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
           onChange={onColumnCountChange}
         />
       </Grid>
-      <Grid item>
+      <Grid item style={{ paddingRight: "0px" }}>
+        <Typography id="select-label">Sorting</Typography>
         <Select
+          disableUnderline
           value={sortingOption.key}
           onChange={(ev) => onSortingOptionChange(ev.target.value as number)}
         >
@@ -171,8 +181,11 @@ export function ElementControlMenu(props: ElementControlMenuProps) {
           })}
         </Select>
       </Grid>
-      <Grid item>
-        <IconButton onClick={onSortingDirectionToggle}>
+      <Grid item style={{ paddingLeft: "0px" }}>
+        <IconButton
+          onClick={onSortingDirectionToggle}
+          className={classes.sortArrow}
+        >
           {sortedAscending ? <ArrowDownward /> : <ArrowUpward />}
         </IconButton>
       </Grid>

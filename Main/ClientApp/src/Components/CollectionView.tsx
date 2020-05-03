@@ -11,7 +11,7 @@ import BaseCollectionView from "./BaseCollectionView";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fab: {
-      position: "absolute",
+      position: "fixed",
       bottom: theme.spacing(2),
       right: theme.spacing(2),
     },
@@ -46,21 +46,20 @@ export default function CollectionView(props: CollectionViewProps) {
 
   return (
     <>
-      <BaseCollectionView collection={collection}>
-        <Fab
-          color="primary"
-          aria-label="add"
-          className={classes.fab}
-          onClick={toggleAddElementDialogOpen}
-        >
-          <AddIcon />
-        </Fab>
-      </BaseCollectionView>
+      <BaseCollectionView collection={collection} />
       <AddElementDialog
         toggleDialogOpen={toggleAddElementDialogOpen}
         open={dialogOpen}
         collectionId={props.match.params.collectionId}
       />
+      <Fab
+        color="primary"
+        aria-label="add"
+        className={classes.fab}
+        onClick={toggleAddElementDialogOpen}
+      >
+        <AddIcon />
+      </Fab>
     </>
   );
 }
