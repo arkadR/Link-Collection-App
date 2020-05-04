@@ -49,6 +49,41 @@ export async function loadSharedCollections() {
   });
 }
 
+export async function loadSharedCollectionsRelatedToCollections() {
+  let contributorsSharedCollections = await SharedCollectionsApi.getContributorsSharedCollections();
+  Dispatcher.dispatch({
+    actionType: ActionTypes.LOAD_SHARED_COLLECTIONS_RELATED_TO_COLLECTIONS,
+    payload: { contributorsSharedCollections: contributorsSharedCollections },
+  });
+}
+
 export async function shareCollection(shareData: SharedCollectionData) {
-  await SharedCollectionsApi.shareCollection(shareData);
+  let success = await SharedCollectionsApi.shareCollection(shareData);
+  if (success) {
+    loadSharedCollections();
+    loadSharedCollectionsRelatedToCollections();
+  }
+}
+
+export async function changeContributorRights(
+  updateData: SharedCollectionData
+) {
+  let success = await SharedCollectionsApi.updateSharedCollection(updateData);
+  if (success) {
+    loadSharedCollections();
+    loadSharedCollectionsRelatedToCollections();
+  } else console.error("Could not change contributor rights");
+}
+
+export async function deleteContributorOfCollection(
+  collectionId: number,
+  userId: number
+) {
+  let success = await SharedCollectionsApi.deleteSharedCollection(
+    collectionId,
+    userId
+  );
+  if (success) {
+    loadSharedCollectionsRelatedToCollections();
+  } else console.error("Could not delete shared collection");
 }

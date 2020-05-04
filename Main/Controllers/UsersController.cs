@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Interfaces;
+using LinkCollectionApp.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace LinkCollectionApp.Controllers
 {
@@ -22,16 +25,11 @@ namespace LinkCollectionApp.Controllers
     }
 
     [HttpGet]
-    public List<object> GetFriends()
+    public List<UserDTO> GetFriends()
     {
       var userId = _userContextProvider.GetCurrentUserId();
       var users = _dbContext.ApplicationUser.Where(user => user.Id != userId);
-      return users.Select(user => new
-      {
-        Id = user.Id,
-        Name = user.UserName,
-        Email = user.Email
-      } as object).ToList();
+      return users.Select(user => UserDTO.FromApplicationUser(user)).ToList();
     }
   }
 }

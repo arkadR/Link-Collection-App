@@ -15,7 +15,7 @@ import {
 } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { SharedCollectionData } from "../../Model/SharedCollection";
-import { User } from "../../Model/User";
+import { User, UserRights } from "../../Model/User";
 import UsersStore from "../../Stores/UsersStore";
 
 type ShareCollectionDialogProps = {
@@ -23,11 +23,6 @@ type ShareCollectionDialogProps = {
   toggleDialogOpen: () => void;
   collectionId: number;
 };
-
-enum UserRights {
-  ViewRights,
-  EditRights,
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
