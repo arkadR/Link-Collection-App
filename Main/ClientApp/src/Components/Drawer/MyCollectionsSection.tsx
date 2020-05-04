@@ -94,11 +94,11 @@ export default function MyCollectionsSection() {
   }, []);
 
   const hasSharedCollections = (collectionId: number) => {
-    let collectionSC = contributorsOfSharedCollections?.find(
-      (csc) => csc.collectionId === collectionId
+    return (
+      contributorsOfSharedCollections?.find(
+        (csc) => csc.collectionId === collectionId
+      ) !== undefined
     );
-    if (collectionSC === undefined) return false;
-    return true;
   };
 
   const toggleAddElementDialogOpen = () => {
