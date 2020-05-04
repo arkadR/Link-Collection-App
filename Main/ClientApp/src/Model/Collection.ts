@@ -3,7 +3,7 @@ import { Element } from "./Element";
 export type Collection = {
   id: number;
   isPublic: boolean;
-  ownerId: number;
+  ownerId: string;
   name: string;
   description: string;
   createdDate: Date;

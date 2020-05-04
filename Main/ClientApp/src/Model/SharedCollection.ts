@@ -4,7 +4,7 @@ import { User } from "./User";
 export type SharedCollection = {
   collectionId: number;
   collection: Collection;
-  userId: number;
+  userId: string;
   editRights: boolean;
   user: User;
 };

@@ -61,6 +61,7 @@ namespace LinkCollectionApp.Test
         OwnerId = ownerId,
         Description = description ?? NewGuid,
         Name = name ?? NewGuid,
+        IsPublic = false,
         Elements = Enumerable.Range(0, numOfElements).Select(num => new Element
         {
           Name = NewGuid,

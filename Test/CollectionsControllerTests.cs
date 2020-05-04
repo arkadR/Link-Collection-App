@@ -561,5 +561,134 @@ namespace LinkCollectionApp.Test
       });
     }
 
+    [Fact]
+    public void MakePublic_OnPrivateCollection_IsPublicUpdated()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      AddUser(userId1);
+      var collection = AddCollection(userId1, 5);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        result = controller.MakePublic(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        context.Collection.Single(c => c.Id == collection.Id).IsPublic.Should().BeTrue();
+      });
+    }
+
+    [Fact]
+    public void MakePublic_OnPublicCollection_OkNoChanges()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      AddUser(userId1);
+      var collection = AddCollection(userId1, 5);
+      InTransaction(context =>
+      {
+        context.Collection.Single(c => c.Id == collection.Id).IsPublic = true;
+        context.SaveChanges();
+      });
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        result = controller.MakePublic(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<OkResult>();
+      InTransaction(context =>
+      {
+        context.Collection.Single(c => c.Id == collection.Id).IsPublic.Should().BeTrue();
+      });
+    }
+
+    [Fact]
+    public void MakePublic_OnOtherUserCollection_Forbidden()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        result = controller.MakePublic(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<ForbidResult>();
+      InTransaction(context =>
+      {
+        context.Collection
+          .Single(c => c.Id == collection.Id)
+          .IsPublic.Should().BeFalse();
+      });
+    }
+
+    [Fact]
+    public void MakePublic_CollectionDoesNotExist_NotFound()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      AddUser(userId1);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        result = controller.MakePublic(1010);
+      });
+
+      //Assert 
+      result.Should().BeOfType<NotFoundResult>();
+    }
+
+    [Fact]
+    public void MakePublic_CollaboratorHasEditRights_Forbidden()
+    {
+      //Arrange
+      var userId1 = NewGuid;
+      var userId2 = NewGuid;
+      AddUser(userId1);
+      AddUser(userId2);
+      var collection = AddCollection(userId1, 5);
+      ShareCollection(collection.Id, userId2, true);
+
+      //Act
+      IActionResult result = null;
+      InTransaction(context =>
+      {
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        result = controller.MakePublic(collection.Id);
+      });
+
+      //Assert 
+      result.Should().BeOfType<ForbidResult>();
+      InTransaction(context =>
+      {
+        context.Collection
+          .Single(c => c.Id == collection.Id)
+          .IsPublic.Should().BeFalse();
+      });
+    }
+
   }
 }
