@@ -5,6 +5,7 @@ using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Implementations;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -71,7 +72,8 @@ namespace LinkCollectionApp
           options.ClientSecret = googleAuthNSection["ClientSecret"];
         })
         .AddIdentityServerJwt()
-        .AddJwtBearer(options => options.TokenValidationParameters.ValidateIssuer = false);
+        .AddJwtBearer(IdentityServerJwtConstants.IdentityServerJwtBearerScheme, 
+          options => options.TokenValidationParameters.ValidateIssuer = false);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
