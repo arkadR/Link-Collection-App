@@ -15,7 +15,6 @@ import {
   Widgets,
   Public,
   GroupAdd,
-  Person,
   Delete,
   Edit,
   LockOpen,
@@ -199,6 +198,7 @@ export default function MyCollectionsSection() {
                       ?.filter((csc) => csc.collectionId === collection.id)
                       .map((sc) => (
                         <ListItem
+                          key={sc.userId}
                           onClick={() =>
                             onEditContributorClick(collection.id, sc.userId)
                           }
