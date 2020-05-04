@@ -69,7 +69,7 @@ export default function MyCollectionsSection() {
     makeEditContributorDialogOpen,
     setMakeEditContributorDialogOpen,
   ] = useState(false);
-  const [selectedContributorId, setSelectedContributorId] = useState(-1);
+  const [selectedContributorId, setSelectedContributorId] = useState("");
 
   useEffect(() => {
     const collectionChangeHandler = () => {
@@ -127,7 +127,7 @@ export default function MyCollectionsSection() {
 
   const onEditContributorClick = (
     collectionId: number,
-    contributorId: number
+    contributorId: string
   ) => {
     setSelectedCollection(collectionId);
     setSelectedContributorId(contributorId);
