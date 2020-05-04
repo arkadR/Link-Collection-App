@@ -70,7 +70,8 @@ namespace LinkCollectionApp
           options.ClientId = googleAuthNSection["ClientId"];
           options.ClientSecret = googleAuthNSection["ClientSecret"];
         })
-        .AddIdentityServerJwt();
+        .AddIdentityServerJwt()
+        .AddJwtBearer(options => options.TokenValidationParameters.ValidateIssuer = false);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
