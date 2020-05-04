@@ -8,11 +8,6 @@ export async function authorizedGet(apiEndpoint: string) {
   });
 }
 
-export async function unauthorizedGet(apiEndpoint: string) {
-  const host = window.location.origin;
-  return await fetch(`${host}/${apiEndpoint}`);
-}
-
 export async function authorizedPost(apiEndpoint: string, data = {}) {
   return authorizedRequest(apiEndpoint, data, "POST");
 }

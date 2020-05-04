@@ -69,5 +69,57 @@ namespace LinkCollectionApp.Controllers
       _dbContext.SaveChanges();
       return Ok();
     }
+
+    [HttpPatch("{collectionId}")]
+    public IActionResult ChangeUserRoghts(int collectionId, [FromBody] SharedCollectionCreationData data)
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var sharedCollection = _dbContext.SharedCollection
+        .Include(sc => sc.Collection)
+        .SingleOrDefault(sc => sc.UserId == data.UserId && sc.CollectionId == data.CollectionId);
+      if (sharedCollection == null)
+        return NotFound();
+
+      if (sharedCollection.Collection.OwnerId != userId)
+        return Forbid();
+
+      sharedCollection.EditRights = data.EditRights;
+      _dbContext.SaveChanges();
+      return Ok();
+    }
+
+    [HttpDelete("{collectionId}/{userId}")]
+    public IActionResult DeleteCollection(int collectionId, string userId)
+    {
+      var currentUserId = _userProvider.GetCurrentUserId();
+      var sharedCollection = _dbContext.SharedCollection
+        .Include(sc => sc.Collection)
+        .SingleOrDefault(sc => sc.UserId == userId && sc.CollectionId == collectionId);
+      if (sharedCollection == null)
+        return NotFound();
+
+      if (sharedCollection.Collection.OwnerId != currentUserId)
+        return Forbid();
+
+      _dbContext.SharedCollection.Remove(sharedCollection);
+
+      _dbContext.SaveChanges();
+      return Ok();
+    }
+
+    [HttpGet("contributors")]
+    public ActionResult<List<CollectionContributorDTO>> GetContributorsSharedCollections()
+    {
+      var userId = _userProvider.GetCurrentUserId();
+      var userCollections = _dbContext.Users
+      .Include(u => u.Collections)
+      .ThenInclude(c => c.SharedCollections)
+      .ThenInclude(sc => sc.User)
+      .Single(u => u.Id == userId)
+      .Collections.ToList();
+
+      var sharedCollections = userCollections.SelectMany(c => c.SharedCollections).ToList();
+      return sharedCollections.Select(sc => CollectionContributorDTO.FromSharedCollection(sc)).ToList();
+    }
   }
 }
