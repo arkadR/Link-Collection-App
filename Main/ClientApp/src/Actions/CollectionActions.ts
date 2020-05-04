@@ -77,7 +77,7 @@ export async function changeContributorRights(
 
 export async function deleteContributorOfCollection(
   collectionId: number,
-  userId: number
+  userId: string
 ) {
   let success = await SharedCollectionsApi.deleteSharedCollection(
     collectionId,

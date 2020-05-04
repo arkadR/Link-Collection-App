@@ -39,7 +39,7 @@ class SharedCollectionStore extends StoreBase {
 
   public getSharedCollectionRelatedToCollection(
     collectionId: number,
-    userId: number
+    userId: string
   ): SharedCollection | null {
     if (this._contributorsSharedCollections == null)
       loadSharedCollectionsRelatedToCollections();

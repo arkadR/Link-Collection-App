@@ -26,7 +26,7 @@ type EditContributorDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
   collectionId: number;
-  userId: number;
+  userId: string;
 };
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -6,7 +6,7 @@ type DeleteContributorDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
   collectionId: number;
-  userId: number;
+  userId: string;
   additionalCancelAction?: () => void;
 };
 
