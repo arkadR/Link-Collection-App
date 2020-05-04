@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import SimpleDialog from "./SimpleDialog";
-import { updateSharedCollection } from "../../Actions/CollectionActions";
+import { changeContributorRights } from "../../Actions/CollectionActions";
 import {
   Button,
   Avatar,
@@ -18,6 +18,7 @@ import {
   SharedCollectionData,
   SharedCollection,
 } from "../../Model/SharedCollection";
+import { UserRights } from "../../Model/User";
 import SharedCollectionStore from "../../Stores/SharedCollectionsStore";
 import DeleteContributorDialog from "./DeleteContributorDialog";
 
@@ -27,11 +28,6 @@ type EditContributorDialogProps = {
   collectionId: number;
   userId: number;
 };
-
-enum UserRights {
-  ViewRights,
-  EditRights,
-}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,8 +48,8 @@ export default function EditContributorDialog(
     setSharedCollection,
   ] = useState<SharedCollection | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedUserRights, setUserRights] = useState(
-    sharedCollection?.editRights ? UserRights.EditRights : UserRights.ViewRights
+  const [selectedUserRights, setSelectedUserRights] = useState(
+    UserRights.ViewRights
   );
 
   const createSharedCollectionData = () => {
@@ -65,19 +61,19 @@ export default function EditContributorDialog(
   };
 
   const onUserRightsChange = (event: React.ChangeEvent<{ value: any }>) => {
-    setUserRights(event.target.value);
+    setSelectedUserRights(event.target.value);
   };
 
   useEffect(() => {
     setSharedCollection(
-      SharedCollectionStore.getContributorSharedCollection(
+      SharedCollectionStore.getSharedCollectionRelatedToCollection(
         props.collectionId,
         props.userId
       )
     );
     const changeHandler = () => {
       setSharedCollection(
-        SharedCollectionStore.getContributorSharedCollection(
+        SharedCollectionStore.getSharedCollectionRelatedToCollection(
           props.collectionId,
           props.userId
         )
@@ -131,12 +127,12 @@ export default function EditContributorDialog(
             <Button
               disabled={
                 (sharedCollection?.editRights &&
-                  selectedUserRights == UserRights.EditRights) ||
+                  selectedUserRights === UserRights.EditRights) ||
                 (!sharedCollection?.editRights &&
-                  selectedUserRights == UserRights.ViewRights)
+                  selectedUserRights === UserRights.ViewRights)
               }
               onClick={() => {
-                updateSharedCollection(createSharedCollectionData());
+                changeContributorRights(createSharedCollectionData());
                 props.toggleDialogOpen();
               }}
               color="primary"

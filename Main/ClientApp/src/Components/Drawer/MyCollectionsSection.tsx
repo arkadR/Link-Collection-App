@@ -56,10 +56,10 @@ export default function MyCollectionsSection() {
     CollectionsStore.getCollections()
   );
   const [
-    contributorsSharedCollections,
-    setContributorsSharedCollections,
+    contributorsOfSharedCollections,
+    setContributorsOfSharedCollections,
   ] = useState<SharedCollection[] | null>(
-    SharedCollectionsStore.getCollectionsSharedCollections()
+    SharedCollectionsStore.getSharedCollectionsRelatedToCollections()
   );
   const [shareDialogOpen, setShareDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -76,26 +76,30 @@ export default function MyCollectionsSection() {
     const collectionChangeHandler = () => {
       setCollections(CollectionsStore.getCollections());
     };
-    const contributorsSCChangeHandler = () => {
-      setContributorsSharedCollections(
-        SharedCollectionsStore.getCollectionsSharedCollections()
+    const contributorsOfSharedCollectionsChangeHandler = () => {
+      setContributorsOfSharedCollections(
+        SharedCollectionsStore.getSharedCollectionsRelatedToCollections()
       );
     };
     CollectionsStore.addChangeListener(collectionChangeHandler);
-    SharedCollectionsStore.addChangeListener(contributorsSCChangeHandler);
+    SharedCollectionsStore.addChangeListener(
+      contributorsOfSharedCollectionsChangeHandler
+    );
 
     return () => {
       CollectionsStore.removeChangeListener(collectionChangeHandler);
-      SharedCollectionsStore.removeChangeListener(contributorsSCChangeHandler);
+      SharedCollectionsStore.removeChangeListener(
+        contributorsOfSharedCollectionsChangeHandler
+      );
     };
   }, []);
 
-  const haveSharedCollections = (collectionId: number) => {
-    let collectionSC = contributorsSharedCollections?.filter(
+  const hasSharedCollections = (collectionId: number) => {
+    let collectionSC = contributorsOfSharedCollections?.find(
       (csc) => csc.collectionId === collectionId
     );
     if (collectionSC === undefined) return false;
-    return collectionSC.length > 0;
+    return true;
   };
 
   const toggleAddElementDialogOpen = () => {
@@ -190,8 +194,8 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Share" />
                     </ListItem>
-                    {haveSharedCollections(collection.id) && <Divider />}
-                    {contributorsSharedCollections
+                    {hasSharedCollections(collection.id) && <Divider />}
+                    {contributorsOfSharedCollections
                       ?.filter((csc) => csc.collectionId === collection.id)
                       .map((sc) => (
                         <ListItem
@@ -202,7 +206,7 @@ export default function MyCollectionsSection() {
                         >
                           <ListItemAvatar>
                             <Avatar>
-                              <Person />
+                              {sc.user.name.toUpperCase().charAt(0)}
                             </Avatar>
                           </ListItemAvatar>
                           <ListItemText primary={sc.user.name} />

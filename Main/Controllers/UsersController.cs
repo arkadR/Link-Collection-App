@@ -25,11 +25,11 @@ namespace LinkCollectionApp.Controllers
     }
 
     [HttpGet]
-    public List<UserSimpleData> GetFriends()
+    public List<UserDTO> GetFriends()
     {
       var userId = _userContextProvider.GetCurrentUserId();
       var users = _dbContext.ApplicationUser.Where(user => user.Id != userId);
-      return users.Select(user => UserSimpleData.Create(user)).ToList();
+      return users.Select(user => UserDTO.FromApplicationUser(user)).ToList();
     }
   }
 }

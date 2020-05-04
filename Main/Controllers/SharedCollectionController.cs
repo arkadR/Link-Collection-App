@@ -70,8 +70,8 @@ namespace LinkCollectionApp.Controllers
       return Ok();
     }
 
-    [HttpPatch]
-    public IActionResult UpdateCollection([FromBody] SharedCollectionCreationData data)
+    [HttpPatch("{collectionId}")]
+    public IActionResult ChangeUserRoghts(int collectionId, [FromBody] SharedCollectionCreationData data)
     {
       var userId = _userProvider.GetCurrentUserId();
       var sharedCollection = _dbContext.SharedCollection
@@ -80,11 +80,10 @@ namespace LinkCollectionApp.Controllers
       if (sharedCollection == null)
         return NotFound();
 
-      if (sharedCollection.UserId != userId && sharedCollection.Collection.OwnerId != userId)
+      if (sharedCollection.Collection.OwnerId != userId)
         return Forbid();
 
       sharedCollection.EditRights = data.EditRights;
-      _dbContext.Update(sharedCollection);
       _dbContext.SaveChanges();
       return Ok();
     }
@@ -109,7 +108,7 @@ namespace LinkCollectionApp.Controllers
     }
 
     [HttpGet("contributors")]
-    public ActionResult<List<SharedCollectionContributorData>> GetContributorsSharedCollections()
+    public ActionResult<List<CollectionContributorDTO>> GetContributorsSharedCollections()
     {
       var userId = _userProvider.GetCurrentUserId();
       var userCollections = _dbContext.Users
@@ -119,8 +118,8 @@ namespace LinkCollectionApp.Controllers
       .Single(u => u.Id == userId)
       .Collections.ToList();
 
-      var sharedCollections = userCollections.Select(c => c.SharedCollections).SelectMany(sc => sc).ToList();
-      return sharedCollections.Select(sc => SharedCollectionContributorData.Create(sc)).ToList();
+      var sharedCollections = userCollections.SelectMany(c => c.SharedCollections).ToList();
+      return sharedCollections.Select(sc => CollectionContributorDTO.FromSharedCollection(sc)).ToList();
     }
   }
 }

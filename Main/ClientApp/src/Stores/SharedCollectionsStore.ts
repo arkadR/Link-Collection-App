@@ -4,7 +4,7 @@ import StoreBase from "../Infrastructure/StoreBase";
 import Action from "../Infrastructure/Action";
 import {
   loadSharedCollections,
-  loadContributorsSharedCollections,
+  loadSharedCollectionsRelatedToCollections,
 } from "../Actions/CollectionActions";
 
 class SharedCollectionStore extends StoreBase {
@@ -15,7 +15,7 @@ class SharedCollectionStore extends StoreBase {
         this.emitChange();
         break;
       }
-      case ActionTypes.LOAD_CONTRIBUTORS_SHARED_COLLECTIONS: {
+      case ActionTypes.LOAD_SHARED_COLLECTIONS_RELATED_TO_COLLECTIONS: {
         this._contributorsSharedCollections =
           action.payload.contributorsSharedCollections;
         this.emitChange();
@@ -37,21 +37,21 @@ class SharedCollectionStore extends StoreBase {
     return sharedCollection ?? null;
   }
 
-  public getContributorSharedCollection(
+  public getSharedCollectionRelatedToCollection(
     collectionId: number,
     userId: number
   ): SharedCollection | null {
     if (this._contributorsSharedCollections == null)
-      loadContributorsSharedCollections();
+      loadSharedCollectionsRelatedToCollections();
     let sharedCollection = this._contributorsSharedCollections?.find(
       (sc) => sc.collectionId === collectionId && sc.userId === userId
     );
     return sharedCollection ?? null;
   }
 
-  public getCollectionsSharedCollections(): SharedCollection[] | null {
+  public getSharedCollectionsRelatedToCollections(): SharedCollection[] | null {
     if (this._contributorsSharedCollections == null)
-      loadContributorsSharedCollections();
+      loadSharedCollectionsRelatedToCollections();
     return this._contributorsSharedCollections ?? [];
   }
 

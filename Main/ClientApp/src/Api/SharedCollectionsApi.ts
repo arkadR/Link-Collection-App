@@ -30,7 +30,10 @@ class SharedCollectionsApi {
   async updateSharedCollection(
     updateData: SharedCollectionData
   ): Promise<boolean> {
-    let response = await authorizedPatch(`api/sharedcollections`, updateData);
+    let response = await authorizedPatch(
+      `api/sharedcollections/${updateData.collectionId}`,
+      updateData
+    );
     return response.ok;
   }
 

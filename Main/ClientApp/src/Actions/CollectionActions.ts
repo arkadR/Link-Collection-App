@@ -49,10 +49,10 @@ export async function loadSharedCollections() {
   });
 }
 
-export async function loadContributorsSharedCollections() {
+export async function loadSharedCollectionsRelatedToCollections() {
   let contributorsSharedCollections = await SharedCollectionsApi.getContributorsSharedCollections();
   Dispatcher.dispatch({
-    actionType: ActionTypes.LOAD_CONTRIBUTORS_SHARED_COLLECTIONS,
+    actionType: ActionTypes.LOAD_SHARED_COLLECTIONS_RELATED_TO_COLLECTIONS,
     payload: { contributorsSharedCollections: contributorsSharedCollections },
   });
 }
@@ -60,21 +60,22 @@ export async function loadContributorsSharedCollections() {
 export async function shareCollection(shareData: SharedCollectionData) {
   let success = await SharedCollectionsApi.shareCollection(shareData);
   if (success) {
-    loadCollections();
     loadSharedCollections();
-    loadContributorsSharedCollections();
+    loadSharedCollectionsRelatedToCollections();
   }
 }
 
-export async function updateSharedCollection(updateData: SharedCollectionData) {
+export async function changeContributorRights(
+  updateData: SharedCollectionData
+) {
   let success = await SharedCollectionsApi.updateSharedCollection(updateData);
   if (success) {
     loadSharedCollections();
-    loadContributorsSharedCollections();
-  } else console.error("Could not update shared collection");
+    loadSharedCollectionsRelatedToCollections();
+  } else console.error("Could not change contributor rights");
 }
 
-export async function deleteContributorSharedCollection(
+export async function deleteContributorOfCollection(
   collectionId: number,
   userId: number
 ) {
@@ -83,6 +84,6 @@ export async function deleteContributorSharedCollection(
     userId
   );
   if (success) {
-    loadContributorsSharedCollections();
+    loadSharedCollectionsRelatedToCollections();
   } else console.error("Could not delete shared collection");
 }
