@@ -51,10 +51,11 @@ namespace LinkCollectionApp.Data
             .HasDefaultValueSql("(getdate())");
 
         entity.Property(e => e.Description)
-            .HasMaxLength(255)
+            .HasMaxLength(1023)
             .IsUnicode(false);
 
-        entity.Property(e => e.IsPublic).HasDefaultValueSql("((0))");
+        entity.Property(e => e.IsPublic)
+          .HasDefaultValueSql("((0))");
 
         entity.Property(e => e.Name)
             .HasMaxLength(100)
@@ -76,12 +77,12 @@ namespace LinkCollectionApp.Data
         entity.ToTable("Elements", "app");
 
         entity.Property(e => e.Description)
-            .HasMaxLength(255)
+            .HasMaxLength(1023)
             .IsUnicode(false);
 
         entity.Property(e => e.Link)
             .IsRequired()
-            .HasMaxLength(255)
+            .HasMaxLength(1023)
             .IsUnicode(false);
 
         entity.Property(e => e.Name)

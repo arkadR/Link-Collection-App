@@ -44,6 +44,8 @@
     <Compile Remove="Migrations\20200425110922_RemovedViewRights.Designer.cs" />
     <Compile Remove="Migrations\20200425111158_RemovedViewRights.cs" />
     <Compile Remove="Migrations\20200425111158_RemovedViewRights.Designer.cs" />
+    <Compile Remove="Migrations\20200504150949_UpdatedLinkLength.cs" />
+    <Compile Remove="Migrations\20200504150949_UpdatedLinkLength.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
