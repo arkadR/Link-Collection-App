@@ -68,6 +68,7 @@ export default function MakePublicDialog(props: MakePublicDialogProps) {
       setSharableLink(
         `https://${window.location.host}/public/${props.collectionId}`
       );
+    else setSharableLink("");
   }, [props.collectionId]);
 
   const copyToClipboard = async () => {

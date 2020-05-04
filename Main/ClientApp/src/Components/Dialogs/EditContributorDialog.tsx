@@ -26,7 +26,7 @@ type EditContributorDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
   collectionId: number;
-  userId: number;
+  userId: string;
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,26 +65,24 @@ export default function EditContributorDialog(
   };
 
   useEffect(() => {
-    setSharedCollection(
-      SharedCollectionStore.getSharedCollectionRelatedToCollection(
+    const changeHandler = () => {
+      let sc = SharedCollectionStore.getSharedCollectionRelatedToCollection(
         props.collectionId,
         props.userId
-      )
-    );
-    const changeHandler = () => {
-      setSharedCollection(
-        SharedCollectionStore.getSharedCollectionRelatedToCollection(
-          props.collectionId,
-          props.userId
-        )
+      );
+      setSharedCollection(sc);
+      setSelectedUserRights(
+        sc?.editRights === true ? UserRights.EditRights : UserRights.ViewRights
       );
     };
+
+    changeHandler();
 
     SharedCollectionStore.addChangeListener(changeHandler);
     return () => {
       SharedCollectionStore.removeChangeListener(changeHandler);
     };
-  }, [props.collectionId, props.userId, sharedCollection?.editRights]);
+  }, [props.collectionId, props.userId]);
 
   return (
     <>

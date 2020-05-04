@@ -39,7 +39,7 @@ class SharedCollectionsApi {
 
   async deleteSharedCollection(
     collectionId: number,
-    userId: number
+    userId: string
   ): Promise<boolean> {
     let response = await authorizedDelete(
       `api/sharedcollections/${collectionId}/${userId}`
