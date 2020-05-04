@@ -55,6 +55,11 @@
     <TypeScriptCompile Include="ClientApp\src\App.tsx" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="cert\IdentityServer4Auth.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <TypeScriptCompile Update="ClientApp\src\Home.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -75,7 +80,7 @@
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
       <DistFiles Include="$(SpaRoot)build\**" />
-      <ResolvedFileToPublish Include="@(DistFiles-&gt;'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
         <RelativePath>%(DistFiles.Identity)</RelativePath>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>

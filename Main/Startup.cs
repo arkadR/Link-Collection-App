@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Implementations;
 using LinkCollectionApp.Infrastructure.Interfaces;
@@ -55,7 +57,10 @@ namespace LinkCollectionApp
       services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
+      var cert = new X509Certificate2("cert/IdentityServer4Auth.pfx", "TestPassword");
+      
       services.AddIdentityServer()
+        .AddSigningCredential(cert)
         .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
       services.AddAuthentication()
