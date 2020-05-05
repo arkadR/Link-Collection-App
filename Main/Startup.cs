@@ -74,7 +74,8 @@ namespace LinkCollectionApp
         })
         .AddIdentityServerJwt();
 
-      services.Configure<JwtBearerOptions>(opts => opts.TokenValidationParameters.ValidateIssuer = false);
+      services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme, 
+        opts => opts.TokenValidationParameters.ValidateIssuer = false);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
