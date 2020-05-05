@@ -7,6 +7,7 @@ using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -71,9 +72,9 @@ namespace LinkCollectionApp
           options.ClientId = googleAuthNSection["ClientId"];
           options.ClientSecret = googleAuthNSection["ClientSecret"];
         })
-        .AddIdentityServerJwt()
-        .AddJwtBearer(IdentityServerJwtConstants.IdentityServerJwtBearerScheme, 
-          options => options.TokenValidationParameters.ValidateIssuer = false);
+        .AddIdentityServerJwt();
+
+      services.Configure<JwtBearerOptions>(opts => opts.TokenValidationParameters.ValidateIssuer = false);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
