@@ -43,7 +43,13 @@ namespace LinkCollectionApp.Controllers
     public IActionResult AddCollection([FromBody] CollectionCreationData data)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var collection = new Collection {Name = data.Name, IsPublic = data.IsPublic, OwnerId = userId, Description = data.Description};
+      var collection = new Collection
+      {
+        Name = data.Name, 
+        IsPublic = data.IsPublic, 
+        OwnerId = userId, 
+        Description = data.Description
+      };
       _dbContext.Add(collection);
       _dbContext.SaveChanges();
       return Ok();

@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Implementations;
@@ -80,9 +79,7 @@ namespace LinkCollectionApp
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      //TODO: switch back to IsDevelopment at the end. For now it is necessary for viewing stack trace on Azure
-      // if (env.IsDevelopment())
-      if (true)
+      if (env.IsDevelopment() || env.IsStaging())
       {
         app.UseDeveloperExceptionPage();
       }
@@ -94,7 +91,6 @@ namespace LinkCollectionApp
 
       app.UseHttpsRedirection();
       app.UseStaticFiles();
-
 
       app.UseRouting();
 
