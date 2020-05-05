@@ -1,9 +1,12 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Implementations;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
@@ -55,18 +58,28 @@ namespace LinkCollectionApp
       services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
+      var cert = new X509Certificate2("cert/IdentityServer4Auth.pfx", "TestPassword");
+      
       services.AddIdentityServer()
+        .AddSigningCredential(cert)
         .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
       services.AddAuthentication()
+        .AddGoogle(options =>
+        {
+          var googleAuthNSection = Configuration.GetSection("Authentication:Google");
+          options.ClientId = googleAuthNSection["ClientId"];
+          options.ClientSecret = googleAuthNSection["ClientSecret"];
+        })
         .AddIdentityServerJwt();
+
+      services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme, 
+        opts => opts.TokenValidationParameters.ValidateIssuer = false);
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      //TODO: switch back to IsDevelopment at the end. For now it is necessary for viewing stack trace on Azure
-      // if (env.IsDevelopment())
-      if (true)
+      if (env.IsDevelopment() || env.IsStaging())
       {
         app.UseDeveloperExceptionPage();
       }
@@ -78,7 +91,6 @@ namespace LinkCollectionApp
 
       app.UseHttpsRedirection();
       app.UseStaticFiles();
-
 
       app.UseRouting();
 
