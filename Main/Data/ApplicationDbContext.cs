@@ -19,6 +19,7 @@ namespace LinkCollectionApp.Data
     public virtual DbSet<Element> Element { get; set; }
     public virtual DbSet<SavedCollection> SavedCollection { get; set; }
     public virtual DbSet<SharedCollection> SharedCollection { get; set; }
+    public virtual DbSet<PublicCollectionVisit> PublicCollectionVisit { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -147,6 +148,30 @@ namespace LinkCollectionApp.Data
             .HasForeignKey(d => d.UserId)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK__SharedCol__UserI__534D60F1");
+      });
+
+      modelBuilder.Entity<PublicCollectionVisit>(entity =>
+      {
+        entity.HasKey(e => e.Id).HasName("PK__PubColVi__37E09F67E467D0D0");
+
+        entity.ToTable("PublicCollectionVisits", "app");
+
+        entity.Property(e => e.BrowserName)
+          .IsRequired()
+          .HasMaxLength(100)
+          .IsUnicode(false);
+
+        entity
+          .Property(e => e.DeviceOS)
+          .IsRequired()
+          .HasMaxLength(100)
+          .IsUnicode(false);
+
+        entity
+          .Property(e => e.Country)
+          .IsRequired()
+          .HasMaxLength(100)
+          .IsUnicode(false);
       });
 
     }

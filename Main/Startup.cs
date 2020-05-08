@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using UAParser;
 
 namespace LinkCollectionApp
 {
@@ -44,6 +45,9 @@ namespace LinkCollectionApp
 
       services.AddHttpContextAccessor();
       services.AddTransient<IUserContextProvider, UserContextProvider>();
+      services.AddTransient<IIpInfoService, IpInfoService>();
+      services.AddTransient<IRequestInfoService, RequestInfoService>();
+      services.AddSingleton<Parser>(Parser.GetDefault());
       ConfigureIdentity(services);
 
       // In production, the React files will be served from this directory
