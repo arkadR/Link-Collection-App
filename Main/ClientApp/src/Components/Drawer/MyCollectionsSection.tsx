@@ -73,7 +73,6 @@ export default function MyCollectionsSection() {
   ] = useState(false);
   const [selectedContributorId, setSelectedContributorId] = useState("");
   const { path, url } = useRouteMatch();
-  console.log({ path, url });
 
   useEffect(() => {
     const collectionChangeHandler = () => {

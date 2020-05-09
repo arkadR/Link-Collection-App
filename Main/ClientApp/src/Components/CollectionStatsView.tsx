@@ -24,19 +24,28 @@ type CollectionStatsViewProps = RouteComponentProps & {
   match: { params: { collectionId: number } };
 };
 
+type ChartData = {
+  name: string;
+  value: number;
+};
+
 export default function CollectionStatsView(props: CollectionStatsViewProps) {
   let collectionId = props.match.params.collectionId;
 
-  let [data, setData] = useState<PublicCollectionVisitor[] | null>(null);
-  let [browserData, setBrowserData] = useState<any | null>(null);
-  let [dailyEntryData, setDailyEntryData] = useState<any | null>(null);
-  let [countryData, setCountryData] = useState<any | null>(null);
+  let [browserData, setBrowserData] = useState<ChartData[] | undefined>(
+    undefined
+  );
+  let [dailyEntryData, setDailyEntryData] = useState<ChartData[] | undefined>(
+    undefined
+  );
+  let [countryData, setCountryData] = useState<ChartData[] | undefined>(
+    undefined
+  );
   useEffect(() => {
     async function loadData() {
       let response = await PublicCollectionsApi.getPublicCollectionVisitorData(
         collectionId
       );
-      setData(response);
       setBrowserData(getBrowserData(response!));
       setDailyEntryData(getDataForDailyEnters(response!));
       setCountryData(getDataForCountryEntries(response!));
@@ -46,8 +55,8 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
   }, [collectionId]);
 
   return (
+    //TODO: Layout
     <div>
-      {/* {JSON.stringify(data)} */}
       <LineChart width={500} height={500} data={dailyEntryData}>
         <XAxis dataKey="date" />
         <YAxis />
@@ -57,8 +66,6 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
       </LineChart>
       <PieChart width={500} height={500}>
         <Pie data={browserData} dataKey="value" label={(d) => d.name}>
-          {/* 
-            //@ts-ignore */}
           {browserData?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={getColorForBrowser(entry.name)} />
           ))}
@@ -66,22 +73,13 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
         <Tooltip />
         <Legend />
       </PieChart>
-      <BarChart
-        width={500}
-        height={500}
-        data={countryData}
-        // margin={{
-        //   top: 5, right: 30, left: 20, bottom: 5,
-        // }}
-      >
+      <BarChart width={500} height={500} data={countryData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
         <Legend />
         <Bar dataKey="value">
-          {/* 
-            //@ts-ignore */}
           {countryData?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={getRandomColor()} />
           ))}
@@ -91,42 +89,47 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
   );
 }
 
-function getBrowserData(response: PublicCollectionVisitor[]) {
-  let counted = countBy(response, (dat) => dat.browserName);
-  let x = Object.getOwnPropertyNames(counted).map((propName) => ({
-    name: propName,
-    value: counted[propName],
-  }));
-  console.log({ browserData: x });
-  return x;
+function getBrowserData(rawData: PublicCollectionVisitor[]) {
+  let counted = countBy(rawData, (dat) => dat.browserName);
+  let arrayData = Object.getOwnPropertyNames(counted).map(
+    (propName) =>
+      ({
+        name: propName,
+        value: counted[propName],
+      } as ChartData)
+  );
+  return arrayData;
 }
 
-function getDataForDailyEnters(response: PublicCollectionVisitor[]) {
-  let minDate = moment(min(response.map((r) => r.date))!);
-  let maxDate = moment(max(response.map((r) => r.date))!);
-  let arr = [] as { date: string; count: number }[];
+function getDataForDailyEnters(rawData: PublicCollectionVisitor[]) {
+  let minDate = moment(min(rawData.map((r) => r.date))!);
+  let maxDate = moment(max(rawData.map((r) => r.date))!);
+  let arrayData = [] as ChartData[];
   for (let m = moment(minDate); m.isBefore(maxDate); m.add(1, "days")) {
     let obj = {
-      date: m.format("YYYY-MM-DD"),
-      count: response.filter((r) => moment(r.date).isSame(m, "day")).length,
-    };
-    arr = [...arr, obj];
+      name: m.format("YYYY-MM-DD"),
+      value: rawData.filter((r) => moment(r.date).isSame(m, "day")).length,
+    } as ChartData;
+    arrayData = [...arrayData, obj];
   }
-  console.log({ dailyData: arr });
-  return arr;
+  return arrayData;
 }
 
-function getDataForCountryEntries(response: PublicCollectionVisitor[]) {
-  let counted = countBy(response, (dat) => dat.country);
-  let x = Object.getOwnPropertyNames(counted).map((propName) => ({
-    name: propName,
-    value: counted[propName],
-  }));
-  console.log({ countryData: x });
-  return x;
+function getDataForCountryEntries(rawData: PublicCollectionVisitor[]) {
+  let counted = countBy(rawData, (dat) => dat.country);
+  let arrayData = Object.getOwnPropertyNames(counted).map(
+    (propName) =>
+      ({
+        name: propName,
+        value: counted[propName],
+      } as ChartData)
+  );
+  return arrayData;
 }
 
+//TODO: Move to a util class
 function getColorForBrowser(browserName: string) {
+  //TODO: Check fetched browser names, add more colors for fun
   switch (browserName) {
     case "Edge":
       return "#0088FE";
@@ -139,6 +142,7 @@ function getColorForBrowser(browserName: string) {
   }
 }
 
+//TODO: Move to a util class
 function getRandomColor() {
   var letters = "0123456789ABCDEF";
   var color = "#";
