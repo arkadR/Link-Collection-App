@@ -6,5 +6,6 @@ namespace LinkCollectionApp.Infrastructure.DTO
   {
     public string OriginCountry { get; set; }
     public ClientInfo ClientInfo { get; set; }
+    public bool IsBogus => OriginCountry == "bogus";
   }
 }

@@ -47,6 +47,7 @@ namespace LinkCollectionApp
       services.AddTransient<IUserContextProvider, UserContextProvider>();
       services.AddTransient<IIpInfoService, IpInfoService>();
       services.AddTransient<IRequestInfoService, RequestInfoService>();
+      services.AddTransient<IUaParser, UaParserAdapter>();
       services.AddSingleton<Parser>(Parser.GetDefault());
       ConfigureIdentity(services);
 

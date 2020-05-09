@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using LinkCollectionApp.Infrastructure.Interfaces;
+using Newtonsoft.Json;
 
 namespace LinkCollectionApp.Infrastructure.Implementations
 {
@@ -11,7 +12,18 @@ namespace LinkCollectionApp.Infrastructure.Implementations
     {
       using var httpClient = new HttpClient();
       using var response = await httpClient.GetAsync($"https://ipinfo.io/{ip}");
-      return await response.Content.ReadAsStringAsync();
+      var responseText = await response.Content.ReadAsStringAsync();
+      var dto = JsonConvert.DeserializeObject<IpInfoResponse>(responseText);
+      return dto.Country;
+    }
+
+    private class IpInfoResponse
+    {
+      public string Ip { get; set; }
+      public string Loc { get; set; }
+      public string City { get; set; }
+      public string Region { get; set; }
+      public string Country { get; set; }
     }
   }
 }
