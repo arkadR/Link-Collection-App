@@ -58,11 +58,11 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
     //TODO: Layout
     <div>
       <LineChart width={500} height={500} data={dailyEntryData}>
-        <XAxis dataKey="date" />
+        <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="count" />
+        <Line type="monotone" dataKey="value" />
       </LineChart>
       <PieChart width={500} height={500}>
         <Pie data={browserData} dataKey="value" label={(d) => d.name}>
