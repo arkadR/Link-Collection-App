@@ -18,6 +18,7 @@ import {
   Delete,
   Edit,
   LockOpen,
+  Equalizer,
 } from "@material-ui/icons";
 import DrawerItem from "./DrawerItem";
 import DrawerItemNested from "./DrawerItemNested";
@@ -32,6 +33,7 @@ import { Collection } from "../../Model/Collection";
 import { SharedCollection } from "../../Model/SharedCollection";
 import DeleteCollectionDialog from "../Dialogs/DeleteCollectionDialog";
 import MakePublicDialog from "../Dialogs/MakePublicDialog";
+import { Link, useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -70,6 +72,7 @@ export default function MyCollectionsSection() {
     setMakeEditContributorDialogOpen,
   ] = useState(false);
   const [selectedContributorId, setSelectedContributorId] = useState("");
+  const { path, url } = useRouteMatch();
 
   useEffect(() => {
     const collectionChangeHandler = () => {
@@ -183,6 +186,21 @@ export default function MyCollectionsSection() {
                       </ListItemIcon>
                       <ListItemText primary="Get sharable link" />
                     </ListItem>
+
+                    {collection.isPublic && (
+                      <Link
+                        to={`${url}/${collection.id}/stats`}
+                        style={{ color: "black", textDecoration: "none" }}
+                      >
+                        <ListItem button>
+                          <ListItemIcon>
+                            <Equalizer />
+                          </ListItemIcon>
+                          <ListItemText primary="Stats" />
+                        </ListItem>
+                      </Link>
+                    )}
+
                     {/* TODO: make private listitem */}
                     <ListItem
                       onClick={() => onShareCollectionClick(collection.id)}

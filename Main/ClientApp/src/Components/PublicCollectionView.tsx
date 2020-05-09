@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import BaseCollectionView from "./BaseCollectionView";
 import { Collection } from "../Model/Collection";
@@ -13,12 +13,17 @@ export default function PublicCollectionView(props: PublicCollectionViewProps) {
   let [collection, setCollection] = useState<Collection | null>(null);
   let [isLoaded, setIsLoaded] = useState(false);
 
-  CollectionsApi.getPublicCollection(props.match.params.collectionId).then(
-    (c) => {
+  useEffect(() => {
+    async function loadData() {
+      let collection = await CollectionsApi.getPublicCollection(
+        props.match.params.collectionId
+      );
+      setCollection(collection);
       setIsLoaded(true);
-      setCollection(c);
     }
-  );
+    loadData();
+    return () => {};
+  }, [props.match.params.collectionId]);
 
   //TODO: Refactor, this is unreadable
   return isLoaded === false ? (
