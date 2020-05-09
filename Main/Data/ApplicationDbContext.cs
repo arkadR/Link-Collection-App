@@ -152,7 +152,7 @@ namespace LinkCollectionApp.Data
 
       modelBuilder.Entity<PublicCollectionVisit>(entity =>
       {
-        entity.HasKey(e => e.Id).HasName("PK__PubColVi__37E09F67E467D0D0");
+        // entity.HasKey(e => e.Id).HasName("PK__PubColVi__37E09F67E467D0D0");
 
         entity.ToTable("PublicCollectionVisits", "app");
 
@@ -172,6 +172,12 @@ namespace LinkCollectionApp.Data
           .IsRequired()
           .HasMaxLength(100)
           .IsUnicode(false);
+
+        entity.Property(e => e.CollectionId).IsRequired();
+
+        entity.Property(e => e.Date)
+          .HasColumnType("datetime")
+          .HasDefaultValueSql("(getdate())");
       });
 
     }

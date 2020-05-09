@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LinkCollectionApp.Models
 {
@@ -9,6 +6,7 @@ namespace LinkCollectionApp.Models
   {
     public int Id { get; set; }
     public int CollectionId { get; set; }
+    public DateTime Date { get; set; }
     public string DeviceOS { get; set; }
     public string BrowserName { get; set; }
     public string Country { get; set; }

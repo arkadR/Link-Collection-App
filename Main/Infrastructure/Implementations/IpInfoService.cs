@@ -14,7 +14,7 @@ namespace LinkCollectionApp.Infrastructure.Implementations
       using var response = await httpClient.GetAsync($"https://ipinfo.io/{ip}");
       var responseText = await response.Content.ReadAsStringAsync();
       var dto = JsonConvert.DeserializeObject<IpInfoResponse>(responseText);
-      return dto.Country;
+      return dto.Bogon ? "bogon" : dto.Country; //TODO
     }
 
     private class IpInfoResponse
@@ -24,6 +24,7 @@ namespace LinkCollectionApp.Infrastructure.Implementations
       public string City { get; set; }
       public string Region { get; set; }
       public string Country { get; set; }
+      public bool Bogon { get; set; }
     }
   }
 }

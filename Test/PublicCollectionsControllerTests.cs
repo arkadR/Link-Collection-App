@@ -32,7 +32,7 @@ namespace LinkCollectionApp.Test
       ActionResult<Collection> result = null;
       InTransaction(context =>
       {
-        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock());
+        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock(), GetUserProviderMock(""));
         result = controller.GetPublicCollection(collection.Id).Result;
       });
 
@@ -53,7 +53,7 @@ namespace LinkCollectionApp.Test
       ActionResult<Collection> result = null;
       InTransaction(context =>
       {
-        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock());
+        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock(), GetUserProviderMock(""));
         result = controller.GetPublicCollection(collection.Id).Result;
       });
 
@@ -72,7 +72,7 @@ namespace LinkCollectionApp.Test
       ActionResult<Collection> result = null;
       InTransaction(context =>
       {
-        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock());
+        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock(), GetUserProviderMock(""));
         result = controller.GetPublicCollection(1010).Result;
       });
 

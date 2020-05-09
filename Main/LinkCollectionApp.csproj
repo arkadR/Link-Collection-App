@@ -46,6 +46,8 @@
     <Compile Remove="Migrations\20200425111158_RemovedViewRights.Designer.cs" />
     <Compile Remove="Migrations\20200504150949_UpdatedLinkLength.cs" />
     <Compile Remove="Migrations\20200504150949_UpdatedLinkLength.Designer.cs" />
+    <Compile Remove="Migrations\20200509145018_TestMigration.cs" />
+    <Compile Remove="Migrations\20200509145018_TestMigration.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\src\App.tsx" />
