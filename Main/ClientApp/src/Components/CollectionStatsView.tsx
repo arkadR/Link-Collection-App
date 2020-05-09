@@ -11,6 +11,10 @@ import {
   Tooltip,
   Legend,
   Line,
+  Cell,
+  CartesianGrid,
+  BarChart,
+  Bar,
 } from "recharts";
 import { countBy, min, max } from "lodash";
 import moment from "moment";
@@ -26,6 +30,7 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
   let [data, setData] = useState<PublicCollectionVisitor[] | null>(null);
   let [browserData, setBrowserData] = useState<any | null>(null);
   let [dailyEntryData, setDailyEntryData] = useState<any | null>(null);
+  let [countryData, setCountryData] = useState<any | null>(null);
   useEffect(() => {
     async function loadData() {
       let response = await PublicCollectionsApi.getPublicCollectionVisitorData(
@@ -33,9 +38,8 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
       );
       setData(response);
       setBrowserData(getBrowserData(response!));
-      let d = getDataForDailyEnters(response!);
-      setDailyEntryData(d);
-      console.log({ d });
+      setDailyEntryData(getDataForDailyEnters(response!));
+      setCountryData(getDataForCountryEntries(response!));
     }
     loadData();
     return () => {};
@@ -52,12 +56,37 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
         <Line type="monotone" dataKey="count" />
       </LineChart>
       <PieChart width={500} height={500}>
-        <Pie
-          data={browserData}
-          dataKey="count"
-          label={(d) => `${d.browserName} - ${d.count}`}
-        ></Pie>
+        <Pie data={browserData} dataKey="value" label={(d) => d.name}>
+          {/* 
+            //@ts-ignore */}
+          {browserData?.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={getColorForBrowser(entry.name)} />
+          ))}
+        </Pie>
+        <Tooltip />
+        <Legend />
       </PieChart>
+      <BarChart
+        width={500}
+        height={500}
+        data={countryData}
+        // margin={{
+        //   top: 5, right: 30, left: 20, bottom: 5,
+        // }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="value">
+          {/* 
+            //@ts-ignore */}
+          {countryData?.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={getRandomColor()} />
+          ))}
+        </Bar>
+      </BarChart>
     </div>
   );
 }
@@ -65,9 +94,10 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
 function getBrowserData(response: PublicCollectionVisitor[]) {
   let counted = countBy(response, (dat) => dat.browserName);
   let x = Object.getOwnPropertyNames(counted).map((propName) => ({
-    browserName: propName,
-    count: counted[propName],
+    name: propName,
+    value: counted[propName],
   }));
+  console.log({ browserData: x });
   return x;
 }
 
@@ -82,5 +112,38 @@ function getDataForDailyEnters(response: PublicCollectionVisitor[]) {
     };
     arr = [...arr, obj];
   }
+  console.log({ dailyData: arr });
   return arr;
+}
+
+function getDataForCountryEntries(response: PublicCollectionVisitor[]) {
+  let counted = countBy(response, (dat) => dat.country);
+  let x = Object.getOwnPropertyNames(counted).map((propName) => ({
+    name: propName,
+    value: counted[propName],
+  }));
+  console.log({ countryData: x });
+  return x;
+}
+
+function getColorForBrowser(browserName: string) {
+  switch (browserName) {
+    case "Edge":
+      return "#0088FE";
+
+    case "Chrome":
+      return "#FFBB28";
+
+    default:
+      return getRandomColor();
+  }
+}
+
+function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
