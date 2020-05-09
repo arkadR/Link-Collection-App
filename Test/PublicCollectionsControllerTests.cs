@@ -90,7 +90,7 @@ namespace LinkCollectionApp.Test
             new OS("TestOSFamily", "1", "0", "0", "0"),
             new Device("TestDeviceFamily", "TestBrand", "TestModel"),
             new UserAgent("TestUAFamily", "1", "0", "0")),
-          OriginCountry = "TestCountry"
+          IpInfo = new IpInfo { Country = "TestCountry" }
         }));
       return mock.Object;
     }

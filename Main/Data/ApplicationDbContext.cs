@@ -152,9 +152,9 @@ namespace LinkCollectionApp.Data
 
       modelBuilder.Entity<PublicCollectionVisit>(entity =>
       {
-        // entity.HasKey(e => e.Id).HasName("PK__PubColVi__37E09F67E467D0D0");
-
         entity.ToTable("PublicCollectionVisits", "app");
+
+        entity.HasKey(e => e.Id).HasName("PK__PubColVi__37E09F67E467D0D0");
 
         entity.Property(e => e.BrowserName)
           .IsRequired()

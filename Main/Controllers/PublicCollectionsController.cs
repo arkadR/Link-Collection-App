@@ -66,13 +66,13 @@ namespace LinkCollectionApp.Controllers
     private async Task SaveVisitorData(int collectionId)
     {
       var requestInfo = await _requestInfoService.GetFromCurrentRequest();
-      if (requestInfo.IsBogus == false)
+      if (requestInfo?.IpInfo.Bogon == false)
       {
         var visitEntry = new PublicCollectionVisit
         {
           CollectionId = collectionId,
           BrowserName = requestInfo.ClientInfo.UA.Family,
-          Country = requestInfo.OriginCountry,
+          Country = requestInfo.IpInfo.Country,
           DeviceOS = requestInfo.ClientInfo.OS.Family
         };
         _dbContext.PublicCollectionVisit.Add(visitEntry);

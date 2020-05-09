@@ -179,11 +179,9 @@ namespace LinkCollectionApp.Test
     }
 
     [Theory]
-    [InlineData(true, true)]
-    [InlineData(true, false)]
-    [InlineData(false, true)]
-    [InlineData(false, false)]
-    public void ShareCollection_OneCollectionSharedWithRights_ProperRightsSaved(bool viewRights, bool editRights)
+    [InlineData(true)]
+    [InlineData(false)]
+    public void ShareCollection_OneCollectionSharedWithRights_ProperRightsSaved(bool editRights)
     {
       //Arrange
       var user1 = NewGuid;

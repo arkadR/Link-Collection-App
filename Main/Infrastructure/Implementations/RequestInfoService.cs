@@ -21,16 +21,18 @@ namespace LinkCollectionApp.Infrastructure.Implementations
 
     public async Task<RequestInfo> GetFromCurrentRequest()
     {
-      //TODO: Validate, try/catch
       var httpContext = _httpContextAccessor.HttpContext;
-      var agents = httpContext.Request.Headers[HeaderNames.UserAgent];
-      var clientInfo = _parser.Parse(agents[0]);
-      var country = await _ipInfoService.GetUserCountryByIp(httpContext.Connection.RemoteIpAddress);
-      return new RequestInfo
+      try
       {
-        OriginCountry = country,
-        ClientInfo = clientInfo
-      };
+        var agents = httpContext.Request.Headers[HeaderNames.UserAgent];
+        var clientInfo = _parser.Parse(agents[0]);
+        var ipInfo = await _ipInfoService.GetIpInfo(httpContext.Connection.RemoteIpAddress);
+        return new RequestInfo { IpInfo = ipInfo, ClientInfo = clientInfo};
+      }
+      catch
+      {
+        return null;
+      }
     }
   }
 }

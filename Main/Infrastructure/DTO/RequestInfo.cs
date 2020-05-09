@@ -4,8 +4,7 @@ namespace LinkCollectionApp.Infrastructure.DTO
 {
   public class RequestInfo
   {
-    public string OriginCountry { get; set; }
     public ClientInfo ClientInfo { get; set; }
-    public bool IsBogus => OriginCountry == "bogus";
+    public IpInfo IpInfo { get; set; }
   }
 }
