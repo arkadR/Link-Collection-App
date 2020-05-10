@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import { PublicCollectionVisitor } from "../Model/PublicCollectionVisitor";
 import PublicCollectionsApi from "../Api/PublicCollectionsApi";
 import { RouteComponentProps } from "react-router-dom";
+import { Card, CardHeader, CardContent, Grid, Box } from "@material-ui/core";
 import {
+  ResponsiveContainer,
   PieChart,
   Pie,
   LineChart,
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   Line,
   Cell,
   CartesianGrid,
@@ -18,8 +20,19 @@ import {
 } from "recharts";
 import { countBy, min, max } from "lodash";
 import moment from "moment";
+import {
+  getRandomColor,
+  getColorForBrowser,
+} from "../Infrastructure/ColorUtilities";
 
-//TODO: A big refactor is needed
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      padding: "25px 30px 25px 30px",
+    },
+  })
+);
+
 type CollectionStatsViewProps = RouteComponentProps & {
   match: { params: { collectionId: number } };
 };
@@ -30,6 +43,7 @@ type ChartData = {
 };
 
 export default function CollectionStatsView(props: CollectionStatsViewProps) {
+  const classes = useStyles();
   let collectionId = props.match.params.collectionId;
 
   let [browserData, setBrowserData] = useState<ChartData[] | undefined>(
@@ -55,37 +69,90 @@ export default function CollectionStatsView(props: CollectionStatsViewProps) {
   }, [collectionId]);
 
   return (
-    //TODO: Layout
-    <div>
-      <LineChart width={500} height={500} data={dailyEntryData}>
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="value" />
-      </LineChart>
-      <PieChart width={500} height={500}>
-        <Pie data={browserData} dataKey="value" label={(d) => d.name}>
-          {browserData?.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={getColorForBrowser(entry.name)} />
-          ))}
-        </Pie>
-        <Tooltip />
-        <Legend />
-      </PieChart>
-      <BarChart width={500} height={500} data={countryData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="value">
-          {countryData?.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={getRandomColor()} />
-          ))}
-        </Bar>
-      </BarChart>
-    </div>
+    <Box className={classes.root}>
+      <Grid
+        container
+        direction="row"
+        spacing={3}
+        justify="flex-start"
+        alignItems="center"
+      >
+        <Grid item xs={12}>
+          {ChartCard(
+            "Daily visits",
+            "Daily number of visits on this public collection",
+            DailyEntryChart(dailyEntryData)
+          )}
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          {ChartCard(
+            "Visitor's browser",
+            "Browser used by visitors",
+            BrowserChart(browserData)
+          )}
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          {ChartCard(
+            "Visitor's country",
+            "Visitor's country of origin",
+            CountryChart(countryData)
+          )}
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+function ChartCard(title: string, subheader: string | null, chart: ReactNode) {
+  return (
+    <Card elevation={3}>
+      <CardHeader title={title} subheader={subheader} />
+      <CardContent>
+        <ResponsiveContainer width="100%" height={250}>
+          {chart}
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
+  );
+}
+
+function DailyEntryChart(dailyEntryData: ChartData[] | undefined) {
+  return (
+    <LineChart data={dailyEntryData}>
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Line type="monotone" dataKey="value" />
+    </LineChart>
+  );
+}
+
+function BrowserChart(browserData: ChartData[] | undefined) {
+  return (
+    <PieChart>
+      <Pie data={browserData} dataKey="value" label={(d) => d.name}>
+        {browserData?.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={getColorForBrowser(entry.name)} />
+        ))}
+      </Pie>
+      <Tooltip />
+    </PieChart>
+  );
+}
+
+function CountryChart(countryData: ChartData[] | undefined) {
+  return (
+    <BarChart data={countryData}>
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Bar dataKey="value">
+        {countryData?.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={getRandomColor()} />
+        ))}
+      </Bar>
+    </BarChart>
   );
 }
 
@@ -125,29 +192,4 @@ function getDataForCountryEntries(rawData: PublicCollectionVisitor[]) {
       } as ChartData)
   );
   return arrayData;
-}
-
-//TODO: Move to a util class
-function getColorForBrowser(browserName: string) {
-  //TODO: Check fetched browser names, add more colors for fun
-  switch (browserName) {
-    case "Edge":
-      return "#0088FE";
-
-    case "Chrome":
-      return "#FFBB28";
-
-    default:
-      return getRandomColor();
-  }
-}
-
-//TODO: Move to a util class
-function getRandomColor() {
-  var letters = "0123456789ABCDEF";
-  var color = "#";
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
 }
