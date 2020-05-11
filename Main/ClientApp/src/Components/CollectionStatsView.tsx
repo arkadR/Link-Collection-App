@@ -172,7 +172,7 @@ function getDataForDailyEnters(rawData: PublicCollectionVisitor[]) {
   let minDate = moment(min(rawData.map((r) => r.date))!);
   let maxDate = moment(max(rawData.map((r) => r.date))!);
   let arrayData = [] as ChartData[];
-  for (let m = moment(minDate); m.isBefore(maxDate); m.add(1, "days")) {
+  for (let m = moment(minDate); m.isSameOrBefore(maxDate); m.add(1, "days")) {
     let obj = {
       name: m.format("YYYY-MM-DD"),
       value: rawData.filter((r) => moment(r.date).isSame(m, "day")).length,
