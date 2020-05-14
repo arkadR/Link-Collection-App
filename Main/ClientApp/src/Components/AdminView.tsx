@@ -15,9 +15,15 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import ChangeMaxCollectionsDialog from "./Dialogs/ChangeMaxCollectionsDialog";
+import ChangeMaxElementsDialog from "./Dialogs/ChangeMaxElementsDialog";
 
 export default function AdminView() {
   const [users, setUsers] = useState(UsersStore.getUsers());
+  //TODO: fetch Maximum number of collections
+  const [maxCollections, setMaxCollections] = React.useState(-1);
+  //TODO: fetch Maximum number of elements
+  const [maxElements, setMaxElements] = React.useState(-1);
   const [usersExpandOpen, setUsersExpandOpen] = React.useState(false);
   const [changeElementsDialogOpen, setChangeElementsDialogOpen] = useState(
     false
@@ -53,11 +59,18 @@ export default function AdminView() {
           <Card elevation={3}>
             <CardHeader
               title="Number of collections"
-              // TODO: add Maximum number of collections
-              subheader="Maximum number of collections a user can have is set to "
+              subheader={
+                "Maximum number of collections a user can have is set to " +
+                maxCollections
+              }
             />
             <CardActions>
-              <Button onClick={() => {}} color="primary">
+              <Button
+                onClick={() => {
+                  setChangeCollectionsDialogOpen(true);
+                }}
+                color="primary"
+              >
                 Change
               </Button>
             </CardActions>
@@ -68,11 +81,18 @@ export default function AdminView() {
           <Card elevation={3}>
             <CardHeader
               title="Number of elements"
-              //TODO: add Maximum number of elements
-              subheader="Maximum number of elements in the collection is set to  "
+              subheader={
+                "Maximum number of elements in the collection is set to " +
+                maxElements
+              }
             />
             <CardActions>
-              <Button onClick={() => {}} color="primary">
+              <Button
+                onClick={() => {
+                  setChangeElementsDialogOpen(true);
+                }}
+                color="primary"
+              >
                 Change
               </Button>
             </CardActions>
@@ -108,6 +128,20 @@ export default function AdminView() {
           </Card>
         </Grid>
       </Grid>
+
+      <ChangeMaxElementsDialog
+        open={changeElementsDialogOpen}
+        toggleDialogOpen={() =>
+          setChangeElementsDialogOpen(!changeElementsDialogOpen)
+        }
+      />
+      <ChangeMaxCollectionsDialog
+        open={changeCollectionsDialogOpen}
+        toggleDialogOpen={() =>
+          setChangeCollectionsDialogOpen(!changeCollectionsDialogOpen)
+        }
+        maxCollections={maxCollections}
+      />
     </>
   );
 }
