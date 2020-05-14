@@ -5,18 +5,27 @@ import {
   Card,
   CardHeader,
   CardActions,
-  Collapse,
+  //   Collapse,
   Button,
   IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
+  //   List,
+  //   ListItem,
+  //   ListItemAvatar,
+  //   Avatar,
+  //   ListItemText,
+  Divider,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
 } from "@material-ui/core";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import { ExpandLess, ExpandMore, Delete } from "@material-ui/icons";
 import ChangeMaxCollectionsDialog from "./Dialogs/ChangeMaxCollectionsDialog";
 import ChangeMaxElementsDialog from "./Dialogs/ChangeMaxElementsDialog";
+import DeleteUserDialog from "./Dialogs/DeleteUserDialog";
 
 export default function AdminView() {
   const [users, setUsers] = useState(UsersStore.getUsers());
@@ -24,7 +33,9 @@ export default function AdminView() {
   const [maxCollections, setMaxCollections] = React.useState(-1);
   //TODO: fetch Maximum number of elements
   const [maxElements, setMaxElements] = React.useState(-1);
-  const [usersExpandOpen, setUsersExpandOpen] = React.useState(false);
+  //   const [usersExpandOpen, setUsersExpandOpen] = React.useState(false);
+  const [deleteUserDialogOpen, setDeleteUserDialogOpen] = React.useState(false);
+  const [selectedUserId, setSelectedUserId] = useState("");
   const [changeElementsDialogOpen, setChangeElementsDialogOpen] = useState(
     false
   );
@@ -33,9 +44,14 @@ export default function AdminView() {
     setChangeCollectionsDialogOpen,
   ] = useState(false);
 
-  const toggleUsersExpandOpen = () => {
-    setUsersExpandOpen(!usersExpandOpen);
+  const onDeleteUserClick = (userId: string) => {
+    setSelectedUserId(userId);
+    setDeleteUserDialogOpen(true);
   };
+
+  //   const toggleUsersExpandOpen = () => {
+  //     setUsersExpandOpen(!usersExpandOpen);
+  //   };
 
   useEffect(() => {
     const changeHandler = () => {
@@ -99,32 +115,62 @@ export default function AdminView() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <Card elevation={3}>
             <CardHeader
               title="Users"
               subheader={"Current number of users is  " + users.length}
             />
-            <CardActions>
+            {/* <CardActions>
               <IconButton
                 style={{ marginLeft: "auto" }}
                 onClick={toggleUsersExpandOpen}
               >
                 {usersExpandOpen ? <ExpandLess /> : <ExpandMore />}
               </IconButton>
-            </CardActions>
-            <Collapse in={usersExpandOpen} timeout="auto" unmountOnExit>
-              <List component="div">
-                {users.map((u) => (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>{u.name.toUpperCase().charAt(0)}</Avatar>
-                    </ListItemAvatar>
-                    <ListItemText>{u.email}</ListItemText>
-                  </ListItem>
-                ))}
-              </List>
-            </Collapse>
+            </CardActions> */}
+            {/* <Collapse in={usersExpandOpen} timeout="auto" unmountOnExit> */}
+            <Divider />
+            <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
+              {/* IDEA: sorting table */}
+              <Table size="small" stickyHeader>
+                <TableHead>
+                  <TableRow>
+                    <TableCell variant="head">
+                      <b>Name</b>
+                    </TableCell>
+                    <TableCell>
+                      <b>Email</b>
+                    </TableCell>
+                    <TableCell>
+                      <b>Id</b>
+                    </TableCell>
+                    <TableCell align="right">
+                      <b>Actions</b>
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell>{user.name}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.id}</TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          onClick={() => {
+                            onDeleteUserClick(user.id);
+                          }}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {/* </Collapse> */}
           </Card>
         </Grid>
       </Grid>
@@ -134,6 +180,7 @@ export default function AdminView() {
         toggleDialogOpen={() =>
           setChangeElementsDialogOpen(!changeElementsDialogOpen)
         }
+        maxElements={maxElements}
       />
       <ChangeMaxCollectionsDialog
         open={changeCollectionsDialogOpen}
@@ -141,6 +188,13 @@ export default function AdminView() {
           setChangeCollectionsDialogOpen(!changeCollectionsDialogOpen)
         }
         maxCollections={maxCollections}
+      />
+      <DeleteUserDialog
+      // open={deleteUserDialogOpen}
+      // toggleDialogOpen={() =>
+      //   setDeleteUserDialogOpen(!deleteUserDialogOpen)
+      // }
+      // userId={selectedUserId}
       />
     </>
   );

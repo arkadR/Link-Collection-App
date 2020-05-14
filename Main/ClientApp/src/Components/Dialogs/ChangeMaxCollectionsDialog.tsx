@@ -32,10 +32,9 @@ export default function ChangeMaxCollectionsDialog(
           }
           autoFocus
           margin="dense"
-          id="elementName"
+          id="maxCollections"
           label="Maximum number of collections"
           type="number"
-          //TODO: add maximum number of collections placeholder
           placeholder={"" + props.maxCollections}
           fullWidth
         />
@@ -48,7 +47,7 @@ export default function ChangeMaxCollectionsDialog(
           onClick={() => {
             //TODO: on click
           }}
-          color="primary"
+          color="secondary"
           autoFocus
         >
           Change
