@@ -22,7 +22,10 @@ import {
   TableBody,
   Paper,
 } from "@material-ui/core";
-import { ExpandLess, ExpandMore, Delete } from "@material-ui/icons";
+import {
+  // ExpandLess, ExpandMore,
+  Delete,
+} from "@material-ui/icons";
 import ChangeMaxCollectionsDialog from "./Dialogs/ChangeMaxCollectionsDialog";
 import ChangeMaxElementsDialog from "./Dialogs/ChangeMaxElementsDialog";
 import DeleteUserDialog from "./Dialogs/DeleteUserDialog";

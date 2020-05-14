@@ -1,5 +1,6 @@
 import React from "react";
 import DeleteDialog from "./DeleteDialog";
+import { deleteUser } from "../../Actions/UserActions";
 
 type DeleteUserDialogProps = {
   open: boolean;
@@ -20,7 +21,7 @@ export default function DeleteUserDialog(props: DeleteUserDialogProps) {
       title={title}
       description={description}
       confirmAction={() => {
-        //TODO: delete user
+        deleteUser(props.userId);
       }}
     />
   );
