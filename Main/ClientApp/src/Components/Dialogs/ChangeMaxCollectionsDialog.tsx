@@ -11,6 +11,11 @@ type ChangeMaxCollectionsDialogProps = {
 export default function ChangeMaxCollectionsDialog(
   props: ChangeMaxCollectionsDialogProps
 ) {
+  const title = "Change maximum number of collections";
+  const description =
+    "Change maximum number of collections a user can have (now: " +
+    props.maxCollections +
+    ")";
   const [maxCollections, setMaxCollections] = React.useState(
     props.maxCollections
   );
@@ -19,12 +24,8 @@ export default function ChangeMaxCollectionsDialog(
     <SimpleDialog
       open={props.open}
       toggleDialogOpen={props.toggleDialogOpen}
-      title="Change maximum number of collections"
-      description={
-        "Change maximum number of collections a user can have (now: " +
-        props.maxCollections +
-        ")"
-      }
+      title={title}
+      description={description}
       content={
         <TextField
           onChange={(e) =>

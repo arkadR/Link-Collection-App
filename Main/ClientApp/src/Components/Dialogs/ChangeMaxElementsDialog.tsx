@@ -11,18 +11,19 @@ type ChangeMaxElementsDialogProps = {
 export default function ChangeMaxElementsDialog(
   props: ChangeMaxElementsDialogProps
 ) {
+  const title = "Change maximum number of elements";
+  const description =
+    "Change maximum number of elements in the collection (now: " +
+    props.maxElements +
+    ")";
   const [maxElements, setMaxElements] = React.useState(props.maxElements);
 
   return (
     <SimpleDialog
       open={props.open}
       toggleDialogOpen={props.toggleDialogOpen}
-      title="Change maximum number of elements"
-      description={
-        "Change maximum number of elements in the collection (now: " +
-        props.maxElements +
-        ")"
-      }
+      title={title}
+      description={description}
       content={
         <TextField
           onChange={(e) =>

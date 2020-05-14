@@ -131,7 +131,7 @@ export default function AdminView() {
             </CardActions> */}
             {/* <Collapse in={usersExpandOpen} timeout="auto" unmountOnExit> */}
             <Divider />
-            <TableContainer component={Paper} style={{ maxHeight: "400px" }}>
+            <TableContainer component={Paper} style={{ maxHeight: "500px" }}>
               {/* IDEA: sorting table */}
               <Table size="small" stickyHeader>
                 <TableHead>
@@ -156,6 +156,7 @@ export default function AdminView() {
                       <TableCell>{user.name}</TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>{user.id}</TableCell>
+                      {/* IDEA: admin can't be deleted */}
                       <TableCell align="right">
                         <IconButton
                           onClick={() => {
@@ -190,11 +191,9 @@ export default function AdminView() {
         maxCollections={maxCollections}
       />
       <DeleteUserDialog
-      // open={deleteUserDialogOpen}
-      // toggleDialogOpen={() =>
-      //   setDeleteUserDialogOpen(!deleteUserDialogOpen)
-      // }
-      // userId={selectedUserId}
+        open={deleteUserDialogOpen}
+        toggleDialogOpen={() => setDeleteUserDialogOpen(!deleteUserDialogOpen)}
+        userId={selectedUserId}
       />
     </>
   );
