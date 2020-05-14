@@ -5,6 +5,7 @@ import ApiAuthorizationRoutes from "./Authorization/ApiAuthorizationRoutes";
 import AuthorizeRoute from "./Authorization/AuthorizeRoute";
 import WelcomeScreen from "./Components/WelcomeScreen";
 import CollectionsPage from "./Components/CollectionsPage";
+import AdminPage from "./Components/AdminPage";
 import PublicCollectionPage from "./Components/PublicCollectionPage";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Route exact path="/" component={WelcomeScreen} />
       <AuthorizeRoute path="/collections/" component={CollectionsPage} />
       <Route path="/public/" component={PublicCollectionPage} />
+      <AuthorizeRoute path="/admin/" component={AdminPage} />
     </>
   );
 }
