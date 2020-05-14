@@ -51,6 +51,7 @@ namespace LinkCollectionApp.Controllers
       });
 
       _dbContext.Collection.RemoveAll(c => c.OwnerId == user.Id);
+      _dbContext.ApplicationUser.Remove(user);
       _dbContext.SaveChanges();
       return Ok();
     }

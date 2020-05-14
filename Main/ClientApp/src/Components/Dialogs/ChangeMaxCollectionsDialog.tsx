@@ -37,6 +37,7 @@ export default function ChangeMaxCollectionsDialog(
           label="Maximum number of collections"
           type="number"
           placeholder={"" + props.maxCollections}
+          value={"" + props.maxCollections}
           fullWidth
         />
       }

@@ -35,6 +35,7 @@ export default function ChangeMaxElementsDialog(
           label="Maximum number of elements"
           type="number"
           placeholder={"" + props.maxElements}
+          value={"" + props.maxElements}
           fullWidth
         />
       }
