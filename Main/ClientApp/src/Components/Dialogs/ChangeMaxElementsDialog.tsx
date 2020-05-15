@@ -44,7 +44,10 @@ export default function ChangeMaxElementsDialog(
             maxElements === props.maxElements ||
             ((maxElements as unknown) as number) < 0
           }
-          onClick={() => changeValue("MaxElements", maxElements)}
+          onClick={() => {
+            changeValue("MaxElements", maxElements);
+            props.toggleDialogOpen();
+          }}
           color="secondary"
           autoFocus
         >

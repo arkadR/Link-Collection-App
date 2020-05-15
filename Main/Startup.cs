@@ -70,12 +70,12 @@ namespace LinkCollectionApp
         .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
       services.AddAuthentication()
-        //.AddGoogle(options =>
-        //{
-        //  var googleAuthNSection = Configuration.GetSection("Authentication:Google");
-        //  options.ClientId = googleAuthNSection["ClientId"];
-        //  options.ClientSecret = googleAuthNSection["ClientSecret"];
-        //})
+        .AddGoogle(options =>
+        {
+          var googleAuthNSection = Configuration.GetSection("Authentication:Google");
+          options.ClientId = googleAuthNSection["ClientId"];
+          options.ClientSecret = googleAuthNSection["ClientSecret"];
+        })
         .AddIdentityServerJwt();
 
       services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme, 

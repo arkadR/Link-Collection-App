@@ -46,7 +46,10 @@ export default function ChangeMaxCollectionsDialog(
             maxCollections === props.maxCollections ||
             ((maxCollections as unknown) as number) < 0
           }
-          onClick={() => changeValue("MaxCollections", maxCollections)}
+          onClick={() => {
+            changeValue("MaxCollections", maxCollections);
+            props.toggleDialogOpen();
+          }}
           color="secondary"
           autoFocus
         >

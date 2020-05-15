@@ -27,8 +27,6 @@ export default function AdminView() {
   const [configuration, setConfiguration] = useState(
     ConfigurationStore.getConfiguration()
   );
-  //   const [maxCollections, setMaxCollections] = React.useState(configuration.get("MaxCollections"));
-  //   const [maxElements, setMaxElements] = React.useState(configuration.get("MaxElements"));
   let maxElements = configuration.get("MaxElements");
   let maxCollections = configuration.get("MaxCollections");
   const [deleteUserDialogOpen, setDeleteUserDialogOpen] = React.useState(false);

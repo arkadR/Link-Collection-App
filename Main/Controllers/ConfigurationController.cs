@@ -20,9 +20,18 @@ namespace LinkCollectionApp.Controllers
     [HttpGet]
     public string[][] GetConfiguration()
     {
-      //var configuration = _dbContext.Configuration.ToDictionary(c => c.Key, c => c.Value);
-      var configuration = _dbContext.Configuration.Select(c => new string[] { c.Key, c.Value }).ToArray();
-      return configuration;
+      return _dbContext.Configuration.Select(c => new string[] { c.Key, c.Value }).ToArray();
+    }
+
+    [HttpPatch("{key}/{value}")]
+    public IActionResult ChangeValue(string key, string value)
+    {
+      var configuration = _dbContext.Configuration.SingleOrDefault(c => c.Key == key);
+      if (configuration == null)
+        return NotFound();
+      configuration.Value = value;
+      _dbContext.SaveChanges();
+      return Ok();
     }
   }
 }
