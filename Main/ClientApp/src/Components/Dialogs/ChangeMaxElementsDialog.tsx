@@ -1,11 +1,12 @@
 import React from "react";
 import SimpleDialog from "./SimpleDialog";
 import { Button, TextField } from "@material-ui/core";
+import { changeValue } from "../../Actions/ConfigurationActions";
 
 type ChangeMaxElementsDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
-  maxElements: number;
+  maxElements: string;
 };
 
 export default function ChangeMaxElementsDialog(
@@ -26,25 +27,24 @@ export default function ChangeMaxElementsDialog(
       description={description}
       content={
         <TextField
-          onChange={(e) =>
-            setMaxElements((e.target.value as unknown) as number)
-          }
+          onChange={(e) => setMaxElements(e.target.value)}
           autoFocus
           margin="dense"
           id="maxElements"
           label="Maximum number of elements"
           type="number"
           placeholder={"" + props.maxElements}
-          value={"" + props.maxElements}
+          defaultValue={"" + props.maxElements}
           fullWidth
         />
       }
       actions={
         <Button
-          disabled={maxElements === props.maxElements || maxElements < 0}
-          onClick={() => {
-            //TODO: on click
-          }}
+          disabled={
+            maxElements === props.maxElements ||
+            ((maxElements as unknown) as number) < 0
+          }
+          onClick={() => changeValue("MaxElements", maxElements)}
           color="secondary"
           autoFocus
         >

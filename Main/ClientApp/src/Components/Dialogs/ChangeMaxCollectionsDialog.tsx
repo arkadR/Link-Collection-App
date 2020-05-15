@@ -1,11 +1,12 @@
 import React from "react";
 import SimpleDialog from "./SimpleDialog";
 import { Button, TextField } from "@material-ui/core";
+import { changeValue } from "../../Actions/ConfigurationActions";
 
 type ChangeMaxCollectionsDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
-  maxCollections: number;
+  maxCollections: string;
 };
 
 export default function ChangeMaxCollectionsDialog(
@@ -28,27 +29,24 @@ export default function ChangeMaxCollectionsDialog(
       description={description}
       content={
         <TextField
-          onChange={(e) =>
-            setMaxCollections((e.target.value as unknown) as number)
-          }
+          onChange={(e) => setMaxCollections(e.target.value)}
           autoFocus
           margin="dense"
           id="maxCollections"
           label="Maximum number of collections"
           type="number"
           placeholder={"" + props.maxCollections}
-          value={"" + props.maxCollections}
+          defaultValue={"" + props.maxCollections}
           fullWidth
         />
       }
       actions={
         <Button
           disabled={
-            maxCollections === props.maxCollections || maxCollections < 0
+            maxCollections === props.maxCollections ||
+            ((maxCollections as unknown) as number) < 0
           }
-          onClick={() => {
-            //TODO: on click
-          }}
+          onClick={() => changeValue("MaxCollections", maxCollections)}
           color="secondary"
           autoFocus
         >

@@ -1,11 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using LinkCollectionApp.Data;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LinkCollectionApp.Controllers
 {
-  [Authorize(Roles = "Administrator")]
+  //[Authorize(Roles = "Administrator")]
   [Route("api/[controller]")]
   [ApiController]
   public class ConfigurationController : ControllerBase
@@ -17,13 +17,12 @@ namespace LinkCollectionApp.Controllers
       _dbContext = dbContext;
     }
 
-    [HttpGet("{key}")]
-    public ActionResult<string> GetValue(string key)
+    [HttpGet]
+    public string[][] GetConfiguration()
     {
-      var configuration = _dbContext.Configuration.SingleOrDefault(c => c.Key == key);
-      if (configuration == null)
-        return NotFound();
-      return configuration.Value;
+      //var configuration = _dbContext.Configuration.ToDictionary(c => c.Key, c => c.Value);
+      var configuration = _dbContext.Configuration.Select(c => new string[] { c.Key, c.Value }).ToArray();
+      return configuration;
     }
   }
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UsersStore from "../Stores/UsersStore";
+import ConfigurationStore from "../Stores/ConfigurationStore";
 import {
   Grid,
   Card,
@@ -23,10 +24,13 @@ import DeleteUserDialog from "./Dialogs/DeleteUserDialog";
 
 export default function AdminView() {
   const [users, setUsers] = useState(UsersStore.getUsers());
-  //TODO: fetch Maximum number of collections
-  const [maxCollections, setMaxCollections] = React.useState(-1);
-  //TODO: fetch Maximum number of elements
-  const [maxElements, setMaxElements] = React.useState(-1);
+  const [configuration, setConfiguration] = useState(
+    ConfigurationStore.getConfiguration()
+  );
+  //   const [maxCollections, setMaxCollections] = React.useState(configuration.get("MaxCollections"));
+  //   const [maxElements, setMaxElements] = React.useState(configuration.get("MaxElements"));
+  let maxElements = configuration.get("MaxElements");
+  let maxCollections = configuration.get("MaxCollections");
   const [deleteUserDialogOpen, setDeleteUserDialogOpen] = React.useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [changeElementsDialogOpen, setChangeElementsDialogOpen] = useState(
@@ -43,11 +47,18 @@ export default function AdminView() {
   };
 
   useEffect(() => {
-    const changeHandler = () => {
+    const usersChangeHandler = () => {
       setUsers(UsersStore.getUsers());
     };
-    UsersStore.addChangeListener(changeHandler);
-    return () => UsersStore.removeChangeListener(changeHandler);
+    const configurationChangeHander = () => {
+      setConfiguration(ConfigurationStore.getConfiguration());
+    };
+    UsersStore.addChangeListener(usersChangeHandler);
+    ConfigurationStore.addChangeListener(configurationChangeHander);
+    return () => {
+      UsersStore.removeChangeListener(usersChangeHandler);
+      ConfigurationStore.removeChangeListener(configurationChangeHander);
+    };
   }, []);
 
   return (
@@ -159,14 +170,14 @@ export default function AdminView() {
         toggleDialogOpen={() =>
           setChangeElementsDialogOpen(!changeElementsDialogOpen)
         }
-        maxElements={maxElements}
+        maxElements={maxElements === undefined ? "-1" : maxElements}
       />
       <ChangeMaxCollectionsDialog
         open={changeCollectionsDialogOpen}
         toggleDialogOpen={() =>
           setChangeCollectionsDialogOpen(!changeCollectionsDialogOpen)
         }
-        maxCollections={maxCollections}
+        maxCollections={maxCollections === undefined ? "-1" : maxCollections}
       />
       <DeleteUserDialog
         open={deleteUserDialogOpen}
