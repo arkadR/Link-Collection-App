@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using LinkCollectionApp.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LinkCollectionApp.Controllers
 {
-  //[Authorize(Roles = "Administrator")]
+  [Authorize(Roles = "Administrator")]
   [Route("api/[controller]")]
   [ApiController]
   public class ConfigurationController : ControllerBase
