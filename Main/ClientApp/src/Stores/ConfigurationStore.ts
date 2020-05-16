@@ -1,7 +1,11 @@
 import ActionTypes from "../Actions/ActionTypes";
 import StoreBase from "../Infrastructure/StoreBase";
 import Action from "../Infrastructure/Action";
-import { loadConfiguration } from "../Actions/ConfigurationActions";
+import {
+  loadConfiguration,
+  updateConfiguration,
+} from "../Actions/ConfigurationActions";
+import { Configuration } from "../Model/Configuration";
 
 class ConfigurationStore extends StoreBase {
   onActionReceived(action: Action): void {
@@ -14,12 +18,22 @@ class ConfigurationStore extends StoreBase {
     }
   }
 
-  public getConfiguration(): Map<string, string> {
+  public getConfiguration(): Configuration | null {
     if (this._configuration == null) loadConfiguration();
-    return this._configuration ?? new Map();
+    return this._configuration;
   }
 
-  private _configuration: Map<string, string> | null = null;
+  public setMaxCollectionsPerUser(newValue: number) {
+    this._configuration!.maxCollectionsPerUser = newValue;
+    updateConfiguration(this._configuration!);
+  }
+
+  public setMaxElementsInCollection(newValue: number) {
+    this._configuration!.maxElementsInCollection = newValue;
+    updateConfiguration(this._configuration!);
+  }
+
+  private _configuration: Configuration | null = null;
 }
 
 const store = new ConfigurationStore();

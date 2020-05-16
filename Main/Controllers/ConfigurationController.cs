@@ -1,36 +1,36 @@
-﻿using System.Linq;
-using LinkCollectionApp.Data;
+﻿using LinkCollectionApp.Data;
+using LinkCollectionApp.Infrastructure.DTO;
+using LinkCollectionApp.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 
 namespace LinkCollectionApp.Controllers
 {
-  [Authorize(Roles = "Administrator")]
+  // [Authorize(Roles = "Administrator")]
   [Route("api/[controller]")]
   [ApiController]
   public class ConfigurationController : ControllerBase
   {
     private readonly ApplicationDbContext _dbContext;
+    private readonly ICollectionConfigurationProvider _configurationProvider;
 
-    public ConfigurationController(ApplicationDbContext dbContext)
+    public ConfigurationController(ApplicationDbContext dbContext, ICollectionConfigurationProvider configurationProvider)
     {
       _dbContext = dbContext;
+      _configurationProvider = configurationProvider;
     }
 
     [HttpGet]
-    public string[][] GetConfiguration()
+    public CollectionConfiguration GetConfiguration()
     {
-      return _dbContext.Configuration.Select(c => new string[] { c.Key, c.Value }).ToArray();
+      return _configurationProvider.GetModel();
     }
 
-    [HttpPatch("{key}/{value}")]
-    public IActionResult ChangeValue(string key, string value)
+    [HttpPatch]
+    public IActionResult UpdateConfiguration([FromBody] CollectionConfiguration newConfig)
     {
-      var configuration = _dbContext.Configuration.SingleOrDefault(c => c.Key == key);
-      if (configuration == null)
-        return NotFound();
-      configuration.Value = value;
-      _dbContext.SaveChanges();
+      _configurationProvider.MaxCollectionsPerUser = newConfig.MaxCollectionsPerUser;
+      _configurationProvider.MaxElementsInCollection = newConfig.MaxElementsInCollection;
       return Ok();
     }
   }

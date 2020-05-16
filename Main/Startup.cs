@@ -15,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UAParser;
+using ConfigurationProvider = LinkCollectionApp.Infrastructure.Implementations.ConfigurationProvider;
+using IConfigurationProvider = LinkCollectionApp.Infrastructure.Interfaces.IConfigurationProvider;
 
 namespace LinkCollectionApp
 {
@@ -29,7 +31,6 @@ namespace LinkCollectionApp
 
     public void ConfigureServices(IServiceCollection services)
     {
-
       services
         .AddControllersWithViews()
         .AddNewtonsoftJson()
@@ -45,6 +46,8 @@ namespace LinkCollectionApp
 
       services.AddHttpContextAccessor();
       services.AddTransient<IUserContextProvider, UserContextProvider>();
+      services.AddTransient<IConfigurationProvider, ConfigurationProvider>();
+      services.AddTransient<ICollectionConfigurationProvider, CollectionConfigurationProvider>();
       services.AddTransient<IIpInfoService, IpInfoService>();
       services.AddTransient<IRequestInfoService, RequestInfoService>();
       services.AddTransient<IUaParser, UaParserAdapter>();
