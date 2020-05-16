@@ -10,14 +10,14 @@ using Moq;
 
 namespace LinkCollectionApp.Test
 {
-  public abstract class IntegrationTestBase : IDisposable
+  public abstract class UnitTestBase : IDisposable
   {
     private readonly DbContextOptions<ApplicationDbContext> _options;
     private readonly IOptions<OperationalStoreOptions> _operationalStoreOptions;
 
     protected string NewGuid => Guid.NewGuid().ToString();
 
-    protected IntegrationTestBase()
+    protected UnitTestBase()
     {
       var databaseName = Guid.NewGuid().ToString();
       _options = new DbContextOptionsBuilder<ApplicationDbContext>()
@@ -113,6 +113,16 @@ namespace LinkCollectionApp.Test
       var userProviderMock = new Mock<IUserContextProvider>();
       userProviderMock.Setup(m => m.GetCurrentUserId()).Returns(userId);
       return userProviderMock.Object;
+    }
+
+    protected ICollectionConfigurationProvider getCollectionConfigurationProviderMock(
+      int maxCollectionsPerUser = int.MaxValue, 
+      int maxElementsInCollection = int.MaxValue)
+    {
+      var mock = new Mock<ICollectionConfigurationProvider>();
+      mock.Setup(m => m.MaxCollectionsPerUser).Returns(maxCollectionsPerUser);
+      mock.Setup(m => m.MaxElementsInCollection).Returns(maxElementsInCollection);
+      return mock.Object;
     }
   }
 }

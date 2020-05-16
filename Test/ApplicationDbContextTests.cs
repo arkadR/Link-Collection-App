@@ -6,7 +6,7 @@ using Xunit;
 
 namespace LinkCollectionApp.Test
 {
-  public class ApplicationDbContextTests : IntegrationTestBase
+  public class ApplicationDbContextTests : UnitTestBase
   {
     [Theory]
     [InlineData("SomeId1")]

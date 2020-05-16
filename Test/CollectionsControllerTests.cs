@@ -10,7 +10,7 @@ using Xunit;
 
 namespace LinkCollectionApp.Test
 {
-  public class CollectionsControllerTests : IntegrationTestBase
+  public class CollectionsControllerTests : UnitTestBase
   {
     [Theory]
     [InlineData("TestUserId")]
@@ -23,7 +23,7 @@ namespace LinkCollectionApp.Test
       ICollection<Collection> collections = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         collections = controller.GetUserCollections();
       });
 
@@ -51,7 +51,7 @@ namespace LinkCollectionApp.Test
       ICollection<Collection> collections = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         collections = controller.GetUserCollections();
       });
 
@@ -79,7 +79,7 @@ namespace LinkCollectionApp.Test
       ICollection<Collection> collections = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         collections = controller.GetUserCollections();
       });
 
@@ -104,7 +104,7 @@ namespace LinkCollectionApp.Test
       ICollection<Collection> collections = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         collections = controller.GetUserCollections();
       });
 
@@ -126,7 +126,7 @@ namespace LinkCollectionApp.Test
       //Act
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         controller.AddCollection(collectionData);
       });
 
@@ -152,7 +152,7 @@ namespace LinkCollectionApp.Test
       //Act
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         controller.AddCollection(collectionData);
       });
 
@@ -179,7 +179,7 @@ namespace LinkCollectionApp.Test
       //Act
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         controller.AddCollection(collectionData);
       });
 
@@ -211,7 +211,7 @@ namespace LinkCollectionApp.Test
       //Act
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         controller.UpdateCollection(collection.Id, collectionData);
       });
 
@@ -239,7 +239,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         result = controller.UpdateCollection(collection.Id, collectionData);
       });
 
@@ -270,7 +270,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         result = controller.UpdateCollection(collection.Id, collectionData);
       });
 
@@ -297,7 +297,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         result = controller.UpdateCollection(collection.Id + 1, collectionData);
       });
 
@@ -318,7 +318,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(NewGuid));
+        var controller = new CollectionsController(context, GetUserProviderMock(NewGuid), getCollectionConfigurationProviderMock());
         result = controller.UpdateCollection(collection.Id, collectionData);
       });
 
@@ -342,7 +342,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2), getCollectionConfigurationProviderMock());
         result = controller.UpdateCollection(collection.Id, collectionData);
       });
 
@@ -366,7 +366,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2), getCollectionConfigurationProviderMock());
         result = controller.UpdateCollection(collection.Id, collectionData);
       });
 
@@ -388,7 +388,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2), getCollectionConfigurationProviderMock());
         result = controller.DeleteCollection(collection.Id);
       });
 
@@ -411,7 +411,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2), getCollectionConfigurationProviderMock());
         result = controller.DeleteCollection(collection.Id);
       });
 
@@ -431,7 +431,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         result = controller.DeleteCollection(collection.Id);
       });
 
@@ -459,7 +459,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         result = controller.DeleteCollection(collection.Id);
       });
 
@@ -491,7 +491,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId), getCollectionConfigurationProviderMock());
         result = controller.DeleteCollection(collection.Id);
       });
 
@@ -520,7 +520,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1), getCollectionConfigurationProviderMock());
         result = controller.DeleteCollection(collection.Id);
       });
 
@@ -548,7 +548,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1), getCollectionConfigurationProviderMock());
         result = controller.DeleteCollection(collection.Id);
       });
 
@@ -573,7 +573,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1), getCollectionConfigurationProviderMock());
         result = controller.MakePublic(collection.Id);
       });
 
@@ -602,7 +602,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1), getCollectionConfigurationProviderMock());
         result = controller.MakePublic(collection.Id);
       });
 
@@ -628,7 +628,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2), getCollectionConfigurationProviderMock());
         result = controller.MakePublic(collection.Id);
       });
 
@@ -653,7 +653,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId1));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId1), getCollectionConfigurationProviderMock());
         result = controller.MakePublic(1010);
       });
 
@@ -676,7 +676,7 @@ namespace LinkCollectionApp.Test
       IActionResult result = null;
       InTransaction(context =>
       {
-        var controller = new CollectionsController(context, GetUserProviderMock(userId2));
+        var controller = new CollectionsController(context, GetUserProviderMock(userId2), getCollectionConfigurationProviderMock());
         result = controller.MakePublic(collection.Id);
       });
 

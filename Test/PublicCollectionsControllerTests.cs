@@ -13,7 +13,7 @@ using Xunit;
 
 namespace LinkCollectionApp.Test
 {
-  public class PublicCollectionsControllerTests : IntegrationTestBase
+  public class PublicCollectionsControllerTests : UnitTestBase
   {
     [Fact]
     public void GetPublicCollection_CollectionPublic_Ok()
