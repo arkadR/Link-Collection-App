@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SimpleDialog from "./SimpleDialog";
 import { Button } from "@material-ui/core";
 import NumberInput from "../Common/NumberInput";
