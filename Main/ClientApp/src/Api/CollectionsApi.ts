@@ -9,6 +9,7 @@ import {
   authorizedDelete,
   authorizedPatch,
 } from "../Infrastructure/FetchUtilities";
+import { DisplayMessageInSnackbar } from "../Actions/UIActions";
 
 class CollectionsApi {
   async getCollections(): Promise<Collection[]> {
@@ -21,7 +22,11 @@ class CollectionsApi {
     collectionData: CollectionCreationData
   ): Promise<boolean> {
     let response = await authorizedPost("api/collections", collectionData);
-    return response.ok;
+    if (response.ok) return true;
+
+    let message = await response.text();
+    DisplayMessageInSnackbar(message);
+    return false;
   }
 
   async deleteCollection(id: number): Promise<boolean> {
