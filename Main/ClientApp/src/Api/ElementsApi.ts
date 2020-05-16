@@ -6,9 +6,9 @@ import {
 import { ElementCreationData, ElementUpdateData } from "../Model/Element";
 
 class ElementsApi {
-  async addElement(elementData: ElementCreationData): Promise<boolean> {
+  async addElement(elementData: ElementCreationData): Promise<Response> {
     let response = await authorizedPost("api/elements", elementData);
-    return response.ok;
+    return response;
   }
 
   async updateElement(
