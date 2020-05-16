@@ -13,7 +13,6 @@ import {
   createStyles,
   Grid,
 } from "@material-ui/core";
-import { Person } from "@material-ui/icons";
 import {
   SharedCollectionData,
   SharedCollection,
@@ -100,7 +99,7 @@ export default function EditContributorDialog(
           >
             <Grid item>
               <Avatar>
-                <Person />
+                {sharedCollection?.user.name.toUpperCase().charAt(0)}
               </Avatar>
             </Grid>
             <Grid item xs={7}>

@@ -9,3 +9,9 @@ export async function loadUsers() {
     payload: { users: users },
   });
 }
+
+export async function deleteUser(userId: string) {
+  let success = await UsersApi.deleteUser(userId);
+  if (success) loadUsers();
+  else console.error("Could not delete user");
+}

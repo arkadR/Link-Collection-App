@@ -72,7 +72,7 @@ export default function MyCollectionsSection() {
     setMakeEditContributorDialogOpen,
   ] = useState(false);
   const [selectedContributorId, setSelectedContributorId] = useState("");
-  const { path, url } = useRouteMatch();
+  const { url } = useRouteMatch();
 
   useEffect(() => {
     const collectionChangeHandler = () => {
