@@ -6,10 +6,10 @@ import {
   Theme,
   createStyles,
   CircularProgress,
-  Snackbar,
 } from "@material-ui/core";
 import CollectionsApi from "../../Api/CollectionsApi";
 import CollectionsStore from "../../Stores/CollectionsStore";
+import { DisplayMessageInSnackbar } from "../../Actions/UIActions";
 
 type MakePublicDialogProps = {
   open: boolean;
@@ -46,7 +46,6 @@ export default function MakePublicDialog(props: MakePublicDialogProps) {
 
   const [loading, setLoading] = React.useState(false);
   const [sharableLink, setSharableLink] = useState("");
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const onConfirmClick = async () => {
     setLoading(true);
@@ -73,53 +72,37 @@ export default function MakePublicDialog(props: MakePublicDialogProps) {
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(sharableLink);
-    setSnackbarOpen(true);
+    DisplayMessageInSnackbar("Link copied to clipboard");
   };
 
   return (
-    <>
-      <SimpleDialog
-        open={props.open}
-        toggleDialogOpen={props.toggleDialogOpen}
-        title={title}
-        description={sharableLink === "" ? description : successDescription}
-        content={
-          <>
-            {sharableLink}
-            {sharableLink !== "" && (
-              <Button color="primary" onClick={copyToClipboard}>
-                Copy
-              </Button>
-            )}
-          </>
-        }
-        actions={
-          <div className={classes.wrapper}>
-            {sharableLink === "" && (
-              <Button
-                color="primary"
-                disabled={loading}
-                onClick={onConfirmClick}
-              >
-                Confirm
-              </Button>
-            )}
-            {loading && (
-              <CircularProgress size={24} className={classes.buttonProgress} />
-            )}
-          </div>
-        }
-      ></SimpleDialog>
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={snackbarOpen}
-        onClose={() => setSnackbarOpen(false)}
-        autoHideDuration={3000}
-        message="Link copied to clipboard"
-      />
-    </>
+    <SimpleDialog
+      open={props.open}
+      toggleDialogOpen={props.toggleDialogOpen}
+      title={title}
+      description={sharableLink === "" ? description : successDescription}
+      content={
+        <>
+          {sharableLink}
+          {sharableLink !== "" && (
+            <Button color="primary" onClick={copyToClipboard}>
+              Copy
+            </Button>
+          )}
+        </>
+      }
+      actions={
+        <div className={classes.wrapper}>
+          {sharableLink === "" && (
+            <Button color="primary" disabled={loading} onClick={onConfirmClick}>
+              Confirm
+            </Button>
+          )}
+          {loading && (
+            <CircularProgress size={24} className={classes.buttonProgress} />
+          )}
+        </div>
+      }
+    />
   );
 }

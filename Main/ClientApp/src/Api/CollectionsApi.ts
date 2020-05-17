@@ -19,9 +19,9 @@ class CollectionsApi {
 
   async addCollection(
     collectionData: CollectionCreationData
-  ): Promise<boolean> {
+  ): Promise<Response> {
     let response = await authorizedPost("api/collections", collectionData);
-    return response.ok;
+    return response;
   }
 
   async deleteCollection(id: number): Promise<boolean> {

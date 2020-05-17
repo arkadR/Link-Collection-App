@@ -7,6 +7,7 @@ import {
   CollectionUpdateData,
 } from "../Model/Collection";
 import { SharedCollectionData } from "../Model/SharedCollection";
+import { DisplayMessageInSnackbar } from "./UIActions";
 
 export async function loadCollections() {
   let collections = await CollectionsApi.getCollections();
@@ -19,9 +20,12 @@ export async function loadCollections() {
 export async function addCollection(
   collectionCreationData: CollectionCreationData
 ) {
-  let success = await CollectionsApi.addCollection(collectionCreationData);
-  if (success) loadCollections();
-  else console.error("Could not add collection");
+  let response = await CollectionsApi.addCollection(collectionCreationData);
+  if (response.ok) loadCollections();
+  else {
+    let message = await response.text();
+    DisplayMessageInSnackbar(message);
+  }
 }
 
 export async function deleteCollection(id: number) {

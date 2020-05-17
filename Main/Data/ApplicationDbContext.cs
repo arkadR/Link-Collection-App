@@ -20,7 +20,7 @@ namespace LinkCollectionApp.Data
     public virtual DbSet<SavedCollection> SavedCollection { get; set; }
     public virtual DbSet<SharedCollection> SharedCollection { get; set; }
     public virtual DbSet<PublicCollectionVisit> PublicCollectionVisit { get; set; }
-    public virtual DbSet<Configuration> Configuration { get; set; }
+    public virtual DbSet<ConfigurationEntry> Configuration { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -181,7 +181,7 @@ namespace LinkCollectionApp.Data
           .HasDefaultValueSql("(getdate())");
       });
 
-      modelBuilder.Entity<Configuration>(entity =>
+      modelBuilder.Entity<ConfigurationEntry>(entity =>
       {
         entity.HasKey(e => new { e.Key })
            .HasName("PK__Configuration__XOCTKZ6IAQ");

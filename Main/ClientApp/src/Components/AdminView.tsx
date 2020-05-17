@@ -27,8 +27,10 @@ export default function AdminView() {
   const [configuration, setConfiguration] = useState(
     ConfigurationStore.getConfiguration()
   );
-  let maxElements = configuration.get("MaxElements");
-  let maxCollections = configuration.get("MaxCollections");
+
+  let maxElements = configuration?.maxElementsInCollection;
+  let maxCollections = configuration?.maxCollectionsPerUser;
+
   const [deleteUserDialogOpen, setDeleteUserDialogOpen] = React.useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
   const [changeElementsDialogOpen, setChangeElementsDialogOpen] = useState(
@@ -168,14 +170,20 @@ export default function AdminView() {
         toggleDialogOpen={() =>
           setChangeElementsDialogOpen(!changeElementsDialogOpen)
         }
-        maxElements={maxElements === undefined ? "-1" : maxElements}
+        maxElements={maxElements ?? -1}
+        onValueChange={(val: number) =>
+          ConfigurationStore.setMaxElementsInCollection(val)
+        }
       />
       <ChangeMaxCollectionsDialog
         open={changeCollectionsDialogOpen}
         toggleDialogOpen={() =>
           setChangeCollectionsDialogOpen(!changeCollectionsDialogOpen)
         }
-        maxCollections={maxCollections === undefined ? "-1" : maxCollections}
+        maxCollections={maxCollections ?? -1}
+        onValueChange={(val: number) =>
+          ConfigurationStore.setMaxCollectionsPerUser(val)
+        }
       />
       <DeleteUserDialog
         open={deleteUserDialogOpen}

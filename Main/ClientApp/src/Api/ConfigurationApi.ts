@@ -2,18 +2,17 @@ import {
   authorizedGet,
   authorizedPatch,
 } from "../Infrastructure/FetchUtilities";
+import { Configuration } from "../Model/Configuration";
 
 class ConfigurationApi {
-  async getConfiguration(): Promise<Map<string, string>> {
+  async getConfiguration(): Promise<Configuration> {
     let response = await authorizedGet("api/configuration");
-    let configurationArr = (await response.json()) as string[][];
-    let map = new Map();
-    configurationArr.forEach((a) => map.set(a[0], a[1]));
-    return map;
+    let configuration = (await response.json()) as Configuration;
+    return configuration;
   }
 
-  async changeValue(key: string, value: string): Promise<boolean> {
-    let response = await authorizedPatch(`api/configuration/${key}/${value}`);
+  async updateConfiguration(newConfig: Configuration): Promise<boolean> {
+    let response = await authorizedPatch(`api/configuration`, newConfig);
     return response.ok;
   }
 }

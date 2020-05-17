@@ -19,11 +19,16 @@ namespace LinkCollectionApp.Controllers
   {
     private readonly ApplicationDbContext _dbContext;
     private readonly IUserContextProvider _userProvider;
+    private readonly ICollectionConfigurationProvider _configurationProvider;
 
-    public CollectionsController(ApplicationDbContext dbContext, IUserContextProvider userProvider)
+    public CollectionsController(
+      ApplicationDbContext dbContext, 
+      IUserContextProvider userProvider, 
+      ICollectionConfigurationProvider configurationProvider)
     {
       _dbContext = dbContext;
       _userProvider = userProvider;
+      _configurationProvider = configurationProvider;
     }
 
     [HttpGet]
@@ -42,7 +47,16 @@ namespace LinkCollectionApp.Controllers
     [HttpPost]
     public IActionResult AddCollection([FromBody] CollectionCreationData data)
     {
+      var maxCollectionPerUser = _configurationProvider.MaxCollectionsPerUser;
       var userId = _userProvider.GetCurrentUserId();
+      var userCollectionCount = _dbContext.Users
+        .Include(u => u.Collections)
+        .Single(u => u.Id == userId)
+        .Collections.Count;
+
+      if (userCollectionCount >= maxCollectionPerUser)
+        return BadRequest("Could not add the collection: Reached maximum number of collections");
+
       var collection = new Collection
       {
         Name = data.Name, 

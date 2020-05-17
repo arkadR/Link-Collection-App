@@ -9,7 +9,7 @@ using Xunit;
 
 namespace LinkCollectionApp.Test
 {
-  public class SharedCollectionControllerTests : IntegrationTestBase
+  public class SharedCollectionControllerTests : UnitTestBase
   {
 
     [Fact]

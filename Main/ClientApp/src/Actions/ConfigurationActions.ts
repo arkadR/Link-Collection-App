@@ -1,6 +1,7 @@
 import Dispatcher from "../Infrastructure/Dispatcher";
 import ConfigurationApi from "../Api/ConfigurationApi";
 import ActionTypes from "./ActionTypes";
+import { Configuration } from "../Model/Configuration";
 
 export async function loadConfiguration() {
   let configuration = await ConfigurationApi.getConfiguration();
@@ -10,8 +11,8 @@ export async function loadConfiguration() {
   });
 }
 
-export async function changeValue(key: string, value: string) {
-  let success = await ConfigurationApi.changeValue(key, value);
+export async function updateConfiguration(config: Configuration) {
+  let success = await ConfigurationApi.updateConfiguration(config);
   if (success) loadConfiguration();
-  else console.error("Could not change congiguration value for " + key);
+  else console.error("Could not update configuration");
 }

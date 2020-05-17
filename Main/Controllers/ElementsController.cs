@@ -18,21 +18,33 @@ namespace LinkCollectionApp.Controllers
 
     private readonly ApplicationDbContext _dbContext;
     private readonly IUserContextProvider _userProvider;
+    private readonly ICollectionConfigurationProvider _configurationProvider;
 
-    public ElementsController(ApplicationDbContext dbContext, IUserContextProvider userProvider)
+    public ElementsController(
+      ApplicationDbContext dbContext, 
+      IUserContextProvider userProvider, 
+      ICollectionConfigurationProvider configurationProvider)
     {
       _dbContext = dbContext;
       _userProvider = userProvider;
+      _configurationProvider = configurationProvider;
     }
 
     [HttpPost]
     public IActionResult AddElement([FromBody] ElementCreationData elementData)
     {
       var userId = _userProvider.GetCurrentUserId();
-      var lastSequenceInCollection = _dbContext.Collection
-        .Find(elementData.CollectionId).Elements
-        .Max(e => e.Sequence);
+      var collection = _dbContext.Collection
+        .Include(c => c.Elements)
+        .SingleOrDefault(c => c.Id == elementData.CollectionId);
 
+      if (collection == null)
+        return NotFound();
+
+      if (collection.Elements.Count >= _configurationProvider.MaxElementsInCollection)
+        return BadRequest("Could not add the element: Maximum number of elements reached");
+
+      var lastSequenceInCollection = collection.Elements.Max(e => e.Sequence);
       var element = new Element
       {
         Link = elementData.Link, 

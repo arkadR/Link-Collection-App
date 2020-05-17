@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SimpleDialog from "./SimpleDialog";
-import { Button, TextField } from "@material-ui/core";
-import { changeValue } from "../../Actions/ConfigurationActions";
+import { Button } from "@material-ui/core";
+import NumberInput from "../Common/NumberInput";
 
 type ChangeMaxCollectionsDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
-  maxCollections: string;
+  maxCollections: number;
+  onValueChange: (val: number) => void;
 };
 
 export default function ChangeMaxCollectionsDialog(
@@ -21,6 +22,10 @@ export default function ChangeMaxCollectionsDialog(
     props.maxCollections
   );
 
+  useEffect(() => {
+    setMaxCollections(props.maxCollections);
+  }, [props.maxCollections]);
+
   return (
     <SimpleDialog
       open={props.open}
@@ -28,26 +33,18 @@ export default function ChangeMaxCollectionsDialog(
       title={title}
       description={description}
       content={
-        <TextField
-          onChange={(e) => setMaxCollections(e.target.value)}
-          autoFocus
-          margin="dense"
-          id="maxCollections"
-          label="Maximum number of collections"
-          type="number"
-          placeholder={"" + props.maxCollections}
-          defaultValue={"" + props.maxCollections}
-          fullWidth
+        <NumberInput
+          value={maxCollections}
+          onChange={(val) => setMaxCollections(val)}
         />
       }
       actions={
         <Button
           disabled={
-            maxCollections === props.maxCollections ||
-            ((maxCollections as unknown) as number) < 0
+            maxCollections === props.maxCollections || maxCollections <= 0
           }
           onClick={() => {
-            changeValue("MaxCollections", maxCollections);
+            props.onValueChange(maxCollections);
             props.toggleDialogOpen();
           }}
           color="secondary"
