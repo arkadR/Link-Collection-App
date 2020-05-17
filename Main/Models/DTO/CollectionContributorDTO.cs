@@ -9,7 +9,7 @@
 
     public static CollectionContributorDTO FromSharedCollection(SharedCollection sharedCollection)
     {
-      var user = UserDTO.FromApplicationUser(sharedCollection.User);
+      var user = UserDtoBuilder.FromApplicationUser(sharedCollection.User).Create();
       return new CollectionContributorDTO 
       { 
         CollectionId = sharedCollection.CollectionId, 
