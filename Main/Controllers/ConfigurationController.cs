@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LinkCollectionApp.Controllers
 {
-  // [Authorize(Roles = "Administrator")]
+  [Authorize(Roles = "Administrator")]
   [Route("api/[controller]")]
   [ApiController]
   public class ConfigurationController : ControllerBase

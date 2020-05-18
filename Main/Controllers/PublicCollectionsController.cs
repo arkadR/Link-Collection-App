@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +19,10 @@ namespace LinkCollectionApp.Controllers
     private readonly IUserContextProvider _userContextProvider;
     private readonly IRequestInfoService _requestInfoService;
 
-    public PublicCollectionsController(ApplicationDbContext dbContext, IRequestInfoService requestInfoService, IUserContextProvider userContextProvider)
+    public PublicCollectionsController(
+      ApplicationDbContext dbContext, 
+      IRequestInfoService requestInfoService, 
+      IUserContextProvider userContextProvider)
     {
       _dbContext = dbContext;
       _requestInfoService = requestInfoService;

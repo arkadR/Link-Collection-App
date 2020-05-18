@@ -10,6 +10,14 @@ export async function loadUsers() {
   });
 }
 
+export async function loadCurrentUser() {
+  let user = await UsersApi.getCurrentUser();
+  Dispatcher.dispatch({
+    actionType: ActionTypes.LOAD_CURRENT_USER,
+    payload: { user: user },
+  });
+}
+
 export async function deleteUser(userId: string) {
   let success = await UsersApi.deleteUser(userId);
   if (success) loadUsers();
