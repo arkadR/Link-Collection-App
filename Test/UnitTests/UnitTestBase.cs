@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
 
-namespace LinkCollectionApp.Test
+namespace LinkCollectionApp.Test.UnitTests
 {
   public abstract class UnitTestBase : IDisposable
   {
