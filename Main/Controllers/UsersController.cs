@@ -52,10 +52,12 @@ namespace LinkCollectionApp.Controllers
       return users.Select(user => UserDtoBuilder.FromApplicationUser(user).Create()).ToList();
     }
 
-    [Authorize(Roles = "Administrator")]
     [HttpDelete("{userId}")]
     public IActionResult DeleteUser(string userId)
     {
+      if (_userContextProvider.IsCurrentUserInRole("Administrator") == false)
+        return Forbid();
+
       var user = _dbContext.ApplicationUser
         .Include(u => u.Collections)
         .SingleOrDefault(u => u.Id == userId);

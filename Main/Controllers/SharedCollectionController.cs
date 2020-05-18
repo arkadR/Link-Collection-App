@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Serialization;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
@@ -112,14 +111,14 @@ namespace LinkCollectionApp.Controllers
     {
       var userId = _userProvider.GetCurrentUserId();
       var userCollections = _dbContext.Users
-      .Include(u => u.Collections)
-      .ThenInclude(c => c.SharedCollections)
-      .ThenInclude(sc => sc.User)
-      .Single(u => u.Id == userId)
-      .Collections.ToList();
+        .Include(u => u.Collections)
+        .ThenInclude(c => c.SharedCollections)
+        .ThenInclude(sc => sc.User)
+        .Single(u => u.Id == userId)
+        .Collections.ToList();
 
       var sharedCollections = userCollections.SelectMany(c => c.SharedCollections).ToList();
-      return sharedCollections.Select(sc => CollectionContributorDTO.FromSharedCollection(sc)).ToList();
+      return sharedCollections.Select(CollectionContributorDTO.FromSharedCollection).ToList();
     }
   }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using LinkCollectionApp.Data;
+using LinkCollectionApp.Infrastructure;
 using LinkCollectionApp.Infrastructure.Implementations;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
@@ -15,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using UAParser;
 using ConfigurationProvider = LinkCollectionApp.Infrastructure.Implementations.ConfigurationProvider;
 using IConfigurationProvider = LinkCollectionApp.Infrastructure.Interfaces.IConfigurationProvider;
@@ -54,6 +56,7 @@ namespace LinkCollectionApp
       services.AddTransient<IUaParser, UaParserAdapter>();
       services.AddSingleton<Parser>(Parser.GetDefault());
       ConfigureIdentity(services);
+      ConfigureAuthentication(services);
 
       // In production, the React files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -62,7 +65,7 @@ namespace LinkCollectionApp
       });
     }
 
-    private void ConfigureIdentity(IServiceCollection services)
+    protected virtual void ConfigureIdentity(IServiceCollection services)
     {
       services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddRoles<IdentityRole>()
@@ -72,22 +75,11 @@ namespace LinkCollectionApp
       
       services.AddIdentityServer()
         .AddSigningCredential(cert)
-        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-
-      services.AddAuthentication()
-        .AddGoogle(options =>
-        {
-          var googleAuthNSection = Configuration.GetSection("Authentication:Google");
-          options.ClientId = googleAuthNSection["ClientId"];
-          options.ClientSecret = googleAuthNSection["ClientSecret"];
-        })
-        .AddIdentityServerJwt();
-
-      services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme, 
-        opts => opts.TokenValidationParameters.ValidateIssuer = false);
+        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+        .AddProfileService<IdentityProfileService>();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
     {
       if (env.IsDevelopment() || env.IsStaging())
       {
@@ -119,7 +111,7 @@ namespace LinkCollectionApp
       ConfigureSpa(app, env);
     }
 
-    private void ConfigureSpa(IApplicationBuilder app, IHostEnvironment env)
+    protected virtual void ConfigureSpa(IApplicationBuilder app, IHostEnvironment env)
     {
       app.UseSpaStaticFiles();
 
@@ -131,6 +123,21 @@ namespace LinkCollectionApp
           spa.UseReactDevelopmentServer(npmScript: "start");
         }
       });
+    }
+
+    protected virtual void ConfigureAuthentication(IServiceCollection services)
+    {
+      services.AddAuthentication()
+        .AddGoogle(options =>
+        {
+          var googleAuthNSection = Configuration.GetSection("Authentication:Google");
+          options.ClientId = googleAuthNSection["ClientId"];
+          options.ClientSecret = googleAuthNSection["ClientSecret"];
+        })
+        .AddIdentityServerJwt();
+
+      services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme,
+        opts => opts.TokenValidationParameters.ValidateIssuer = false);
     }
   }
 }

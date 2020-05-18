@@ -7,7 +7,7 @@ using LinkCollectionApp.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
-namespace LinkCollectionApp.Test
+namespace LinkCollectionApp.Test.UnitTests
 {
   public class SharedCollectionControllerTests : UnitTestBase
   {

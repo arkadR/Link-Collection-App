@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LinkCollectionApp.Models;
 
 namespace LinkCollectionApp.Infrastructure.Interfaces
@@ -8,5 +9,6 @@ namespace LinkCollectionApp.Infrastructure.Interfaces
     [Obsolete("Some problems with this, use GetCurrentUserId instead")]
     public ApplicationUser GetCurrentUser();
     public string GetCurrentUserId();
+    public bool IsCurrentUserInRole(string role);
   }
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace LinkCollectionApp.Test
+namespace LinkCollectionApp.Test.UnitTests
 {
   public class CollectionsControllerTests : UnitTestBase
   {
