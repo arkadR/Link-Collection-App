@@ -5,17 +5,30 @@ import { IconButton } from "@material-ui/core";
 import { VpnKey, Queue } from "@material-ui/icons";
 import SpotifyLoginDialog from "./Dialogs/SpotifyLoginDialog";
 import { addToQueue, getTrackInfo } from "../Actions/SpotifyActions";
-import { useCookie } from "../Infrastructure/CustomReactHooks";
+import Cookies from "js-cookie";
 import SpotifyStore from "../Stores/SpotifyStore";
 import { CardHeader, Avatar } from "@material-ui/core";
+import UsersStore from "../Stores/UsersStore";
 
 type SpotifyElementProps = {
   element: Element;
 };
 
+type SpotifyTokenCookie = {
+  spotifyToken: string;
+  userId: string;
+};
+
 export default function SpotifyElement(props: SpotifyElementProps) {
+  const [currentUser, setCurrentUser] = useState(UsersStore.getCurrentUser());
   const [spotifyLoginDialogOpen, setSpotifyLoginDialogOpen] = useState(false);
-  let [userToken, _] = useCookie<string | null>("spotifyUserToken", null);
+  let spotifyCookie = Cookies.getJSON(
+    "spotifyUserToken"
+  ) as SpotifyTokenCookie | null;
+  let userToken =
+    currentUser?.id === spotifyCookie?.userId
+      ? spotifyCookie?.spotifyToken
+      : null;
   let trackId = getTrackId(props.element.link);
   let trackUri = "spotify:track:" + trackId;
   let [track, setTrack] = useState<SpotifyApi.SingleTrackResponse | undefined>(
@@ -23,18 +36,24 @@ export default function SpotifyElement(props: SpotifyElementProps) {
   );
 
   useEffect(() => {
+    const trackChangeHandler = () => {
+      setTrack(SpotifyStore.getTrack(trackId));
+    };
+    const userChangeHandler = () => {
+      setCurrentUser(UsersStore.getCurrentUser());
+    };
+    SpotifyStore.addChangeListener(trackChangeHandler);
+    UsersStore.addChangeListener(userChangeHandler);
+
     if (track === undefined && userToken !== null) {
       getTrackInfo(trackId, userToken!);
     }
-    const collectionChangeHandler = () => {
-      setTrack(SpotifyStore.getTrack(trackId));
-    };
-    SpotifyStore.addChangeListener(collectionChangeHandler);
 
     return () => {
-      SpotifyStore.removeChangeListener(collectionChangeHandler);
+      SpotifyStore.removeChangeListener(trackChangeHandler);
+      UsersStore.removeChangeListener(userChangeHandler);
     };
-  }, [props.element.link]);
+  }, [trackId, userToken, track]);
 
   return (
     <>

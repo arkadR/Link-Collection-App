@@ -1,7 +1,6 @@
 import React from "react";
 import SimpleDialog from "./SimpleDialog";
 import { Button } from "@material-ui/core";
-import { OpenLink } from "../../Infrastructure/UrlUtilities";
 import Cookies from "js-cookie";
 
 type SpotifyLoginDialogProps = {
@@ -17,6 +16,9 @@ export default function SpotifyLoginDialog(props: SpotifyLoginDialogProps) {
   const authEndpoint = "https://accounts.spotify.com/authorize";
   const clientId = "e9a69171037d403ba8f18aa96d36aa09"; //TODO: get from server
   const scopes = ["user-modify-playback-state"];
+  const spotifyRedirectUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${
+    props.redirectUri
+  }&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`;
 
   return (
     <SimpleDialog
@@ -28,16 +30,10 @@ export default function SpotifyLoginDialog(props: SpotifyLoginDialogProps) {
         <Button
           onClick={() => {
             Cookies.set(
-              "spotifyRediretCollectionId",
+              "spotifyRedirectCollectionId",
               JSON.stringify(props.collectionId)
             );
-            OpenLink(
-              `${authEndpoint}?client_id=${clientId}&redirect_uri=${
-                props.redirectUri
-              }&scope=${scopes.join(
-                "%20"
-              )}&response_type=token&show_dialog=true`
-            );
+            window.location.replace(spotifyRedirectUrl);
             props.toggleDialogOpen();
           }}
           color="primary"

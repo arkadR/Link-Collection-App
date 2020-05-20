@@ -9,7 +9,7 @@ export async function addToQueue(trackUri: string, userToken: string) {
     DisplayMessageInSnackbar("Track successfully added to queue");
   } else {
     let message = await response.text();
-    //IDEA: nivalidate userToken
+    //IDEA: invalidate userToken
     DisplayMessageInSnackbar("Could not add track to queue. " + message);
   }
 }
@@ -18,6 +18,6 @@ export async function getTrackInfo(trackId: string, userToken: string) {
   let trackInfo = await SpotifyApi.getTrackInfo(trackId, userToken);
   Dispatcher.dispatch({
     actionType: ActionTypes.GET_SPOTIFY_TRACK_INFO,
-    payload: { trackInfo: trackInfo, trackId: trackId },
+    payload: { trackId: trackId, trackInfo: trackInfo },
   });
 }

@@ -15,11 +15,8 @@ class ElementTypeService {
 
   isSpotifyElement = (element: Element) => {
     return (
-      //TODO:check
       element.link.match(
         /(https?:\/\/open.spotify.com\/(track)\/[a-zA-Z0-9]+(\/playlist\/[a-zA-Z0-9]+|)|spotify:(track):[a-zA-Z0-9]+(:playlist:[a-zA-Z0-9]+|))/
-
-        // /(https?:\/\/open.spotify.com\/(track|user|artist|album)\/[a-zA-Z0-9]+(\/playlist\/[a-zA-Z0-9]+|)|spotify:(track|user|artist|album):[a-zA-Z0-9]+(:playlist:[a-zA-Z0-9]+|))/
       ) != null
     );
   };
