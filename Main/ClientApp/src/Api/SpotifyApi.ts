@@ -1,12 +1,16 @@
-export const authEndpoint = "https://accounts.spotify.com/authorize";
+const queueEndpoint = "https://api.spotify.com/v1/me/player/queue";
 
 class SpotifyApi {
-  //     async getUserToken(clientId: string, redirectUri: string, scopes: string[]): Promise<boolean> {
-  //         var response = await fetch(`${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join(
-  //     "%20"
-  //   )}&response_type=token&show_dialog=true`);
-  //   return response.ok;
-  //       }
+  async addToQueue(trackUri: string, userToken: string): Promise<Response> {
+    let response = await fetch(`${queueEndpoint}?uri=${trackUri}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  }
 }
 
 let api = new SpotifyApi();

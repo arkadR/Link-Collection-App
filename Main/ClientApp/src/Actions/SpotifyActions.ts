@@ -1,12 +1,13 @@
-import Dispatcher from "../Infrastructure/Dispatcher";
 import SpotifyApi from "../Api/SpotifyApi";
-import ActionTypes from "./ActionTypes";
+import { DisplayMessageInSnackbar } from "./UIActions";
 
-export async function setSpotifyUserToken(token: string) {
-  Dispatcher.dispatch({
-    actionType: ActionTypes.SPOTIFY_USER_TOKEN,
-    payload: { spotifyUserToken: token },
-  });
+export async function addToQueue(trackUri: string, userToken: string) {
+  let response = await SpotifyApi.addToQueue(trackUri, userToken);
+  if (response.ok) {
+    DisplayMessageInSnackbar("Track successfully added to queue");
+  } else {
+    let message = await response.text();
+    //IDEA: nivalidate userToken
+    DisplayMessageInSnackbar("Could not add track to queue. " + message);
+  }
 }
-
-// export async function addToQueue(uri:string){}
