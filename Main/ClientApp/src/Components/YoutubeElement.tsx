@@ -4,6 +4,8 @@ import Youtube, { Options } from "react-youtube";
 import { Element } from "../Model/Element";
 import { createStyles, Theme, makeStyles } from "@material-ui/core";
 
+const youtubeVideoIdRegex = /(?:youtube.)\w+(?:\/watch?)\?v=(\w+)/;
+
 interface YoutubeElementProps {
   element: Element;
 }
@@ -25,10 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function YoutubeElement(props: YoutubeElementProps) {
-  const url = new URL(props.element.link);
-  const videoId = url.searchParams.get("v")!;
   const classes = useStyles();
 
+  const match = props.element.link.match(youtubeVideoIdRegex);
+  const videoId = match?.[1] ?? null;
   const onReady = (event: { target: any }) => {
     event.target.pauseVideo();
   };
@@ -37,20 +39,22 @@ export default function YoutubeElement(props: YoutubeElementProps) {
     height: "100%",
     width: "100%",
     playerVars: {
-      autoplay: 1,
+      autoplay: 0,
     },
   } as Options;
 
   return (
     <ElementView element={props.element}>
-      <div className={classes.root}>
-        <Youtube
-          className={classes.content}
-          videoId={videoId}
-          onReady={onReady}
-          opts={opts}
-        />
-      </div>
+      {videoId && (
+        <div className={classes.root}>
+          <Youtube
+            className={classes.content}
+            videoId={videoId}
+            onReady={onReady}
+            opts={opts}
+          />
+        </div>
+      )}
     </ElementView>
   );
 }

@@ -28,6 +28,5 @@ const IsImageElement = (element: Element) => {
 };
 
 const IsYoutubeLink = (element: Element) => {
-  //TODO: Regex
-  return element.link.startsWith("https://youtube.com/watch");
+  return element.link.match(/(youtube.)(\w)+(\/watch?)\?(v=)/) != null;
 };
