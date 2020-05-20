@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace LinkCollectionApp
 {
@@ -14,6 +15,10 @@ namespace LinkCollectionApp
     {
       return Host
         .CreateDefaultBuilder(args)
+        .ConfigureLogging(loggingBuilder =>
+        {
+          loggingBuilder.AddConsole();
+        })
         .ConfigureWebHostDefaults(webBuilder =>
         {
           webBuilder.UseStartup<Startup>();

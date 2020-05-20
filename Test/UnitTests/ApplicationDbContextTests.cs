@@ -4,7 +4,7 @@ using FluentAssertions;
 using LinkCollectionApp.Models;
 using Xunit;
 
-namespace LinkCollectionApp.Test
+namespace LinkCollectionApp.Test.UnitTests
 {
   public class ApplicationDbContextTests : UnitTestBase
   {

@@ -8,6 +8,7 @@ import CollectionsPage from "./Components/CollectionsPage";
 import AdminPage from "./Components/AdminPage";
 import PublicCollectionPage from "./Components/PublicCollectionPage";
 import InfoSnackBar from "./Components/InfoSnackBar";
+import SpotifyCallbackPage from "./Components/SpotifyCallbackPage";
 
 function App() {
   return (
@@ -17,6 +18,10 @@ function App() {
       <AuthorizeRoute path="/collections/" component={CollectionsPage} />
       <Route path="/public/" component={PublicCollectionPage} />
       <AuthorizeRoute path="/admin/" component={AdminPage} />
+      <AuthorizeRoute
+        path="/spotifycallback/"
+        component={SpotifyCallbackPage}
+      />
       <InfoSnackBar />
     </>
   );

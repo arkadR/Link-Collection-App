@@ -11,7 +11,7 @@ using Moq;
 using UAParser;
 using Xunit;
 
-namespace LinkCollectionApp.Test
+namespace LinkCollectionApp.Test.UnitTests
 {
   public class PublicCollectionsControllerTests : UnitTestBase
   {
