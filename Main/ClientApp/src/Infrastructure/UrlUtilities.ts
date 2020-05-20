@@ -21,3 +21,9 @@ export function OpenInNewTab(href: string) {
     rel: "noopener noreferrer",
   }).click();
 }
+
+export function OpenLink(href: string) {
+  Object.assign(document.createElement("a"), {
+    href,
+  }).click();
+}
