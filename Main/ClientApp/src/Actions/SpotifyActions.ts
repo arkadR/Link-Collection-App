@@ -2,6 +2,7 @@ import SpotifyApi from "../Api/SpotifyApi";
 import { DisplayMessageInSnackbar } from "./UIActions";
 import Dispatcher from "../Infrastructure/Dispatcher";
 import ActionTypes from "./ActionTypes";
+import ConfigurationApi from "../Api/ConfigurationApi";
 
 export async function addToQueue(trackUri: string, userToken: string) {
   let response = await SpotifyApi.addToQueue(trackUri, userToken);
@@ -20,4 +21,14 @@ export async function getTrackInfo(trackId: string, userToken: string) {
     actionType: ActionTypes.GET_SPOTIFY_TRACK_INFO,
     payload: { trackId: trackId, trackInfo: trackInfo },
   });
+}
+
+export async function getSpotifyClientId() {
+  let clientId = await ConfigurationApi.getSpotifyClientId();
+  if (clientId === null) DisplayMessageInSnackbar("Could not fetch client id");
+  else
+    Dispatcher.dispatch({
+      actionType: ActionTypes.GET_SPOTIFY_CLIENT_ID,
+      payload: { clientId: clientId },
+    });
 }
