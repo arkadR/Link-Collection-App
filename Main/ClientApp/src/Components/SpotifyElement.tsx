@@ -9,14 +9,10 @@ import Cookies from "js-cookie";
 import SpotifyStore from "../Stores/SpotifyStore";
 import { CardHeader, Avatar } from "@material-ui/core";
 import UsersStore from "../Stores/UsersStore";
+import { SpotifyTokenCookie } from "../Model/Spotify";
 
 type SpotifyElementProps = {
   element: Element;
-};
-
-type SpotifyTokenCookie = {
-  spotifyToken: string;
-  userId: string;
 };
 
 export default function SpotifyElement(props: SpotifyElementProps) {
