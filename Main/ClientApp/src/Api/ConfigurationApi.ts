@@ -15,6 +15,13 @@ class ConfigurationApi {
     let response = await authorizedPatch(`api/configuration`, newConfig);
     return response.ok;
   }
+
+  async getSpotifyClientId(): Promise<string | null> {
+    let response = await authorizedGet("api/configuration/spotifyclientid");
+    if (!response.ok) return null;
+    let clientId = await response.text();
+    return clientId;
+  }
 }
 
 let api = new ConfigurationApi();

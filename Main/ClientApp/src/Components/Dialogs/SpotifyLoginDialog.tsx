@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SimpleDialog from "./SimpleDialog";
 import { Button } from "@material-ui/core";
-import { OpenLink } from "../../Infrastructure/UrlUtilities";
 import Cookies from "js-cookie";
+import SpotifyStore from "../../Stores/SpotifyStore";
 
 type SpotifyLoginDialogProps = {
   open: boolean;
@@ -15,8 +15,23 @@ export default function SpotifyLoginDialog(props: SpotifyLoginDialogProps) {
   const title = "Login to Spotify";
   const description = "Login to spotify to add this song to queue";
   const authEndpoint = "https://accounts.spotify.com/authorize";
-  const clientId = "e9a69171037d403ba8f18aa96d36aa09"; //TODO: get from server
+  const [clientId, setClientId] = useState<string | null>(
+    SpotifyStore.getSpotifyClientId()
+  );
   const scopes = ["user-modify-playback-state"];
+  const spotifyRedirectUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${
+    props.redirectUri
+  }&scope=${scopes.join("%20")}&response_type=token&show_dialog=true`;
+
+  useEffect(() => {
+    const clientIdChangeHandler = () => {
+      setClientId(SpotifyStore.getSpotifyClientId());
+    };
+    SpotifyStore.addChangeListener(clientIdChangeHandler);
+    return () => {
+      SpotifyStore.removeChangeListener(clientIdChangeHandler);
+    };
+  }, []);
 
   return (
     <SimpleDialog
@@ -28,16 +43,10 @@ export default function SpotifyLoginDialog(props: SpotifyLoginDialogProps) {
         <Button
           onClick={() => {
             Cookies.set(
-              "spotifyRediretCollectionId",
+              "spotifyRedirectCollectionId",
               JSON.stringify(props.collectionId)
             );
-            OpenLink(
-              `${authEndpoint}?client_id=${clientId}&redirect_uri=${
-                props.redirectUri
-              }&scope=${scopes.join(
-                "%20"
-              )}&response_type=token&show_dialog=true`
-            );
+            if (clientId !== null) window.location.replace(spotifyRedirectUrl);
             props.toggleDialogOpen();
           }}
           color="primary"

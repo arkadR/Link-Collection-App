@@ -22,22 +22,14 @@ export function OpenInNewTab(href: string) {
   }).click();
 }
 
-export function OpenLink(href: string) {
-  Object.assign(document.createElement("a"), {
-    href,
-  }).click();
-}
-
-// Get the hash of the url
-export function UrlHash(url: string) {
-  return url
+export function GetQueryParams(urlParams: string) {
+  let paramsMap = new Map();
+  urlParams
     .substring(1)
     .split("&")
-    .reduce(function (initial, item) {
-      if (item) {
-        var parts = item.split("=");
-        initial.set(parts[0], decodeURIComponent(parts[1]));
-      }
-      return initial;
-    }, new Map());
+    .forEach((param) => {
+      let parts = param.split("=");
+      paramsMap.set(parts[0], decodeURIComponent(parts[1]));
+    });
+  return paramsMap;
 }

@@ -3,6 +3,7 @@ using LinkCollectionApp.Infrastructure.DTO;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace LinkCollectionApp.Controllers
 {
@@ -43,6 +44,16 @@ namespace LinkCollectionApp.Controllers
       _configurationProvider.MaxCollectionsPerUser = newConfig.MaxCollectionsPerUser;
       _configurationProvider.MaxElementsInCollection = newConfig.MaxElementsInCollection;
       return Ok();
+    }
+
+    [Authorize]
+    [HttpGet("spotifyclientid")]
+    public ActionResult<string> GetSpotifyClientId()
+    {
+      var entry = _dbContext.Configuration.SingleOrDefault(c => c.Key == "SpotifyClientId");
+      if (entry == null)
+        return NotFound();
+      return entry.Value;
     }
   }
 }
