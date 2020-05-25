@@ -17,10 +17,10 @@ import {
   TableBody,
   Paper,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import { Lock } from "@material-ui/icons";
 import ChangeMaxCollectionsDialog from "./Dialogs/ChangeMaxCollectionsDialog";
 import ChangeMaxElementsDialog from "./Dialogs/ChangeMaxElementsDialog";
-import DeleteUserDialog from "./Dialogs/DeleteUserDialog";
+import LockoutUserDialog from "./Dialogs/LockoutUserDialog";
 
 export default function AdminView() {
   const [users, setUsers] = useState(UsersStore.getUsers());
@@ -31,7 +31,9 @@ export default function AdminView() {
   let maxElements = configuration?.maxElementsInCollection;
   let maxCollections = configuration?.maxCollectionsPerUser;
 
-  const [deleteUserDialogOpen, setDeleteUserDialogOpen] = React.useState(false);
+  const [lockoutUserDialogOpen, setLockoutUserDialogOpen] = React.useState(
+    false
+  );
   const [selectedUserId, setSelectedUserId] = useState("");
   const [changeElementsDialogOpen, setChangeElementsDialogOpen] = useState(
     false
@@ -41,9 +43,9 @@ export default function AdminView() {
     setChangeCollectionsDialogOpen,
   ] = useState(false);
 
-  const onDeleteUserClick = (userId: string) => {
+  const onLockoutUserClick = (userId: string) => {
     setSelectedUserId(userId);
-    setDeleteUserDialogOpen(true);
+    setLockoutUserDialogOpen(true);
   };
 
   useEffect(() => {
@@ -148,13 +150,15 @@ export default function AdminView() {
                       <TableCell>{user.id}</TableCell>
                       {/* IDEA: admin can't be deleted */}
                       <TableCell align="right">
-                        <IconButton
-                          onClick={() => {
-                            onDeleteUserClick(user.id);
-                          }}
-                        >
-                          <Delete />
-                        </IconButton>
+                        {user.isLockedOut !== true && (
+                          <IconButton
+                            onClick={() => {
+                              onLockoutUserClick(user.id);
+                            }}
+                          >
+                            <Lock />
+                          </IconButton>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -185,9 +189,11 @@ export default function AdminView() {
           ConfigurationStore.setMaxCollectionsPerUser(val)
         }
       />
-      <DeleteUserDialog
-        open={deleteUserDialogOpen}
-        toggleDialogOpen={() => setDeleteUserDialogOpen(!deleteUserDialogOpen)}
+      <LockoutUserDialog
+        open={lockoutUserDialogOpen}
+        toggleDialogOpen={() =>
+          setLockoutUserDialogOpen(!lockoutUserDialogOpen)
+        }
         userId={selectedUserId}
       />
     </>

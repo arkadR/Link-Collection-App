@@ -6,6 +6,7 @@ import { GridList, GridListTile, Divider, Box } from "@material-ui/core";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import { GetUserFriendlyHostname } from "../Infrastructure/UrlUtilities";
 import { ElementControlMenu, sortDefault } from "./ElementControlMenu";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +32,12 @@ export default function BaseCollectionView(props: BaseCollectionViewProps) {
   let [sortedAscending, setSortedAscending] = useState(true);
   let [selectedHosts, setSelectedHosts] = useState(allHosts);
   let [elementOrderFunction, setElementOrderFunction] = useState(sortDefault);
-  let [columnCount, setColumnCount] = useState(3);
+  let columnCountCookieContent = Cookies.get("columnCount");
+  let columns =
+    columnCountCookieContent === undefined
+      ? 3
+      : parseInt(columnCountCookieContent);
+  let [columnCount, setColumnCount] = useState(columns);
 
   useEffect(() => {
     let elems = props.collection?.elements ?? [];

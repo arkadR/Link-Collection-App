@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LinkCollectionApp.Data;
-using LinkCollectionApp.Extensions;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using LinkCollectionApp.Models.DTO;
@@ -39,9 +39,13 @@ namespace LinkCollectionApp.Controllers
     public async Task<UserDTO> GetCurrentUser()
     {
       var user = await _userManager.FindByIdAsync(_userContextProvider.GetCurrentUserId());
+
       var roles = await _userManager.GetRolesAsync(user);
 
-      return UserDtoBuilder.FromApplicationUser(user).WithRoles(roles).Create();
+      return UserDtoBuilder
+        .FromApplicationUser(user)
+        .WithRoles(roles)
+        .Create();
     }
 
 
@@ -49,11 +53,16 @@ namespace LinkCollectionApp.Controllers
     public List<UserDTO> GetUsers()
     {
       var users = _dbContext.ApplicationUser;
-      return users.Select(user => UserDtoBuilder.FromApplicationUser(user).Create()).ToList();
+      return users.Select(user => 
+        UserDtoBuilder
+          .FromApplicationUser(user)
+          .IncludeLockoutInfo()
+          .Create())
+        .ToList();
     }
 
     [HttpDelete("{userId}")]
-    public IActionResult DeleteUser(string userId)
+    public async Task<IActionResult> LockUser(string userId)
     {
       if (_userContextProvider.IsCurrentUserInRole("Administrator") == false)
         return Forbid();
@@ -65,16 +74,14 @@ namespace LinkCollectionApp.Controllers
       if (user == null)
         return NotFound();
 
-      user.Collections.ToList().ForEach(c =>
+      foreach (var collection in user.Collections)
       {
-        _dbContext.SavedCollection.RemoveAll(sc => sc.CollectionId == c.Id);
-        _dbContext.SharedCollection.RemoveAll(sc => sc.CollectionId == c.Id);
-        _dbContext.Element.RemoveAll(el => el.CollectionId == c.Id);
-      });
-
-      _dbContext.Collection.RemoveAll(c => c.OwnerId == user.Id);
-      _userManager.DeleteAsync(user);
+        collection.IsPublic = false;
+      }
       _dbContext.SaveChanges();
+
+      await _userManager.SetLockoutEnabledAsync(user, true);
+      await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.Now.AddMonths(1));
       return Ok();
     }
 
