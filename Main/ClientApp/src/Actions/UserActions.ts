@@ -1,6 +1,8 @@
 import Dispatcher from "../Infrastructure/Dispatcher";
 import UsersApi from "../Api/UsersApi";
 import ActionTypes from "./ActionTypes";
+import SnackbarSeverity from "./SnackbarSeverity";
+import { DisplayMessageInSnackbar } from "./UIActions";
 
 export async function loadUsers() {
   let users = await UsersApi.getUsers();
@@ -18,8 +20,18 @@ export async function loadCurrentUser() {
   });
 }
 
-export async function deleteUser(userId: string) {
+export async function lockoutUser(userId: string) {
   let success = await UsersApi.deleteUser(userId);
-  if (success) loadUsers();
-  else console.error("Could not delete user");
+  if (success) {
+    DisplayMessageInSnackbar(
+      "User has been locked out",
+      SnackbarSeverity.SUCCESS
+    );
+    loadUsers();
+  } else {
+    DisplayMessageInSnackbar(
+      "Could not lock out the user",
+      SnackbarSeverity.ERROR
+    );
+  }
 }

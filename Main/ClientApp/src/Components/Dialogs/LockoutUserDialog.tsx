@@ -1,6 +1,6 @@
 import React from "react";
 import DeleteDialog from "./DeleteDialog";
-import { deleteUser } from "../../Actions/UserActions";
+import { lockoutUser } from "../../Actions/UserActions";
 
 type LockoutUserDialogProps = {
   open: boolean;
@@ -21,7 +21,7 @@ export default function LockoutUserDialog(props: LockoutUserDialogProps) {
       title={title}
       description={description}
       confirmAction={() => {
-        deleteUser(props.userId);
+        lockoutUser(props.userId);
       }}
     />
   );

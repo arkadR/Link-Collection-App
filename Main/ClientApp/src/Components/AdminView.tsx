@@ -17,10 +17,10 @@ import {
   TableBody,
   Paper,
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import { Lock } from "@material-ui/icons";
 import ChangeMaxCollectionsDialog from "./Dialogs/ChangeMaxCollectionsDialog";
 import ChangeMaxElementsDialog from "./Dialogs/ChangeMaxElementsDialog";
-import LockoutUserDialog from "./Dialogs/LockoutUserDialogg";
+import LockoutUserDialog from "./Dialogs/LockoutUserDialog";
 
 export default function AdminView() {
   const [users, setUsers] = useState(UsersStore.getUsers());
@@ -156,7 +156,7 @@ export default function AdminView() {
                               onLockoutUserClick(user.id);
                             }}
                           >
-                            <Delete />
+                            <Lock />
                           </IconButton>
                         )}
                       </TableCell>
