@@ -2,6 +2,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
+  isLockedOut: boolean | null;
   roles: string[];
 };
 

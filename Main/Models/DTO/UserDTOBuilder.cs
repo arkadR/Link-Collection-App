@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using LinkCollectionApp.Extensions;
 
 namespace LinkCollectionApp.Models.DTO
 {
@@ -8,6 +9,8 @@ namespace LinkCollectionApp.Models.DTO
     private string Id { get; set; }
     private string Name { get; set; }
     private string Email { get; set; }
+    private bool IsLockedOut { get; set; }
+    private bool IncludeLockInfo { get; set; } = false;
     private IList<string> Roles { get; set; }
 
     public static UserDtoBuilder FromApplicationUser(ApplicationUser user)
@@ -16,7 +19,20 @@ namespace LinkCollectionApp.Models.DTO
       {
         Id = user.Id,
         Name = user.UserName,
-        Email = user.Email
+        Email = user.Email,
+        IsLockedOut = user.IsLockedOut()
+      };
+    }
+
+    public UserDtoBuilder IncludeLockoutInfo()
+    {
+      return new UserDtoBuilder
+      {
+        Id = Id,
+        Name = Name,
+        Email = Email,
+        IsLockedOut = IsLockedOut,
+        IncludeLockInfo = true
       };
     }
 
@@ -27,6 +43,8 @@ namespace LinkCollectionApp.Models.DTO
         Id = Id,
         Name = Name,
         Email = Email,
+        IsLockedOut = IsLockedOut,
+        IncludeLockInfo = IncludeLockInfo,
         Roles = roles
       };
     }
@@ -38,6 +56,7 @@ namespace LinkCollectionApp.Models.DTO
         Id = Id,
         Email = Email,
         Name = Name,
+        IsLockedOut = IncludeLockInfo ? IsLockedOut : null as bool?,
         Roles = Roles?.ToList() ?? new List<string>()
       };
     }

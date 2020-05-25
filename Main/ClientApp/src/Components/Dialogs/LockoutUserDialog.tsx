@@ -2,18 +2,18 @@ import React from "react";
 import DeleteDialog from "./DeleteDialog";
 import { deleteUser } from "../../Actions/UserActions";
 
-type DeleteUserDialogProps = {
+type LockoutUserDialogProps = {
   open: boolean;
   toggleDialogOpen: () => void;
   userId: string;
 };
 
-export default function DeleteUserDialog(props: DeleteUserDialogProps) {
-  const title = "Do you want to delete this user?";
+export default function LockoutUserDialog(props: LockoutUserDialogProps) {
+  const title = "Do you want to lock out this user?";
   const description =
     "User (id: " +
     props.userId +
-    ") and all his collections will be irreversibly deleted. Do you want to proceed?";
+    ") will be unable to log in to the application for the next month. Do you want to proceed?";
   return (
     <DeleteDialog
       open={props.open}
