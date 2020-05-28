@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import Loader from "react-loader-spinner";
 import Center from "./Center";
@@ -6,14 +6,15 @@ import Center from "./Center";
 type PanelWideMessageProps = {
   text: string;
   withThrobber?: boolean;
+  children?: ReactNode;
 };
 
 export default function PanelWideMessage(props: PanelWideMessageProps) {
   return (
     <Center>
-      <Grid container justify="center" spacing={2}>
+      <Grid style={{ width: "100%" }} container justify="center" spacing={2}>
         <Grid item>
-          <Typography variant="h3" align="center" style={{ color: "grey" }}>
+          <Typography variant="h3" style={{ color: "grey" }}>
             {props.text}
           </Typography>
         </Grid>
@@ -23,6 +24,7 @@ export default function PanelWideMessage(props: PanelWideMessageProps) {
           </Grid>
         )}
       </Grid>
+      <div style={{ marginTop: 40 }}>{props.children}</div>
     </Center>
   );
 }
