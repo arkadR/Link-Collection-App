@@ -9,21 +9,25 @@ import AdminPage from "./Components/AdminPage";
 import PublicCollectionPage from "./Components/PublicCollectionPage";
 import InfoSnackBar from "./Components/InfoSnackBar";
 import SpotifyCallbackPage from "./Components/SpotifyCallbackPage";
+import { Paper } from "@material-ui/core";
+import DarkThemeProvider from "./Components/DarkThemeProvider";
 
 function App() {
   return (
-    <>
-      <ApiAuthorizationRoutes />
-      <Route exact path="/" component={WelcomeScreen} />
-      <AuthorizeRoute path="/collections/" component={CollectionsPage} />
-      <Route path="/public/" component={PublicCollectionPage} />
-      <AuthorizeRoute path="/admin/" component={AdminPage} />
-      <AuthorizeRoute
-        path="/spotifycallback/"
-        component={SpotifyCallbackPage}
-      />
-      <InfoSnackBar />
-    </>
+    <DarkThemeProvider>
+      <Paper style={{ minHeight: window.innerHeight }}>
+        <ApiAuthorizationRoutes />
+        <Route exact path="/" component={WelcomeScreen} />
+        <AuthorizeRoute path="/collections/" component={CollectionsPage} />
+        <Route path="/public/" component={PublicCollectionPage} />
+        <AuthorizeRoute path="/admin/" component={AdminPage} />
+        <AuthorizeRoute
+          path="/spotifycallback/"
+          component={SpotifyCallbackPage}
+        />
+        <InfoSnackBar />
+      </Paper>
+    </DarkThemeProvider>
   );
 }
 
