@@ -188,17 +188,16 @@ export default function MyCollectionsSection() {
                     </ListItem>
 
                     {collection.isPublic && (
-                      <Link
+                      <ListItem
+                        button
+                        component={Link}
                         to={`${url}/${collection.id}/stats`}
-                        style={{ color: "black", textDecoration: "none" }}
                       >
-                        <ListItem button>
-                          <ListItemIcon>
-                            <Equalizer />
-                          </ListItemIcon>
-                          <ListItemText primary="Stats" />
-                        </ListItem>
-                      </Link>
+                        <ListItemIcon>
+                          <Equalizer />
+                        </ListItemIcon>
+                        <ListItemText primary="Stats" />
+                      </ListItem>
                     )}
 
                     {/* TODO: make private listitem */}
