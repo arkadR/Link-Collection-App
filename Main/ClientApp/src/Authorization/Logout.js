@@ -8,6 +8,8 @@ import {
   LogoutActions,
   ApplicationPaths,
 } from "./ApiAuthorizationConstants";
+import { Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 // The main responsibility of this component is to handle the user's logout process.
 // This is the starting point for the logout process, which is usually initiated when a
@@ -59,7 +61,19 @@ export class Logout extends Component {
       return <div></div>;
     }
     if (!!message) {
-      return <PanelWideMessage text={message} />;
+      return (
+        <PanelWideMessage text={message}>
+          <Button
+            size="large"
+            variant="outlined"
+            color="primary"
+            component={Link}
+            to="/authentication/login"
+          >
+            Login
+          </Button>
+        </PanelWideMessage>
+      );
     } else {
       const action = this.props.action;
       switch (action) {
@@ -70,7 +84,19 @@ export class Logout extends Component {
             <PanelWideMessage withThrobber text="Processing logout callback" />
           );
         case LogoutActions.LoggedOut:
-          return <PanelWideMessage text={message} />;
+          return (
+            <PanelWideMessage text={message}>
+              <Button
+                size="large"
+                variant="outlined"
+                color="primary"
+                component={Link}
+                to="/authentication/login"
+              >
+                Login
+              </Button>
+            </PanelWideMessage>
+          );
         default:
           throw new Error(`Invalid action '${action}'`);
       }
