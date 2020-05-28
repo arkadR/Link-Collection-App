@@ -3,19 +3,26 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
   Toolbar,
   Typography,
-  AppBar as MaterialAppBar
+  AppBar as MaterialAppBar,
 } from "@material-ui/core";
+import Breadcrumbs from "../Breadcrumbs";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {
-      zIndex: theme.zIndex.drawer + 1
+      zIndex: theme.zIndex.drawer + 1,
     },
-    title: {
-      flexGrow: 1
-    }
+    breadcrumbs: {
+      flexGrow: 1,
+      marginLeft: "140px",
+    },
   })
 );
+
+type AppBarProps = {
+  title: string;
+  rightSideMenu: ReactNode;
+};
 
 export default function AppBar(props: AppBarProps) {
   const classes = useStyles();
@@ -23,16 +30,12 @@ export default function AppBar(props: AppBarProps) {
   return (
     <MaterialAppBar position="fixed" className={classes.appBar}>
       <Toolbar>
-        <Typography variant="h6" className={classes.title}>
-          {props.title}
-        </Typography>
+        <Typography variant="h6">{props.title}</Typography>
+        <div className={classes.breadcrumbs}>
+          <Breadcrumbs />
+        </div>
         {props.rightSideMenu}
       </Toolbar>
     </MaterialAppBar>
   );
 }
-
-type AppBarProps = {
-  title: string;
-  rightSideMenu: ReactNode;
-};
