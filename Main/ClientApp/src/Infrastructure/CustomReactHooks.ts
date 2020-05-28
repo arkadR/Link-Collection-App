@@ -1,6 +1,5 @@
 import Cookies from "js-cookie";
 import { useState } from "react";
-import { cookieChanged } from "../Actions/CookieUpdateActions";
 
 export function useCookie<T>(
   cookieName: string,
@@ -15,7 +14,6 @@ export function useCookie<T>(
   const onChange = (newValue: T): void => {
     Cookies.set(cookieName, JSON.stringify(newValue));
     setCookieVal(newValue);
-    cookieChanged(cookieName);
   };
   return [cookieVal, onChange];
 }

@@ -10,11 +10,11 @@ import PublicCollectionPage from "./Components/PublicCollectionPage";
 import InfoSnackBar from "./Components/InfoSnackBar";
 import SpotifyCallbackPage from "./Components/SpotifyCallbackPage";
 import { Paper } from "@material-ui/core";
-import DarkThemeProvider from "./Components/DarkThemeProvider";
+import ThemeProvider from "./Components/ThemeProvider";
 
 function App() {
   return (
-    <DarkThemeProvider>
+    <ThemeProvider>
       <Paper style={{ minHeight: window.innerHeight }}>
         <ApiAuthorizationRoutes />
         <Route exact path="/" component={WelcomeScreen} />
@@ -27,7 +27,7 @@ function App() {
         />
         <InfoSnackBar />
       </Paper>
-    </DarkThemeProvider>
+    </ThemeProvider>
   );
 }
 
