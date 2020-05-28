@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace LinkCollectionApp.Controllers
 {
@@ -18,15 +19,18 @@ namespace LinkCollectionApp.Controllers
     private readonly ApplicationDbContext _dbContext;
     private readonly IUserContextProvider _userContextProvider;
     private readonly IRequestInfoService _requestInfoService;
+    private readonly IMemoryCache _cache;
 
     public PublicCollectionsController(
       ApplicationDbContext dbContext, 
       IRequestInfoService requestInfoService, 
-      IUserContextProvider userContextProvider)
+      IUserContextProvider userContextProvider, 
+      IMemoryCache cache)
     {
       _dbContext = dbContext;
       _requestInfoService = requestInfoService;
       _userContextProvider = userContextProvider;
+      _cache = cache;
     }
 
     [HttpGet("{id}")]
@@ -59,8 +63,13 @@ namespace LinkCollectionApp.Controllers
       if (userId != collection.OwnerId)
         return Forbid();
 
-      var data = _dbContext.PublicCollectionVisit.Where(c => c.CollectionId == id);
-      return data.ToList();
+      var data = _cache.GetOrCreate(id, entry =>
+      {
+        entry.AbsoluteExpiration = DateTimeOffset.Now.AddDays(1);
+        return _dbContext.PublicCollectionVisit.Where(c => c.CollectionId == id).ToList();
+      });
+
+      return data;
     }
 
 

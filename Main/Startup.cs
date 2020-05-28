@@ -137,7 +137,11 @@ namespace LinkCollectionApp
         .AddIdentityServerJwt();
 
       services.Configure<JwtBearerOptions>(IdentityServerJwtConstants.IdentityServerJwtBearerScheme,
-        opts => opts.TokenValidationParameters.ValidateIssuer = false);
+        opts =>
+        {
+          opts.TokenValidationParameters.ValidateIssuer = false;
+          opts.TokenValidationParameters.ValidateLifetime = false;
+        });
     }
   }
 }
