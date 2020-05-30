@@ -3,10 +3,13 @@ using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using LinkCollectionApp.Controllers;
+using LinkCollectionApp.Data;
 using LinkCollectionApp.Infrastructure.DTO;
 using LinkCollectionApp.Infrastructure.Interfaces;
 using LinkCollectionApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using UAParser;
 using Xunit;
@@ -15,6 +18,9 @@ namespace LinkCollectionApp.Test.UnitTests
 {
   public class PublicCollectionsControllerTests : UnitTestBase
   {
+    private PublicCollectionsController GetSystemUnderTest(ApplicationDbContext context) => 
+      new PublicCollectionsController(context, GetRequestInfoServiceMock(), GetUserProviderMock(""), GetMemoryCacheMock());
+
     [Fact]
     public void GetPublicCollection_CollectionPublic_Ok()
     {
@@ -32,7 +38,7 @@ namespace LinkCollectionApp.Test.UnitTests
       ActionResult<Collection> result = null;
       InTransaction(context =>
       {
-        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock(), GetUserProviderMock(""));
+        var controller = GetSystemUnderTest(context);
         result = controller.GetPublicCollection(collection.Id).Result;
       });
 
@@ -53,7 +59,7 @@ namespace LinkCollectionApp.Test.UnitTests
       ActionResult<Collection> result = null;
       InTransaction(context =>
       {
-        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock(), GetUserProviderMock(""));
+        var controller = GetSystemUnderTest(context);
         result = controller.GetPublicCollection(collection.Id).Result;
       });
 
@@ -72,7 +78,7 @@ namespace LinkCollectionApp.Test.UnitTests
       ActionResult<Collection> result = null;
       InTransaction(context =>
       {
-        var controller = new PublicCollectionsController(context, GetRequestInfoServiceMock(), GetUserProviderMock(""));
+        var controller = GetSystemUnderTest(context);
         result = controller.GetPublicCollection(1010).Result;
       });
 
@@ -93,6 +99,15 @@ namespace LinkCollectionApp.Test.UnitTests
           IpInfo = new IpInfo { Country = "TestCountry" }
         }));
       return mock.Object;
+    }
+
+    private IMemoryCache GetMemoryCacheMock()
+    {
+      var services = new ServiceCollection();
+      services.AddMemoryCache();
+      var serviceProvider = services.BuildServiceProvider();
+      var memoryCache = serviceProvider.GetService<IMemoryCache>();
+      return memoryCache;
     }
   }
 }
