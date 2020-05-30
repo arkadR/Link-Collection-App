@@ -1,8 +1,7 @@
 import React, { useState, useEffect, ReactNode } from "react";
-import PanelWideMessage from "./Common/PanelWideMessage";
 import Layout from "./Layout";
 import authService from "../Authorization/AuthorizeService";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Typography,
   Button,
@@ -16,7 +15,6 @@ import {
 import AddCollectionImage from "../assets/images/home/addcollection.png";
 import AddLinkImage from "../assets/images/home/addlink.png";
 import { Variant } from "@material-ui/core/styles/createTypography";
-import Center from "./Common/Center";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,11 +42,6 @@ export default function WelcomeScreen() {
 
   return (
     <Layout>
-      {/* {isAuthenticated === true ? (
-        <Redirect to={"/collections"} />
-      ) : (
-        <PanelWideMessage text="Log in to get started" />
-      )} */}
       <Box className={classes.root}>
         <Paragraph titleVariant="h3" title="About this app">
           This website will let you organize links into collections, so you can
