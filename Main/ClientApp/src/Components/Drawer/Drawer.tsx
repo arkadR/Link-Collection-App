@@ -72,7 +72,7 @@ export default function Drawer() {
       >
         <MyCollectionsSection />
         <SharedSection />
-        <SavedSection />
+        {/* <SavedSection /> */}
         {isAdmin && (
           <ListItem button component={Link} to="/admin">
             <ListItemIcon children={<SettingsIcon />} />
