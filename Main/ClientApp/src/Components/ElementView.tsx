@@ -21,9 +21,6 @@ import {
 import EditElementDialog from "../Components/Dialogs/EditElementDialog";
 import DeleteElementDialog from "../Components/Dialogs/DeleteElementDialog";
 import { parse } from "tldts";
-import ActionTypes from "../Actions/ActionTypes";
-import Action from "../Infrastructure/Action";
-import Dispatcher from "../Infrastructure/Dispatcher";
 import { getFaviconUrl } from "../Actions/FaviconActions";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -60,6 +57,11 @@ export default function ElementView(props: ElementViewProps) {
   };
   const onMenuClose = () => setAnchorEl(null);
 
+  const setBetterFaviconUrl = async (hostname: string) => {
+    let receivedFaviconUrl = await getFaviconUrl(hostname);
+    if (receivedFaviconUrl !== undefined) setFaviconUrl(receivedFaviconUrl);
+  };
+
   useEffect(() => {
     let url = props.element.link;
     let name = props.element.name;
@@ -68,20 +70,9 @@ export default function ElementView(props: ElementViewProps) {
     setFaviconUrl(GetHostnameLink(url) + "/favicon.ico");
     let hostname = parse(url).hostname;
 
-    const faviconHandler = (action: Action) => {
-      if (
-        action.actionType === ActionTypes.GET_FAVICON &&
-        action.payload.domain === hostname
-      ) {
-        setFaviconUrl(action.payload.iconUrl);
-      }
-    };
-
-    const id = Dispatcher.register(faviconHandler);
-
-    if (hostname !== null) getFaviconUrl(hostname);
-
-    return () => Dispatcher.unregister(id);
+    if (hostname !== null) {
+      setBetterFaviconUrl(hostname);
+    }
   }, [props.element]);
 
   return (

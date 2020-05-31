@@ -18,13 +18,7 @@ export async function getFaviconUrl(domain: string) {
   if (response.ok) {
     let faviconsResponse = (await response.json()) as GetFaviconsOkResponse;
     if (faviconsResponse.icons[0] !== undefined) {
-      Dispatcher.dispatch({
-        actionType: ActionTypes.GET_FAVICON,
-        payload: {
-          domain: faviconsResponse.domain,
-          iconUrl: faviconsResponse.icons[0].src,
-        },
-      });
+      return faviconsResponse.icons[0].src;
     }
   }
 }
