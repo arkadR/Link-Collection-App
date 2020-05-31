@@ -20,6 +20,11 @@ import {
 } from "../Infrastructure/UrlUtilities";
 import EditElementDialog from "../Components/Dialogs/EditElementDialog";
 import DeleteElementDialog from "../Components/Dialogs/DeleteElementDialog";
+import { parse } from "tldts";
+import ActionTypes from "../Actions/ActionTypes";
+import Action from "../Infrastructure/Action";
+import Dispatcher from "../Infrastructure/Dispatcher";
+import { getFaviconUrl } from "../Actions/FaviconActions";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,7 +51,7 @@ export default function ElementView(props: ElementViewProps) {
 
   const [elementUrl, setElementUrl] = useState("");
   const [displayedName, setDisplayedName] = useState("");
-  const [faviconUrl, setFaviconUrl] = useState("");
+  const [faviconUrl, setFaviconUrl] = useState("_");
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -61,6 +66,22 @@ export default function ElementView(props: ElementViewProps) {
     setElementUrl(GetProperUrl(url));
     setDisplayedName(name.length === 0 ? url : name);
     setFaviconUrl(GetHostnameLink(url) + "/favicon.ico");
+    let hostname = parse(url).hostname;
+
+    const faviconHandler = (action: Action) => {
+      if (
+        action.actionType === ActionTypes.GET_FAVICON &&
+        action.payload.domain === hostname
+      ) {
+        setFaviconUrl(action.payload.iconUrl);
+      }
+    };
+
+    const id = Dispatcher.register(faviconHandler);
+
+    if (hostname !== null) getFaviconUrl(hostname);
+
+    return () => Dispatcher.unregister(id);
   }, [props.element]);
 
   return (
