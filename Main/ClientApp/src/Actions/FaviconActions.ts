@@ -1,6 +1,4 @@
 import FaviconsApi from "../Api/FaviconsApi";
-import Dispatcher from "../Infrastructure/Dispatcher";
-import ActionTypes from "./ActionTypes";
 
 type GetFaviconsOkResponse = {
   domain: string;

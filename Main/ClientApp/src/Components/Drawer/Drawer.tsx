@@ -10,7 +10,6 @@ import {
 import SettingsIcon from "@material-ui/icons/Settings";
 import MyCollectionsSection from "./MyCollectionsSection";
 import SharedSection from "./SharedSection";
-import SavedSection from "./SavedSection";
 import UsersStore from "../../Stores/UsersStore";
 import { Link } from "react-router-dom";
 
