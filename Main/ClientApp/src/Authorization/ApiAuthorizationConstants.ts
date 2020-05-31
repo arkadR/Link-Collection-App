@@ -1,28 +1,28 @@
-export const ApplicationName = 'LinkCollectionApp';
+export const ApplicationName = "LinkCollectionApp";
 
 export const QueryParameterNames = {
-  ReturnUrl: 'returnUrl',
-  Message: 'message'
+  ReturnUrl: "returnUrl",
+  Message: "message",
 };
 
 export const LogoutActions = {
-  LogoutCallback: 'logout-callback',
-  Logout: 'logout',
-  LoggedOut: 'logged-out'
+  LogoutCallback: "logout-callback",
+  Logout: "logout",
+  LoggedOut: "logged-out",
 };
 
 export const LoginActions = {
-  Login: 'login',
-  LoginCallback: 'login-callback',
-  LoginFailed: 'login-failed',
-  Profile: 'profile',
-  Register: 'register'
+  Login: "login",
+  LoginCallback: "login-callback",
+  LoginFailed: "login-failed",
+  Profile: "profile",
+  Register: "register",
 };
 
-const prefix = '/authentication';
+const prefix = "/authentication";
 
 export const ApplicationPaths = {
-  DefaultLoginRedirectPath: '/',
+  DefaultLoginRedirectPath: "/collections",
   ApiAuthorizationClientConfigurationUrl: `/_configuration/${ApplicationName}`,
   ApiAuthorizationPrefix: prefix,
   Login: `${prefix}/${LoginActions.Login}`,
@@ -33,6 +33,6 @@ export const ApplicationPaths = {
   LogOut: `${prefix}/${LogoutActions.Logout}`,
   LoggedOut: `${prefix}/${LogoutActions.LoggedOut}`,
   LogOutCallback: `${prefix}/${LogoutActions.LogoutCallback}`,
-  IdentityRegisterPath: '/Identity/Account/Register',
-  IdentityManagePath: '/Identity/Account/Manage'
+  IdentityRegisterPath: "/Identity/Account/Register",
+  IdentityManagePath: "/Identity/Account/Manage",
 };
